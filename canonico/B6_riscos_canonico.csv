@@ -19,4 +19,4 @@ R0.U.17;R0.U.17;Risco Pais;0;U;;credito;estrategico;Exposicao a fatores politico
 R0.U.18;R0.U.18;Risco de Contagio;0;U;;credito;estrategico;Propagacao de risco entre entidades do grupo ou do sistema;ativo;
 R0.U.19;R0.U.19;Risco Socioambiental e Climatico;0;U;;operacional;estrategico;Perda por fatores sociais, ambientais e mudancas climaticas;ativo;
 R0.U.20;R0.U.20;Riscos Emergentes;0;U;;operacional;estrategico;Riscos novos com impacto potencial material a medio e longo prazo;ativo;
-R0.U.21;R0.U.21;Risco de IA Generativa;;;;operacional;operacional;Risco de modelos de IA;ativo;
+R0.U.21;R0.U.21;Risco de Inteligencia Artificial;;;;operacional;operacional;Risco de modelos de IA;ativo;

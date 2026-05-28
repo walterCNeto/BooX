@@ -6,6 +6,10 @@ Versionamento semantico do vocabulario canonico.
 - **MINOR** (x.Y.0): adicao de novos IDs (aditivo, nao quebra de-paras).
 - **MAJOR** (X.0.0): deprecacao de IDs em uso ou mudanca incompativel.
 
+## [1.1.1] — 2026-05-28 (PATCH)
+
+- Renomeado/editado riscos: R0.U.21
+
 ## [1.1.0] — 2026-05-28 (MINOR)
 
 - Adicionado riscos: R0.U.21 — Risco de IA Generativa
