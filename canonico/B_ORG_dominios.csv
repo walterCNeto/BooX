@@ -1,0 +1,14 @@
+id;nome;linha_defesa;descricao
+ORG.NEG;Negocios;1;Areas comerciais que originam e gerem relacionamento com clientes e produtos
+ORG.CRE;Credito;1;Concessao, politica, mesa e recuperacao de credito
+ORG.TEC;Tecnologia;1;Desenvolvimento, sustentacao e operacao de sistemas e infraestrutura
+ORG.OPE;Operacoes;1;Processamento operacional, liquidacao, cadastro e backoffice
+ORG.TES;Tesouraria;1;Gestao de caixa, funding, ALM e mesas proprietaria e de clientes
+ORG.RIS;Riscos;2;Gerenciamento independente de riscos financeiros e nao financeiros
+ORG.CIN;Controles Internos e Compliance;2;Conformidade, controles internos, conduta, PLD-FT e privacidade
+ORG.JUR;Juridico;2;Contencioso, consultivo, societario, regulatorio e trabalhista
+ORG.FIN;Financeiro e Controladoria;3;Controladoria, contabilidade, planejamento, RI e tributario
+ORG.AUD;Auditoria Interna;3;Avaliacao independente de controles, governanca e processos
+ORG.OUV;Ouvidoria e Atendimento;3;Ouvidoria, SAC e relacionamento com reguladores
+ORG.RH;Recursos Humanos;3;Gestao de pessoas, folha, recrutamento, treinamento e cultura
+ORG.FOR;Fornecedores e Infraestrutura Fisica;3;Gestao de terceiros, contratos, predial e seguranca fisica

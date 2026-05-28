@@ -1,0 +1,22 @@
+id;nome;categoria_basileia;dominio_2linha;descricao
+DISC_CREDITO;Credito;credito;ORG.RIS.CRE;Risco de credito em todas as carteiras
+DISC_MERCADO;Mercado;mercado;ORG.RIS.MER;Risco de mercado, trading e banking book
+DISC_LIQUIDEZ;Liquidez;liquidez;ORG.RIS.LIQ;Risco de liquidez e funding
+DISC_JUROS;Taxa de Juros;mercado;ORG.RIS.MER;Risco de taxa de juros da carteira bancaria (IRRBB)
+DISC_OPERACIONAL;Operacional;operacional;ORG.RIS.OPE;Risco operacional em processos, pessoas e sistemas
+DISC_CYBER;Cyber;operacional;ORG.CIN.SEG;Seguranca cibernetica e resiliencia
+DISC_SI;Seguranca da Informacao;operacional;ORG.CIN.SEG;Confidencialidade, integridade e disponibilidade da informacao
+DISC_TECNOLOGIA;Tecnologia;operacional;ORG.RIS.OPE;Riscos de tecnologia, sistemas e infraestrutura
+DISC_LGPD;Privacidade e LGPD;operacional;ORG.CIN.LGP;Protecao de dados pessoais e privacidade
+DISC_LD;Lavagem de Dinheiro;operacional;ORG.CIN.PLD;PLD-FT e combate ao financiamento ao terrorismo
+DISC_CONDUTA;Conduta;operacional;ORG.CIN.CON;Conduta de mercado, suitability e relacionamento com cliente
+DISC_CONFORMIDADE;Conformidade;operacional;ORG.CIN.COM;Conformidade regulatoria e legal
+DISC_FRAUDE;Fraude;operacional;ORG.RIS.OPE;Fraude interna e externa
+DISC_MODELO;Modelo;operacional;ORG.RIS.MOD;Risco de modelos quantitativos
+DISC_BIA;Continuidade;operacional;ORG.OPE.PCN;Continuidade de negocios e resiliencia operacional
+DISC_FORNECEDORES;Fornecedores;operacional;ORG.FOR.GFO;Risco de terceiros e prestadores de servico
+DISC_TRABALHISTA;Trabalhista;operacional;ORG.JUR.TRA;Risco trabalhista e previdenciario
+DISC_FISCAL;Fiscal;operacional;ORG.FIN.TRI;Risco fiscal e tributario
+DISC_REPUTACIONAL;Reputacional;reputacional;ORG.RIS.OPE;Risco de imagem e reputacao
+DISC_SAC;Socioambiental e Climatico;operacional;ORG.RIS.SAC;Risco social, ambiental e climatico
+DISC_CONCENTRACAO;Concentracao;credito;ORG.RIS.CRE;Concentracao de exposicoes e contrapartes

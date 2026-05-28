@@ -1,0 +1,74 @@
+id;dominio_id;nome;descricao
+ORG.NEG.VAR;ORG.NEG;Varejo;Atendimento e produtos para pessoa fisica de massa
+ORG.NEG.ALT;ORG.NEG;Alta Renda;Segmento de clientes pessoa fisica de alta renda
+ORG.NEG.PRV;ORG.NEG;Private Banking;Gestao de patrimonio de clientes de alta renda qualificada
+ORG.NEG.EMP;ORG.NEG;Empresas e Middle;Atendimento a pequenas e medias empresas
+ORG.NEG.ATA;ORG.NEG;Atacado e Corporate;Grandes empresas, corporate e investment banking
+ORG.NEG.AGR;ORG.NEG;Agronegocio;Produtos e credito para o setor agropecuario
+ORG.NEG.PRO;ORG.NEG;Produtos;Desenho, precificacao e gestao de portfolio de produtos
+ORG.NEG.CAN;ORG.NEG;Canais e Atendimento;Agencias, canais digitais, contact center e relacionamento
+ORG.NEG.CEX;ORG.NEG;Comercio Exterior;Operacoes de cambio comercial e financiamento ao comercio exterior
+ORG.CRE.CPF;ORG.CRE;Concessao PF;Analise e decisao de credito para pessoa fisica
+ORG.CRE.CPJ;ORG.CRE;Concessao PJ;Analise e decisao de credito para pessoa juridica
+ORG.CRE.MES;ORG.CRE;Mesa de Credito;Estruturacao e decisao de operacoes de maior porte
+ORG.CRE.POL;ORG.CRE;Politica de Credito;Definicao de politicas, alcadas e modelos de concessao
+ORG.CRE.REC;ORG.CRE;Recuperacao e Cobranca;Cobranca, renegociacao e recuperacao de credito
+ORG.CRE.IMO;ORG.CRE;Credito Imobiliario;Originacao e gestao de financiamento imobiliario
+ORG.TEC.COR;ORG.TEC;Core Banking;Sistemas centrais de contas, depositos e transacoes
+ORG.TEC.INV;ORG.TEC;Investimentos;Plataformas de investimentos e renda variavel
+ORG.TEC.MPG;ORG.TEC;Meios de Pagamento;Cartoes, adquirencia, Pix e transferencias
+ORG.TEC.FIN;ORG.TEC;Financeira (sistemas);Sistemas de credito, financiamento e cobranca
+ORG.TEC.SCO;ORG.TEC;Sistemas Corporativos;ERPs, RH, juridico e sistemas administrativos
+ORG.TEC.CAN;ORG.TEC;Canais (sistemas);Internet banking, app, ATM e contact center
+ORG.TEC.DAD;ORG.TEC;Governanca e Engenharia de Dados;Plataforma de dados, pipelines e governanca de dados
+ORG.TEC.PCF;ORG.TEC;Sistemas de Prevencao a Crimes Financeiros;Sistemas de PLD-FT, monitoramento e listas
+ORG.TEC.ARQ;ORG.TEC;Arquitetura;Arquitetura de solucoes, padroes e integracao
+ORG.TEC.IA;ORG.TEC;Inteligencia Artificial;Modelos de IA, ML e ciencia de dados aplicada
+ORG.TEC.SI;ORG.TEC;Seguranca da Informacao (operacao);Operacao de seguranca cibernetica, SOC e resposta a incidentes
+ORG.TEC.INF;ORG.TEC;Infraestrutura;Datacenter, redes, nuvem e computacao
+ORG.OPE.LIQ;ORG.OPE;Liquidacao e Custodia;Liquidacao de operacoes e custodia de ativos
+ORG.OPE.CAM;ORG.OPE;Cambio (operacao);Processamento operacional de operacoes de cambio
+ORG.OPE.PCR;ORG.OPE;Processamento de Credito;Formalizacao, desembolso e operacao de credito
+ORG.OPE.CAD;ORG.OPE;Cadastro e KYC;Cadastro de clientes, KYC e qualificacao
+ORG.OPE.BKO;ORG.OPE;Backoffice de Produtos;Retaguarda operacional de produtos e servicos
+ORG.OPE.PCN;ORG.OPE;Continuidade de Negocios;Plano de continuidade, BIA e gestao de crises
+ORG.TES.PRO;ORG.TES;Mesa Proprietaria;Posicoes proprietarias e gestao de book
+ORG.TES.FUN;ORG.TES;Funding e Captacao;Captacao, emissao e gestao de passivos
+ORG.TES.ALM;ORG.TES;Gestao de Liquidez (ALM);Gestao de ativos e passivos e liquidez
+ORG.TES.CLI;ORG.TES;Mesa de Clientes;Operacoes de tesouraria para clientes
+ORG.RIS.CRE;ORG.RIS;Risco de Credito;Mensuracao e controle independente de risco de credito
+ORG.RIS.MER;ORG.RIS;Risco de Mercado;Mensuracao e controle de risco de mercado e IRRBB
+ORG.RIS.LIQ;ORG.RIS;Risco de Liquidez;Mensuracao e controle de risco de liquidez
+ORG.RIS.OPE;ORG.RIS;Risco Operacional;Gestao de risco operacional, perdas e KRIs
+ORG.RIS.SAC;ORG.RIS;Risco Socioambiental e Climatico;Gestao de risco social, ambiental e climatico
+ORG.RIS.MOD;ORG.RIS;Modelagem e Validacao;Desenvolvimento e validacao independente de modelos
+ORG.RIS.CAP;ORG.RIS;Capital e ICAAP;Gestao de capital, ICAAP e teste de estresse
+ORG.CIN.COM;ORG.CIN;Compliance Regulatorio;Conformidade regulatoria e pauta normativa
+ORG.CIN.CTI;ORG.CIN;Controles Internos;Avaliacao e monitoramento de controles internos
+ORG.CIN.PLD;ORG.CIN;Prevencao a Crimes Financeiros (PLD-FT);Funcao de PLD-FT e combate ao financiamento ao terrorismo
+ORG.CIN.CON;ORG.CIN;Conduta e Etica;Conduta de mercado, etica e suitability
+ORG.CIN.LGP;ORG.CIN;Privacidade e Protecao de Dados;Governanca de privacidade e LGPD
+ORG.CIN.SEG;ORG.CIN;Seguranca Cibernetica (governanca);Governanca e politica de seguranca cibernetica
+ORG.JUR.CTC;ORG.JUR;Contencioso;Gestao de processos judiciais e administrativos
+ORG.JUR.CON;ORG.JUR;Consultivo;Consultoria juridica a negocios e areas
+ORG.JUR.SOC;ORG.JUR;Societario e Regulatorio;Assuntos societarios e regulatorios
+ORG.JUR.TRA;ORG.JUR;Trabalhista;Assuntos trabalhistas e previdenciarios
+ORG.FIN.CTL;ORG.FIN;Controladoria;Controladoria e controle gerencial
+ORG.FIN.CTB;ORG.FIN;Contabilidade;Contabilidade societaria e fiscal
+ORG.FIN.FPA;ORG.FIN;Planejamento Financeiro;Planejamento, orcamento e analise financeira
+ORG.FIN.RI;ORG.FIN;Relacoes com Investidores;Comunicacao com investidores e mercado
+ORG.FIN.TRI;ORG.FIN;Fiscal e Tributario;Gestao fiscal, tributaria e obrigacoes acessorias
+ORG.AUD.NEG;ORG.AUD;Auditoria de Negocios;Auditoria de processos de negocio e operacoes
+ORG.AUD.TI;ORG.AUD;Auditoria de TI;Auditoria de tecnologia e seguranca
+ORG.AUD.CON;ORG.AUD;Auditoria Continua;Monitoramento continuo e analytics de auditoria
+ORG.OUV.OUV;ORG.OUV;Ouvidoria;Ouvidoria e tratamento de demandas de ultima instancia
+ORG.OUV.SAC;ORG.OUV;SAC e Atendimento;Servico de atendimento ao consumidor
+ORG.OUV.REG;ORG.OUV;Relacionamento com Reguladores;Interlocucao com BACEN, CVM e demais reguladores
+ORG.RH.GP;ORG.RH;Gestao de Pessoas;Gestao de talentos, carreira e desempenho
+ORG.RH.FOL;ORG.RH;Folha e Beneficios;Folha de pagamento, beneficios e obrigacoes
+ORG.RH.REC;ORG.RH;Recrutamento;Atracao, selecao e admissao
+ORG.RH.TRE;ORG.RH;Treinamento e Cultura;Desenvolvimento, treinamento e cultura organizacional
+ORG.FOR.GFO;ORG.FOR;Gestao de Fornecedores;Selecao, contratacao e gestao de terceiros
+ORG.FOR.CTR;ORG.FOR;Contratos e Terceiros;Gestao contratual e risco de terceiros
+ORG.FOR.PRE;ORG.FOR;Administracao Predial;Gestao predial e facilities
+ORG.FOR.SEG;ORG.FOR;Seguranca Fisica;Seguranca patrimonial e fisica
