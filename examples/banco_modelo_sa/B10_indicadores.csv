@@ -1,0 +1,17 @@
+id;nome;descricao;risco_id;processo_id;disciplina_id;unidade;direcao;limite_amarelo;limite_vermelho;meta
+KRI-01;Inadimplencia 90d PF;Inadimplencia 90d PF;RL-01;P.CRE.PF;DISC_CREDITO;%;menor_melhor;2.0;4.0;1.5
+KRI-02;Inadimplencia 90d PJ;Inadimplencia 90d PJ;RL-01;P.CRE.PJ;DISC_CREDITO;%;menor_melhor;2.5;5.0;2.0
+KRI-03;Tentativas de intrusao com sucesso;Tentativas de intrusao com sucesso;RL-07;P.TEC.CAN;DISC_CYBER;qtd;menor_melhor;2;5;0
+KRI-04;Alertas PLD nao tratados no prazo;Alertas PLD nao tratados no prazo;RL-13;P.OPE.CAD;DISC_LD;%;menor_melhor;5;10;2
+KRI-05;Disponibilidade do core banking;Disponibilidade do core banking;RL-09;P.TEC.COR;DISC_BIA;%;maior_melhor;99.5;99.0;99.9
+KRI-06;Reclamacoes de venda inadequada;Reclamacoes de venda inadequada;RL-12;P.NEG.VEN;DISC_CONDUTA;qtd;menor_melhor;20;40;10
+KRI-07;Incidentes de vazamento de dados;Incidentes de vazamento de dados;RL-14;P.CIN.LGP;DISC_LGPD;qtd;menor_melhor;1;3;0
+KRI-08;Perdas operacionais (R$ mil);Perdas operacionais (R$ mil);RL-06;P.OPE.LIQ;DISC_OPERACIONAL;R$mil;menor_melhor;200;500;100
+KRI-09;VaR utilizado vs limite;VaR utilizado vs limite;RL-02;P.TES.MES;DISC_MERCADO;%;menor_melhor;70;90;50
+KRI-10;Gap de liquidez 30d;Gap de liquidez 30d;RL-03;P.TES.ALM;DISC_LIQUIDEZ;%;maior_melhor;110;100;130
+KRI-11;Fraude externa (R$ mil);Fraude externa (R$ mil);RL-16;P.TEC.CAN;DISC_FRAUDE;R$mil;menor_melhor;150;400;80
+KRI-12;Apontamentos vencidos;Apontamentos vencidos;RL-11;P.CIN.CON;DISC_CONFORMIDADE;qtd;menor_melhor;3;8;0
+KRI-13;Cobertura de testes de controle;Cobertura de testes de controle;RL-06;P.CIN.CTI;DISC_OPERACIONAL;%;maior_melhor;70;50;90
+KRI-14;SLA de fornecedor critico;SLA de fornecedor critico;RL-10;P.TEC.INF;DISC_FORNECEDORES;%;maior_melhor;95;90;99
+KRI-15;Acuracia do modelo de credito;Acuracia do modelo de credito;RL-08;P.CRE.PF;DISC_MODELO;%;maior_melhor;75;70;85
+KRI-16;Exposicao cambial liquida;Exposicao cambial liquida;RL-05;P.OPE.CAM;DISC_MERCADO;%;menor_melhor;10;20;5

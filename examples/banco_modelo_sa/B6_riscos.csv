@@ -1,0 +1,18 @@
+id;codigo;nome;nivel;nucleo;parent_id;categoria_basileia;disciplina_id;descricao
+RL-01;RL-01;Inadimplencia e perda de credito;0;U;;;DISC_CREDITO;Risco local mapeado para R0.U.1
+RL-02;RL-02;Risco de mercado da carteira;0;U;;;DISC_MERCADO;Risco local mapeado para R0.U.2
+RL-03;RL-03;Descasamento e risco de liquidez;0;U;;;DISC_LIQUIDEZ;Risco local mapeado para R0.U.3
+RL-04;RL-04;Risco de juros da carteira banking;0;U;;;DISC_JUROS;Risco local mapeado para R0.U.4
+RL-05;RL-05;Exposicao cambial;0;U;;;DISC_MERCADO;Risco local mapeado para R0.U.5
+RL-06;RL-06;Falha operacional de processamento;0;U;;;DISC_OPERACIONAL;Risco local mapeado para R0.U.6
+RL-07;RL-07;Risco de Invasao Digital;0;U;;;DISC_CYBER;Risco local mapeado para R0.U.7
+RL-08;RL-08;Erro de modelo de credito;0;U;;;DISC_MODELO;Risco local mapeado para R0.U.8
+RL-09;RL-09;Indisponibilidade de sistemas;0;U;;;DISC_BIA;Risco local mapeado para R0.U.9
+RL-10;RL-10;Falha de fornecedor critico;0;U;;;DISC_FORNECEDORES;Risco local mapeado para R0.U.10
+RL-11;RL-11;Nao conformidade regulatoria;0;U;;;DISC_CONFORMIDADE;Risco local mapeado para R0.U.11
+RL-12;RL-12;Venda inadequada ao cliente;0;U;;;DISC_CONDUTA;Risco local mapeado para R0.U.12
+RL-13;RL-13;Lavagem de dinheiro;0;U;;;DISC_LD;Risco local mapeado para R0.U.13
+RL-14;RL-14;Vazamento de dados pessoais;0;U;;;DISC_LGPD;Risco local mapeado para R0.U.14
+RL-15;RL-15;Dano reputacional;0;U;;;DISC_REPUTACIONAL;Risco local mapeado para R0.U.15
+RL-16;RL-16;Fraude externa em canais;0;U;;;DISC_FRAUDE;Risco local mapeado para R0.U.6
+RL-17;RL-17;Fraude interna;0;U;;;DISC_FRAUDE;Risco local mapeado para R0.U.6

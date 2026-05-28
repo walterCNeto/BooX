@@ -1,0 +1,29 @@
+id;codigo;nome;nivel;nucleo;parent_id;descricao;owner_area;entrada;saida;criticidade_bia
+P.NEG;P.NEG;Negocios e Comercial;0;B;;Negocios e Comercial;AL-VAR;;;
+P.NEG.VAR;P.NEG.VAR;Atendimento Varejo PF;1;B;P.NEG;Atendimento Varejo PF;AL-VAR;;;4
+P.NEG.ALT;P.NEG.ALT;Atendimento Alta Renda;1;B;P.NEG;Atendimento Alta Renda;AL-DIA;;;4
+P.NEG.EMP;P.NEG.EMP;Atendimento Empresas;1;B;P.NEG;Atendimento Empresas;AL-EMP;;;4
+P.NEG.VEN;P.NEG.VEN;Venda e oferta de produtos;2;B;P.NEG.VAR;Venda e oferta de produtos;AL-VAR;;;4
+P.CRE;P.CRE;Credito;0;B;;Credito;AL-CPF;;;
+P.CRE.PF;P.CRE.PF;Concessao de credito PF;1;B;P.CRE;Concessao de credito PF;AL-CPF;;;5
+P.CRE.PJ;P.CRE.PJ;Concessao de credito PJ;1;B;P.CRE;Concessao de credito PJ;AL-CPJ;;;5
+P.CRE.CON;P.CRE.CON;Credito consignado INSS;2;B;P.CRE.PF;Credito consignado INSS;AL-CPF;;;5
+P.CRE.IMO;P.CRE.IMO;Credito imobiliario;2;B;P.CRE.PF;Credito imobiliario;AL-CPF;;;5
+P.CRE.COB;P.CRE.COB;Recuperacao e cobranca;1;B;P.CRE;Recuperacao e cobranca;AL-COB;;;5
+P.OPE;P.OPE;Operacoes;0;U;;Operacoes;AL-CAD;;;
+P.OPE.CAD;P.OPE.CAD;Cadastro e KYC;1;U;P.OPE;Cadastro e KYC;AL-CAD;;;5
+P.OPE.CAM;P.OPE.CAM;Operacoes de cambio;1;B;P.OPE;Operacoes de cambio;AL-CAM;;;4
+P.OPE.LIQ;P.OPE.LIQ;Liquidacao e processamento;1;U;P.OPE;Liquidacao e processamento;AL-CORE;;;4
+P.TES;P.TES;Tesouraria;0;B;;Tesouraria;AL-TES;;;
+P.TES.ALM;P.TES.ALM;Gestao de liquidez (ALM);1;B;P.TES;Gestao de liquidez (ALM);AL-TES;;;4
+P.TES.MES;P.TES.MES;Mesa proprietaria;1;MC;P.TES;Mesa proprietaria;AL-TES;;;4
+P.TEC;P.TEC;Tecnologia;0;U;;Tecnologia;AL-CORE;;;
+P.TEC.COR;P.TEC.COR;Operacao do core banking;1;U;P.TEC;Operacao do core banking;AL-CORE;;;5
+P.TEC.CAN;P.TEC.CAN;Canais digitais;1;U;P.TEC;Canais digitais;AL-CORE;;;4
+P.TEC.SI;P.TEC.SI;Seguranca da informacao;1;U;P.TEC;Seguranca da informacao;AL-CYBER;;;5
+P.TEC.INF;P.TEC.INF;Infraestrutura e nuvem;1;U;P.TEC;Infraestrutura e nuvem;AL-INFRA;;;4
+P.CIN;P.CIN;Controles e Compliance;0;U;;Controles e Compliance;AL-COMPL;;;
+P.CIN.PLD;P.CIN.PLD;Prevencao a lavagem (PLD-FT);1;U;P.CIN;Prevencao a lavagem (PLD-FT);AL-DPLD;;;5
+P.CIN.CON;P.CIN.CON;Conformidade regulatoria;1;U;P.CIN;Conformidade regulatoria;AL-COMPL;;;4
+P.CIN.LGP;P.CIN.LGP;Privacidade e protecao de dados;1;U;P.CIN;Privacidade e protecao de dados;AL-LGPD;;;4
+P.CIN.CTI;P.CIN.CTI;Controles internos;1;U;P.CIN;Controles internos;AL-DICOI;;;4

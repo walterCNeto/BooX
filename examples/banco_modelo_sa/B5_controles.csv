@@ -1,0 +1,21 @@
+id;acao;tipo;risco_id;processo_id;responsavel;local;frequencia;mecanismo;como;cobertura_pct;natureza;eficacia_autoavaliada;eficacia_validada;status_validacao
+CT-001;Comite de credito aprova operacoes acima de limite;credito;RL-01;P.CRE.PJ;AL-RCRED;Comite + sistema;semanal;manual;Voto qualificado;100;preventivo;4;3;validado_amostral
+CT-002;Motor de decisao automatizado com score;credito;RL-01;P.CRE.PF;AL-CPF;Esteira digital;continuo;automatico;Score + politica;100;preventivo;4;4;validado_amostral
+CT-003;Validacao independente anual do modelo;modelo;RL-08;P.CRE.PF;AL-RCRED;MRM;anual;manual;Backtesting;100;detectivo;3;2;validado_documentalmente
+CT-004;Limites de VaR e stop loss na mesa;mercado;RL-02;P.TES.MES;AL-TES;Sistema de risco;diario;automatico;Monitor intraday;100;preventivo;4;4;validado_completo
+CT-005;Monitoramento de gaps de liquidez;liquidez;RL-03;P.TES.ALM;AL-TES;ALM;diario;semi;Fluxo de caixa projetado;100;detectivo;4;4;validado_amostral
+CT-006;Monitoramento transacional PLD;operacional;RL-13;P.CIN.PLD;AL-DPLD;Sistema PLD;continuo;automatico;Regras + listas;90;detectivo;3;2;validado_amostral
+CT-007;Verificacao KYC na abertura;operacional;RL-13;P.OPE.CAD;AL-CAD;Onboarding;por_evento;semi;Documentos + consultas;95;preventivo;3;2;apenas_autoavaliado
+CT-008;SOC 24x7 e resposta a incidentes;operacional;RL-07;P.TEC.SI;AL-CYBER;SOC;continuo;automatico;SIEM + alertas;85;detectivo;4;3;validado_amostral
+CT-009;Gestao de acessos privilegiados;operacional;RL-07;P.TEC.CAN;AL-CYBER;IAM;continuo;semi;Revisao trimestral;70;preventivo;3;;apenas_autoavaliado
+CT-010;Plano de continuidade e DR testado;operacional;RL-09;P.TEC.COR;AL-INFRA;PCN;semestral;manual;Testes de failover;80;corretivo;3;2;validado_documentalmente
+CT-011;Dupla checagem na liquidacao;operacional;RL-06;P.OPE.LIQ;AL-CORE;Backoffice;diario;manual;Maker-checker;100;preventivo;4;3;validado_amostral
+CT-012;Selo de suitability na venda;operacional;RL-12;P.NEG.VEN;AL-COMPL;CRM;por_evento;semi;Perfil + alerta;80;preventivo;3;2;apenas_autoavaliado
+CT-013;Antifraude em canais digitais;operacional;RL-16;P.TEC.CAN;AL-CYBER;Antifraude;continuo;automatico;Device + comportamento;90;detectivo;4;3;validado_amostral
+CT-014;Mapa de privacidade e base legal;operacional;RL-14;P.CIN.LGP;AL-LGPD;RoPA;anual;manual;Inventario de dados;60;preventivo;3;;apenas_autoavaliado
+CT-015;Criptografia de dados sensiveis;operacional;RL-14;P.TEC.CAN;AL-CYBER;Plataforma;continuo;automatico;Em transito e repouso;75;preventivo;3;2;validado_documentalmente
+CT-016;Pauta regulatoria semanal;operacional;RL-11;P.CIN.CON;AL-COMPL;Compliance;semanal;manual;Triagem normativa;90;preventivo;4;3;validado_amostral
+CT-017;Limite cambial e hedge;mercado;RL-05;P.OPE.CAM;AL-TES;Mesa;diario;semi;Exposicao liquida;100;preventivo;4;3;validado_amostral
+CT-018;Politica de cobranca e renegociacao;credito;RL-01;P.CRE.COB;AL-COB;Sistema cobranca;mensal;semi;Reguas de cobranca;90;corretivo;3;2;apenas_autoavaliado
+CT-019;Due diligence de fornecedores criticos;operacional;RL-10;P.TEC.INF;AL-INFRA;GRC fornecedores;anual;manual;Avaliacao + SLA;70;preventivo;3;;apenas_autoavaliado
+CT-020;Conciliacao diaria de retaguarda;operacional;RL-06;P.OPE.CAD;AL-CAD;Backoffice;diario;semi;Batimento de bases;85;detectivo;3;2;apenas_autoavaliado

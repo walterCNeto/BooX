@@ -1,0 +1,11 @@
+id;fonte;tipo;descricao;risco_id;processo_id;disciplina_id;severidade;quantidade;status;valor_metrica;valor_anterior;data;periodo
+EXT-001;bacen;procedente;Procedentes sobre cobranca indevida;RL-12;;DISC_CONDUTA;;18;;;;2025-12-31;2025-Q4
+EXT-002;bacen;procedente;Procedentes sobre oferta de credito;RL-01;;DISC_CREDITO;;9;;;;2025-12-31;2025-Q4
+EXT-003;bacen;ranking_reclamacoes;Posicao no ranking de reclamacoes;RL-15;;DISC_REPUTACIONAL;3;;;;;2025-12-31;2025-Q4
+EXT-004;cvm;processo_em_curso;PAS sobre suitability;RL-12;;DISC_CONDUTA;;1;em_curso;;;2025-11-20;2025-Q4
+EXT-005;procon;procedente;Reclamacoes Procon sobre cobranca;RL-12;;DISC_CONDUTA;;12;;;;2025-12-31;2025-Q4
+EXT-006;midia;noticia_adversa;Reportagem sobre vazamento de dados;RL-14;;DISC_LGPD;4;1;;;;2025-10-15;2025-Q4
+EXT-007;midia;noticia_adversa;Materia sobre golpe em canal digital;RL-16;;DISC_FRAUDE;3;1;;;;2025-11-05;2025-Q4
+EXT-008;reclame_aqui;nota_periodo;Nota geral do periodo;RL-15;;DISC_REPUTACIONAL;;1;;6.4;7.1;2025-12-31;2025-Q4
+EXT-009;anbima;carta_recomendacao;Carta sobre distribuicao;RL-12;;DISC_CONDUTA;;2;;;;2025-09-30;2025-Q3
+EXT-010;bacen;procedente;Procedentes sobre conta e cadastro;RL-06;;DISC_OPERACIONAL;;6;;;;2025-12-31;2025-Q4

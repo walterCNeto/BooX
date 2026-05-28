@@ -1,0 +1,35 @@
+processo_id;processo_nome;risco_id;risco_canonico;disciplina;area_afetada;area_gestora;materialidade;score_y;nivel_y;score_x;nivel_x;prioridade
+P.CRE.CON;Credito consignado INSS;RL-12;R0.U.12;DISC_CONDUTA;AL-CPF;AL-COMPL;4;3.5;Alto;68.6;-;Alto
+P.OPE.CAD;Cadastro e KYC;RL-13;R0.U.13;DISC_LD;AL-CAD;AL-DPLD;5;4.5;Elevado;62.0;-;Critico
+P.TEC.CAN;Canais digitais;RL-07;R0.U.7;DISC_CYBER;AL-CORE;AL-CYBER;4;3.5;Alto;47.0;0;Medio
+P.NEG.VEN;Venda e oferta de produtos;RL-12;R0.U.12;DISC_CONDUTA;AL-VAR;AL-COMPL;4;3.5;Alto;45.1;0;Medio
+P.NEG.ALT;Atendimento Alta Renda;RL-12;R0.U.12;DISC_CONDUTA;AL-DIA;AL-COMPL;3;2.5;Medio;36.6;+;Baixo
+P.TEC.COR;Operacao do core banking;RL-09;R0.U.9;DISC_BIA;AL-CORE;AL-INFRA;5;4.5;Elevado;33.8;+;Medio
+P.CRE.COB;Recuperacao e cobranca;RL-12;R0.U.12;DISC_CONDUTA;AL-COB;AL-COMPL;3;2.5;Medio;33.6;+;Baixo
+P.CRE.CON;Credito consignado INSS;RL-01;R0.U.1;DISC_CREDITO;AL-CPF;AL-RCRED;4;3.5;Alto;30.5;+;Medio
+P.CRE.IMO;Credito imobiliario;RL-01;R0.U.1;DISC_CREDITO;AL-CPF;AL-RCRED;4;3.5;Alto;30.5;+;Medio
+P.CRE.PF;Concessao de credito PF;RL-08;R0.U.8;DISC_MODELO;AL-RCRED;AL-RCRED;3;2.5;Medio;28.8;+;Baixo
+P.CRE.COB;Recuperacao e cobranca;RL-01;R0.U.1;DISC_CREDITO;AL-COB;AL-RCRED;3;2.5;Medio;26.5;+;Baixo
+P.OPE.LIQ;Liquidacao e processamento;RL-17;R0.U.6;DISC_FRAUDE;AL-CORE;AL-AUDIT;3;2.5;Medio;26.4;+;Baixo
+P.CRE.PF;Concessao de credito PF;RL-16;R0.U.6;DISC_FRAUDE;AL-CPF;AL-RISCO;3;2.5;Medio;26.4;+;Baixo
+P.TES.ALM;Gestao de liquidez (ALM);RL-04;R0.U.4;DISC_JUROS;AL-TES;AL-TES;3;2.5;Medio;26.0;+;Baixo
+P.TEC.INF;Infraestrutura e nuvem;RL-09;R0.U.9;DISC_BIA;AL-INFRA;AL-INFRA;4;3.5;Alto;26.0;+;Medio
+P.CIN.CTI;Controles internos;RL-11;R0.U.11;DISC_CONFORMIDADE;AL-DICOI;AL-DICOI;3;2.5;Medio;26.0;+;Baixo
+P.TES.MES;Mesa proprietaria;RL-08;R0.U.8;DISC_MODELO;AL-TES;AL-RISCO;3;2.5;Medio;26.0;+;Baixo
+P.CIN.PLD;Prevencao a lavagem (PLD-FT);RL-13;R0.U.13;DISC_LD;AL-DPLD;AL-DPLD;5;4.5;Elevado;25.6;+;Medio
+P.OPE.CAD;Cadastro e KYC;RL-14;R0.U.14;DISC_LGPD;AL-CAD;AL-LGPD;4;3.5;Alto;24.0;+;Medio
+P.OPE.LIQ;Liquidacao e processamento;RL-09;R0.U.9;DISC_BIA;AL-CORE;AL-INFRA;4;3.5;Alto;23.0;+;Medio
+P.NEG.VEN;Venda e oferta de produtos;RL-15;R0.U.15;DISC_REPUTACIONAL;AL-VAR;AL-OUVID;3;2.5;Medio;23.0;+;Baixo
+P.CIN.LGP;Privacidade e protecao de dados;RL-14;R0.U.14;DISC_LGPD;AL-LGPD;AL-LGPD;4;3.5;Alto;23.0;+;Medio
+P.CIN.CON;Conformidade regulatoria;RL-11;R0.U.11;DISC_CONFORMIDADE;AL-COMPL;AL-COMPL;4;3.5;Alto;22.1;+;Medio
+P.TEC.INF;Infraestrutura e nuvem;RL-10;R0.U.10;DISC_FORNECEDORES;AL-INFRA;AL-INFRA;3;2.5;Medio;22.0;+;Baixo
+P.TEC.CAN;Canais digitais;RL-16;R0.U.6;DISC_FRAUDE;AL-CORE;AL-RISCO;4;3.5;Alto;20.0;+;Medio
+P.TEC.SI;Seguranca da informacao;RL-07;R0.U.7;DISC_CYBER;AL-CYBER;AL-CYBER;5;4.5;Elevado;19.6;++;Medio
+P.CRE.PJ;Concessao de credito PJ;RL-01;R0.U.1;DISC_CREDITO;AL-CPJ;AL-RCRED;5;4.5;Elevado;19.1;++;Medio
+P.OPE.LIQ;Liquidacao e processamento;RL-06;R0.U.6;DISC_OPERACIONAL;AL-CORE;AL-RISCO;4;3.5;Alto;17.6;++;Baixo
+P.CRE.PF;Concessao de credito PF;RL-01;R0.U.1;DISC_CREDITO;AL-CPF;AL-RCRED;5;4.5;Elevado;15.5;++;Medio
+P.OPE.CAD;Cadastro e KYC;RL-06;R0.U.6;DISC_OPERACIONAL;AL-CAD;AL-RISCO;3;2.5;Medio;15.0;++;Baixo
+P.TEC.CAN;Canais digitais;RL-14;R0.U.14;DISC_LGPD;AL-CORE;AL-LGPD;4;3.5;Alto;14.8;++;Baixo
+P.OPE.CAM;Operacoes de cambio;RL-05;R0.U.5;DISC_MERCADO;AL-CAM;AL-TES;3;2.5;Medio;12.1;++;Baixo
+P.TES.ALM;Gestao de liquidez (ALM);RL-03;R0.U.3;DISC_LIQUIDEZ;AL-TES;AL-TES;5;4.5;Elevado;6.0;++;Medio
+P.TES.MES;Mesa proprietaria;RL-02;R0.U.2;DISC_MERCADO;AL-TES;AL-TES;4;3.5;Alto;6.0;++;Baixo

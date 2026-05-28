@@ -1,0 +1,9 @@
+id;norma_id;alvo_tipo;alvo_id;tipo_vinculo;notas
+1;RES_CMN_4557;risco;RL-06;primaria;
+2;RES_BCB_265;risco;RL-06;primaria;
+3;RES_CMN_4658;risco;RL-07;primaria;
+4;LEI_13709;risco;RL-14;primaria;
+5;LEI_9613;risco;RL-13;primaria;
+6;CIRC_BCB_3978;risco;RL-13;primaria;
+7;RES_CVM_30;risco;RL-12;primaria;
+8;RES_CMN_4753;risco;RL-09;primaria;

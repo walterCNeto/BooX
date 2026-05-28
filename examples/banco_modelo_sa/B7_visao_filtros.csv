@@ -1,0 +1,7 @@
+visao_id;dimensao;operador;valor
+VIS_CONSIGNADO;processo;prefixo;P.CRE.CON
+VIS_CONSIGNADO;processo;prefixo;P.CRE.COB
+VIS_CYBER_LGPD;disciplina;em;DISC_CYBER|DISC_LGPD
+VIS_CREDITO;disciplina;igual;DISC_CREDITO
+VIS_CREDITO;processo;prefixo;P.CRE
+VIS_CONDUTA;disciplina;igual;DISC_CONDUTA

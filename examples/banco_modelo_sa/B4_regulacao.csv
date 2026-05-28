@@ -1,0 +1,9 @@
+id;tipo;numero;ano;regulador;titulo;ementa;status;url_oficial
+RES_CMN_4557;res_cmn;4557;2017;CMN;Gerenciamento de riscos e capital;Estrutura de gerenciamento de riscos;vigente;
+RES_BCB_265;res_bcb;265;2022;BCB;Risco operacional;Gerenciamento continuo de risco operacional;vigente;
+RES_CMN_4658;res_cmn;4658;2018;CMN;Politica de seguranca cibernetica;Ciberseguranca e nuvem;vigente;
+LEI_13709;lei;13709;2018;Congresso;LGPD;Protecao de dados pessoais;vigente;
+LEI_9613;lei;9613;1998;Congresso;Lavagem de dinheiro;PLD-FT;vigente;
+CIRC_BCB_3978;circ_bcb;3978;2020;BCB;PLD-FT;Politica de prevencao a lavagem;vigente;
+RES_CVM_30;res_cvm;30;2021;CVM;Suitability;Dever de verificacao de adequacao;vigente;
+RES_CMN_4753;res_cmn;4753;2019;CMN;Continuidade de negocios;Politica de continuidade;vigente;

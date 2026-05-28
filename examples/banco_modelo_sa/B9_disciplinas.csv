@@ -1,0 +1,16 @@
+id;nome;descricao;categoria_basileia;responsavel_2linha
+DISC_BIA;Continuidade;Disciplina Continuidade;operacional;;
+DISC_CONDUTA;Conduta;Disciplina Conduta;operacional;;
+DISC_CONFORMIDADE;Conformidade;Disciplina Conformidade;operacional;;
+DISC_CREDITO;Credito;Disciplina Credito;operacional;;
+DISC_CYBER;Cyber;Disciplina Cyber;operacional;;
+DISC_FORNECEDORES;Fornecedores;Disciplina Fornecedores;operacional;;
+DISC_FRAUDE;Fraude;Disciplina Fraude;operacional;;
+DISC_JUROS;Taxa de Juros;Disciplina Taxa de Juros;operacional;;
+DISC_LD;Lavagem de Dinheiro;Disciplina Lavagem de Dinheiro;operacional;;
+DISC_LGPD;Privacidade e LGPD;Disciplina Privacidade e LGPD;operacional;;
+DISC_LIQUIDEZ;Liquidez;Disciplina Liquidez;operacional;;
+DISC_MERCADO;Mercado;Disciplina Mercado;operacional;;
+DISC_MODELO;Modelo;Disciplina Modelo;operacional;;
+DISC_OPERACIONAL;Operacional;Disciplina Operacional;operacional;;
+DISC_REPUTACIONAL;Reputacional;Disciplina Reputacional;operacional;;

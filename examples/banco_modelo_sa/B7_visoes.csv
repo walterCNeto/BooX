@@ -1,0 +1,6 @@
+id;nome;tipo;descricao;owner;regra_afetacao
+VIS_CASA;Casa toda;livre;Visao consolidada de todos os riscos;CRO;
+VIS_CONSIGNADO;Consignado INSS;produto;Risco do produto consignado ponta a ponta;AL-CPF;
+VIS_CYBER_LGPD;Cyber e LGPD;disciplina;Seguranca cibernetica e privacidade;AL-CYBER;
+VIS_CREDITO;Credito E2E;e2e;Todo o ciclo de credito;AL-RCRED;
+VIS_CONDUTA;Conduta e Suitability;disciplina;Conduta de mercado e venda;AL-COMPL;
