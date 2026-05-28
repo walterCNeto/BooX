@@ -1,0 +1,41 @@
+# Licença de Dados — Creative Commons Attribution 4.0 International (CC BY 4.0)
+
+Todo o **conteúdo de dados** deste repositório está licenciado sob a
+**Creative Commons Attribution 4.0 International (CC BY 4.0)**.
+
+Isso inclui, sem limitação:
+
+- A especificação dos Books (`schema/`)
+- As taxonomias de processos, riscos e disciplinas
+- O conjunto de dados sintético **Banco Modelo S.A.** (`examples/`)
+- Os templates de preenchimento (`templates/`)
+
+## Você é livre para:
+
+- **Compartilhar** — copiar e redistribuir o material em qualquer meio ou formato
+- **Adaptar** — remixar, transformar e criar a partir do material para
+  qualquer finalidade, inclusive comercial
+
+## Sob a seguinte condição:
+
+- **Atribuição** — Você deve dar o crédito apropriado, fornecer um link
+  para a licença e indicar se mudanças foram feitas. Você pode fazê-lo de
+  qualquer forma razoável, mas não de forma que sugira que o licenciante
+  endossa você ou o seu uso.
+
+Texto completo da licença:
+https://creativecommons.org/licenses/by/4.0/legalcode.pt
+
+## Atribuição sugerida
+
+> Framework BooX (catálogo e dados), por Walter C. Neto, licenciado sob
+> CC BY 4.0. Disponível em github.com/walterCNeto/BooX
+
+## Observação importante sobre o Banco Modelo S.A.
+
+O "Banco Modelo S.A." é uma instituição **fictícia**. Todos os dados —
+processos, riscos, controles, apontamentos, indicadores, procedentes,
+nomes de pessoas — são **sintéticos**, criados para fins de demonstração e
+ensino. Qualquer semelhança com instituições, pessoas ou eventos reais é
+coincidência. Os dados não representam, e não devem ser interpretados
+como, informação real de qualquer instituição financeira.

@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+dist/
+build/
+.venv/
+venv/
+env/
+
+# Saídas geradas pela ferramenta
+output/
+*.tmp
+
+# Editores
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Mas manter os exemplos e templates versionados
+!examples/**
+!templates/**
