@@ -61,3 +61,46 @@ hierarquia por prefixo (`ORG.TEC.SI.SOC` seria uma subárea de SI).
 
 Da mesma forma, os riscos R0 podem ganhar R1, R2... conforme a casa
 detalha sua taxonomia, sempre ancorados nos 20 R0 canônicos.
+
+## Curadoria do canonico (Rota A)
+
+O canonico e **estavel mas evolutivo**. As regras completas estao em
+[`REGRAS.md`](REGRAS.md). Em resumo: **aditivo e livre, destrutivo e
+proibido, deprecar em vez de apagar**. IDs nunca sao apagados nem
+reutilizados.
+
+### Versionamento
+
+O canonico tem versao semantica em [`VERSION`](VERSION) e historico em
+[`CHANGELOG.md`](CHANGELOG.md):
+- PATCH: correcao de rotulo/descricao
+- MINOR: adicao de novos IDs (seguro)
+- MAJOR: deprecacao de IDs em uso
+
+### Ferramentas
+
+```bash
+# listar o conteudo de um arquivo canonico
+python canonico/curar.py listar riscos
+
+# adicionar um conceito novo (bump MINOR automatico)
+python canonico/curar.py adicionar riscos --id R0.U.21 --nome "Risco de IA Generativa" \
+   --campos categoria_basileia=operacional grupo=operacional descricao="..."
+
+# renomear o rotulo de um ID (bump PATCH)
+python canonico/curar.py renomear riscos --id R0.U.21 --nome "Risco de IA"
+
+# deprecar um ID sem apagar (bump MAJOR; aponta o substituto)
+python canonico/curar.py deprecar riscos --id R0.U.21 --substituido_por R0.U.6
+
+# validar a integridade do canonico (sempre apos curar)
+python canonico/validar.py
+```
+
+Dominios validos para curar/listar: `dominios`, `areas`, `riscos`, `disciplinas`.
+
+### Campos de governanca
+
+Cada registro canonico tem `status` (ativo/deprecado) e `substituido_por`.
+A analise de suficiencia avisa quando um de-para (B_MAP) aponta para um ID
+canonico deprecado ou inexistente, permitindo migracao gradual sem quebra.

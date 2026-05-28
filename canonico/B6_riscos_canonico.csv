@@ -1,21 +1,22 @@
-id;codigo;nome;nivel;nucleo;parent_id;categoria_basileia;grupo;descricao
-R0.U.1;R0.U.1;Risco de Credito;0;U;;credito;financeiro;Perda pelo nao cumprimento de obrigacoes por contraparte ou devedor
-R0.U.2;R0.U.2;Risco de Mercado;0;U;;mercado;financeiro;Perda por variacao de precos, taxas, moedas e indices de mercado
-R0.U.3;R0.U.3;Risco de Liquidez;0;U;;liquidez;financeiro;Incapacidade de honrar obrigacoes ou negociar posicoes sem perdas relevantes
-R0.U.4;R0.U.4;Risco de Taxa de Juros (IRRBB);0;U;;mercado;financeiro;Risco de taxa de juros dos instrumentos da carteira bancaria
-R0.U.5;R0.U.5;Risco de Variacao Cambial;0;U;;mercado;financeiro;Perda por exposicao a variacao de moedas estrangeiras
-R0.U.6;R0.U.6;Risco Operacional;0;U;;operacional;operacional;Perda por falha em processos, pessoas, sistemas ou eventos externos
-R0.U.7;R0.U.7;Risco Cibernetico;0;U;;operacional;operacional;Perda por ataques, falhas ou incidentes de seguranca cibernetica
-R0.U.8;R0.U.8;Risco de Modelo;0;U;;operacional;operacional;Perda por uso de modelos com erros de concepcao, dados ou aplicacao
-R0.U.9;R0.U.9;Risco de Resiliencia e Continuidade;0;U;;operacional;operacional;Interrupcao de servicos criticos e falha na continuidade de negocios
-R0.U.10;R0.U.10;Risco de Fornecedores e Terceiros;0;U;;operacional;operacional;Perda por falha, dependencia ou conduta de terceiros e prestadores
-R0.U.11;R0.U.11;Risco de Conformidade;0;U;;operacional;conformidade;Perda por descumprimento de normas, leis e regulamentos
-R0.U.12;R0.U.12;Risco de Conduta;0;U;;operacional;conformidade;Perda por conduta inadequada com clientes, mercado ou suitability
-R0.U.13;R0.U.13;Risco de Lavagem de Dinheiro e FT;0;U;;operacional;conformidade;Uso da instituicao para lavagem de dinheiro ou financiamento ao terrorismo
-R0.U.14;R0.U.14;Risco de Privacidade e Protecao de Dados;0;U;;operacional;conformidade;Tratamento inadequado de dados pessoais e violacao da LGPD
-R0.U.15;R0.U.15;Risco Reputacional;0;U;;reputacional;estrategico;Deterioracao da imagem e percepcao de partes interessadas
-R0.U.16;R0.U.16;Risco de Negocio e Estrategia;0;U;;estrategico;estrategico;Perda por decisoes estrategicas, mercado ou execucao inadequada
-R0.U.17;R0.U.17;Risco Pais;0;U;;credito;estrategico;Exposicao a fatores politicos e economicos de outros paises
-R0.U.18;R0.U.18;Risco de Contagio;0;U;;credito;estrategico;Propagacao de risco entre entidades do grupo ou do sistema
-R0.U.19;R0.U.19;Risco Socioambiental e Climatico;0;U;;operacional;estrategico;Perda por fatores sociais, ambientais e mudancas climaticas
-R0.U.20;R0.U.20;Riscos Emergentes;0;U;;operacional;estrategico;Riscos novos com impacto potencial material a medio e longo prazo
+id;codigo;nome;nivel;nucleo;parent_id;categoria_basileia;grupo;descricao;status;substituido_por
+R0.U.1;R0.U.1;Risco de Credito;0;U;;credito;financeiro;Perda pelo nao cumprimento de obrigacoes por contraparte ou devedor;ativo;
+R0.U.2;R0.U.2;Risco de Mercado;0;U;;mercado;financeiro;Perda por variacao de precos, taxas, moedas e indices de mercado;ativo;
+R0.U.3;R0.U.3;Risco de Liquidez;0;U;;liquidez;financeiro;Incapacidade de honrar obrigacoes ou negociar posicoes sem perdas relevantes;ativo;
+R0.U.4;R0.U.4;Risco de Taxa de Juros (IRRBB);0;U;;mercado;financeiro;Risco de taxa de juros dos instrumentos da carteira bancaria;ativo;
+R0.U.5;R0.U.5;Risco de Variacao Cambial;0;U;;mercado;financeiro;Perda por exposicao a variacao de moedas estrangeiras;ativo;
+R0.U.6;R0.U.6;Risco Operacional;0;U;;operacional;operacional;Perda por falha em processos, pessoas, sistemas ou eventos externos;ativo;
+R0.U.7;R0.U.7;Risco Cibernetico;0;U;;operacional;operacional;Perda por ataques, falhas ou incidentes de seguranca cibernetica;ativo;
+R0.U.8;R0.U.8;Risco de Modelo;0;U;;operacional;operacional;Perda por uso de modelos com erros de concepcao, dados ou aplicacao;ativo;
+R0.U.9;R0.U.9;Risco de Resiliencia e Continuidade;0;U;;operacional;operacional;Interrupcao de servicos criticos e falha na continuidade de negocios;ativo;
+R0.U.10;R0.U.10;Risco de Fornecedores e Terceiros;0;U;;operacional;operacional;Perda por falha, dependencia ou conduta de terceiros e prestadores;ativo;
+R0.U.11;R0.U.11;Risco de Conformidade;0;U;;operacional;conformidade;Perda por descumprimento de normas, leis e regulamentos;ativo;
+R0.U.12;R0.U.12;Risco de Conduta;0;U;;operacional;conformidade;Perda por conduta inadequada com clientes, mercado ou suitability;ativo;
+R0.U.13;R0.U.13;Risco de Lavagem de Dinheiro e FT;0;U;;operacional;conformidade;Uso da instituicao para lavagem de dinheiro ou financiamento ao terrorismo;ativo;
+R0.U.14;R0.U.14;Risco de Privacidade e Protecao de Dados;0;U;;operacional;conformidade;Tratamento inadequado de dados pessoais e violacao da LGPD;ativo;
+R0.U.15;R0.U.15;Risco Reputacional;0;U;;reputacional;estrategico;Deterioracao da imagem e percepcao de partes interessadas;ativo;
+R0.U.16;R0.U.16;Risco de Negocio e Estrategia;0;U;;estrategico;estrategico;Perda por decisoes estrategicas, mercado ou execucao inadequada;ativo;
+R0.U.17;R0.U.17;Risco Pais;0;U;;credito;estrategico;Exposicao a fatores politicos e economicos de outros paises;ativo;
+R0.U.18;R0.U.18;Risco de Contagio;0;U;;credito;estrategico;Propagacao de risco entre entidades do grupo ou do sistema;ativo;
+R0.U.19;R0.U.19;Risco Socioambiental e Climatico;0;U;;operacional;estrategico;Perda por fatores sociais, ambientais e mudancas climaticas;ativo;
+R0.U.20;R0.U.20;Riscos Emergentes;0;U;;operacional;estrategico;Riscos novos com impacto potencial material a medio e longo prazo;ativo;
+R0.U.21;R0.U.21;Risco de IA Generativa;;;;operacional;operacional;Risco de modelos de IA;ativo;

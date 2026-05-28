@@ -50,3 +50,18 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/).
   frequencia_execucao, volume_transacional
 - B8: ampliado para incluir Ouvidoria e SAC alem dos sinais externos publicos
 - Banco Modelo S.A. regenerado com todos os campos novos
+
+### Curadoria do canonico (Rota A)
+
+#### Adicionado
+- Campos de governanca `status` (ativo/deprecado) e `substituido_por` em
+  todos os CSVs canonicos
+- `canonico/VERSION` (versionamento semantico, inicia em 1.0.0) e
+  `canonico/CHANGELOG.md`
+- `canonico/REGRAS.md` — regras de curadoria (aditivo livre, destrutivo
+  proibido, deprecar em vez de apagar)
+- `canonico/curar.py` — ferramenta de curadoria (adicionar/renomear/deprecar)
+  com bump de versao e changelog automaticos; bloqueia reuso de IDs
+- `canonico/validar.py` — validacao de integridade do canonico
+- Analise de suficiencia agora detecta de-paras apontando para IDs
+  canonicos deprecados ou inexistentes

@@ -78,6 +78,21 @@ def analisar(pasta):
         faltam=[w for k,w in w5.items() if not _preenchido(c.get(k))]
         if faltam: inc+=1
     if inc: rel["alertas"].append(("5W2H",f"{inc} controle(s) com 5W2H incompleto (descricao parcial)"))
+    # de-para apontando para canonico deprecado ou inexistente
+    raiz = os.path.join(os.path.dirname(pasta), "..") if os.path.basename(os.path.dirname(pasta))=="examples" else None
+    canon_dir = None
+    for cand in [os.path.join(pasta,"..","..","canonico"), os.path.join(os.path.dirname(__file__),"..","canonico")]:
+        if os.path.isdir(cand): canon_dir = cand; break
+    if canon_dir:
+        cr = _ler(os.path.join(canon_dir,"B6_riscos_canonico.csv")) or []
+        status = {r["id"]: r.get("status","ativo") for r in cr}
+        usados = [(m["termo_local_id"], m["canonico_id"]) for m in bmap
+                  if m.get("dominio")=="risco" and m.get("status") in ("aprovado","ajustado")]
+        inex = [c for _,c in usados if c and c not in status]
+        depr = [c for _,c in usados if c in status and status[c]=="deprecado"]
+        if inex: rel["alertas"].append(("de-para",f"{len(set(inex))} de-para(s) apontam para risco canonico INEXISTENTE: "+", ".join(sorted(set(inex))[:5])))
+        if depr: rel["alertas"].append(("de-para",f"{len(set(depr))} de-para(s) usam risco canonico DEPRECADO (migre): "+", ".join(sorted(set(depr))[:5])))
+
     # series curtas
     cont={}
     for s in serie: cont[s["indicador_id"]]=cont.get(s["indicador_id"],0)+1
