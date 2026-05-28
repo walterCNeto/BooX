@@ -1,24 +1,24 @@
-id;titulo;descricao;origem;severidade;status;processo_id;risco_id;controle_id;data_abertura;data_prazo;data_fechamento;responsavel
-AP-2025-0001;Deficiencia em controle cibernetico;Deficiencia em controle cibernetico no processo P.TEC.CAN;auditoria;critico;aberto;P.TEC.CAN;RL-07;CT-009;2025-11-04;2026-02-28;;Area responsavel
-AP-2025-0002;Deficiencia em controle cibernetico;Deficiencia em controle cibernetico no processo P.TEC.CAN;controles_internos;alto;em_tratamento;P.TEC.CAN;RL-07;CT-009;2025-11-09;2026-03-28;;Area responsavel
-AP-2025-0003;Deficiencia em controle cibernetico;Deficiencia em controle cibernetico no processo P.TEC.SI;auditoria;alto;aberto;P.TEC.SI;RL-07;CT-008;2025-07-05;2026-07-28;;Area responsavel
-AP-2025-0004;Lacuna em monitoramento PLD;Lacuna em monitoramento PLD no processo P.OPE.CAD;regulador;critico;aberto;P.OPE.CAD;RL-13;CT-007;2025-06-22;2026-07-28;;Area responsavel
-AP-2025-0005;Lacuna em monitoramento PLD;Lacuna em monitoramento PLD no processo P.OPE.CAD;compliance;alto;em_tratamento;P.OPE.CAD;RL-13;CT-007;2025-10-03;2026-06-28;;Area responsavel
-AP-2025-0006;Lacuna em monitoramento PLD;Lacuna em monitoramento PLD no processo P.CIN.PLD;auditoria;alto;aberto;P.CIN.PLD;RL-13;CT-006;2025-09-02;2026-02-28;;Area responsavel
-AP-2025-0007;Gap de privacidade;Gap de privacidade no processo P.CIN.LGP;compliance;alto;aberto;P.CIN.LGP;RL-14;CT-014;2025-06-07;2026-03-28;;Area responsavel
-AP-2025-0008;Gap de privacidade;Gap de privacidade no processo P.OPE.CAD;controles_internos;medio;aberto;P.OPE.CAD;RL-14;;2025-10-20;2026-02-28;;Area responsavel
-AP-2025-0009;Falha de suitability na venda;Falha de suitability na venda no processo P.CRE.CON;regulador;critico;aberto;P.CRE.CON;RL-12;CT-012;2025-10-07;2026-07-28;;Area responsavel
-AP-2025-0010;Falha de suitability na venda;Falha de suitability na venda no processo P.NEG.VEN;compliance;alto;vencido;P.NEG.VEN;RL-12;CT-012;2025-11-23;2026-06-28;;Area responsavel
-AP-2025-0011;Falha de suitability na venda;Falha de suitability na venda no processo P.CRE.COB;ouvidoria;medio;em_tratamento;P.CRE.COB;RL-12;;2025-09-08;2026-05-28;;Area responsavel
-AP-2025-0012;Fragilidade em concessao;Fragilidade em concessao no processo P.CRE.PJ;controles_internos;medio;aberto;P.CRE.PJ;RL-01;CT-001;2025-10-09;2026-08-28;;Area responsavel
-AP-2025-0013;Fragilidade em concessao;Fragilidade em concessao no processo P.CRE.COB;auditoria;alto;aberto;P.CRE.COB;RL-01;CT-018;2025-12-01;2026-08-28;;Area responsavel
-AP-2025-0014;Indisponibilidade de servico;Indisponibilidade de servico no processo P.TEC.COR;gestao;alto;em_tratamento;P.TEC.COR;RL-09;CT-010;2025-12-06;2026-07-28;;Area responsavel
-AP-2025-0015;Indisponibilidade de servico;Indisponibilidade de servico no processo P.OPE.LIQ;controles_internos;medio;aberto;P.OPE.LIQ;RL-09;;2025-09-11;2026-04-28;;Area responsavel
-AP-2025-0016;Falha de processamento;Falha de processamento no processo P.OPE.LIQ;auditoria;medio;aberto;P.OPE.LIQ;RL-06;CT-011;2025-07-07;2026-08-28;;Area responsavel
-AP-2025-0017;Falha de processamento;Falha de processamento no processo P.OPE.CAD;controles_internos;medio;fechado;P.OPE.CAD;RL-06;CT-020;2025-08-04;2026-02-28;2026-04-15;Area responsavel
-AP-2025-0018;Desvio de conformidade;Desvio de conformidade no processo P.CIN.CON;regulador;medio;em_tratamento;P.CIN.CON;RL-11;CT-016;2025-06-12;2026-08-28;;Area responsavel
-AP-2025-0019;Risco de fornecedor;Risco de fornecedor no processo P.TEC.INF;controles_internos;alto;aberto;P.TEC.INF;RL-10;CT-019;2025-08-20;2026-04-28;;Area responsavel
-AP-2025-0020;Desvio de modelo;Desvio de modelo no processo P.CRE.PF;auditoria;alto;aberto;P.CRE.PF;RL-08;CT-003;2025-12-02;2026-07-28;;Area responsavel
-AP-2025-0021;Fraude em canal;Fraude em canal no processo P.TEC.CAN;gestao;medio;em_tratamento;P.TEC.CAN;RL-16;CT-013;2025-09-18;2026-02-28;;Area responsavel
-AP-2025-0022;Exposicao cambial;Exposicao cambial no processo P.OPE.CAM;controles_internos;baixo;aberto;P.OPE.CAM;RL-05;CT-017;2025-09-03;2026-06-28;;Area responsavel
-AP-2025-0023;Reclamacao reputacional;Reclamacao reputacional no processo P.NEG.VEN;ouvidoria;baixo;aberto;P.NEG.VEN;RL-15;;2025-08-27;2026-07-28;;Area responsavel
+id;titulo;severidade;status;risco_id;data_abertura;area_afetada;area_gestora;processo_id;origem;data_prazo;responsavel;recorrencia;descricao;controle_id;data_fechamento;plano_acao;valor_perda
+AP-2025-0001;Deficiencia em controle cibernetico;critico;aberto;RL-07;2025-11-15;AL-CORE;AL-CYBER;P.TEC.CAN;auditoria;2026-06-28;Area responsavel;reincidente;Deficiencia em controle cibernetico no processo P.TEC.CAN;CT-009;;;
+AP-2025-0002;Deficiencia em controle cibernetico;alto;em_tratamento;RL-07;2025-06-13;AL-CORE;AL-CYBER;P.TEC.CAN;controles_internos;2026-02-28;Area responsavel;primeira;Deficiencia em controle cibernetico no processo P.TEC.CAN;CT-009;;;
+AP-2025-0003;Deficiencia em controle cibernetico;alto;aberto;RL-07;2025-10-10;AL-CYBER;AL-CYBER;P.TEC.SI;auditoria;2026-08-28;Area responsavel;primeira;Deficiencia em controle cibernetico no processo P.TEC.SI;CT-008;;;
+AP-2025-0004;Lacuna em monitoramento PLD;critico;aberto;RL-13;2025-11-20;AL-CAD;AL-DPLD;P.OPE.CAD;regulador;2026-08-28;Area responsavel;reincidente;Lacuna em monitoramento PLD no processo P.OPE.CAD;CT-007;;;
+AP-2025-0005;Lacuna em monitoramento PLD;alto;em_tratamento;RL-13;2025-08-19;AL-CAD;AL-DPLD;P.OPE.CAD;compliance;2026-03-28;Area responsavel;primeira;Lacuna em monitoramento PLD no processo P.OPE.CAD;CT-007;;;
+AP-2025-0006;Lacuna em monitoramento PLD;alto;aberto;RL-13;2025-11-03;AL-DPLD;AL-DPLD;P.CIN.PLD;auditoria;2026-02-28;Area responsavel;primeira;Lacuna em monitoramento PLD no processo P.CIN.PLD;CT-006;;;
+AP-2025-0007;Gap de privacidade;alto;aberto;RL-14;2025-11-08;AL-LGPD;AL-LGPD;P.CIN.LGP;compliance;2026-08-28;Area responsavel;primeira;Gap de privacidade no processo P.CIN.LGP;CT-014;;;
+AP-2025-0008;Gap de privacidade;medio;aberto;RL-14;2025-08-03;AL-CAD;AL-LGPD;P.OPE.CAD;controles_internos;2026-08-28;Area responsavel;primeira;Gap de privacidade no processo P.OPE.CAD;;;;
+AP-2025-0009;Falha de suitability na venda;critico;aberto;RL-12;2025-07-28;AL-CPF;AL-COMPL;P.CRE.CON;regulador;2026-02-28;Area responsavel;reincidente;Falha de suitability na venda no processo P.CRE.CON;CT-012;;;250000
+AP-2025-0010;Falha de suitability na venda;alto;vencido;RL-12;2025-09-09;AL-VAR;AL-COMPL;P.NEG.VEN;compliance;2026-05-28;Area responsavel;reincidente;Falha de suitability na venda no processo P.NEG.VEN;CT-012;;;120000
+AP-2025-0011;Falha de suitability na venda;medio;em_tratamento;RL-12;2025-11-27;AL-COB;AL-COMPL;P.CRE.COB;ouvidoria;2026-04-28;Area responsavel;primeira;Falha de suitability na venda no processo P.CRE.COB;;;;
+AP-2025-0012;Fragilidade em concessao;medio;aberto;RL-01;2025-07-12;AL-CPJ;AL-RCRED;P.CRE.PJ;controles_internos;2026-04-28;Area responsavel;primeira;Fragilidade em concessao no processo P.CRE.PJ;CT-001;;;
+AP-2025-0013;Fragilidade em concessao;alto;aberto;RL-01;2025-07-22;AL-COB;AL-RCRED;P.CRE.COB;auditoria;2026-04-28;Area responsavel;primeira;Fragilidade em concessao no processo P.CRE.COB;CT-018;;;
+AP-2025-0014;Indisponibilidade de servico;alto;em_tratamento;RL-09;2025-11-22;AL-CORE;AL-INFRA;P.TEC.COR;gestao;2026-07-28;Area responsavel;primeira;Indisponibilidade de servico no processo P.TEC.COR;CT-010;;;
+AP-2025-0015;Indisponibilidade de servico;medio;aberto;RL-09;2025-06-20;AL-CORE;AL-INFRA;P.OPE.LIQ;controles_internos;2026-07-28;Area responsavel;primeira;Indisponibilidade de servico no processo P.OPE.LIQ;;;;
+AP-2025-0016;Falha de processamento;medio;aberto;RL-06;2025-07-18;AL-CORE;AL-RISCO;P.OPE.LIQ;auditoria;2026-07-28;Area responsavel;primeira;Falha de processamento no processo P.OPE.LIQ;CT-011;;;45000
+AP-2025-0017;Falha de processamento;medio;fechado;RL-06;2025-07-06;AL-CAD;AL-RISCO;P.OPE.CAD;controles_internos;2026-05-28;Area responsavel;primeira;Falha de processamento no processo P.OPE.CAD;CT-020;2026-04-15;;
+AP-2025-0018;Desvio de conformidade;medio;em_tratamento;RL-11;2025-08-21;AL-COMPL;AL-COMPL;P.CIN.CON;regulador;2026-07-28;Area responsavel;primeira;Desvio de conformidade no processo P.CIN.CON;CT-016;;;
+AP-2025-0019;Risco de fornecedor;alto;aberto;RL-10;2025-10-08;AL-INFRA;AL-INFRA;P.TEC.INF;controles_internos;2026-07-28;Area responsavel;primeira;Risco de fornecedor no processo P.TEC.INF;CT-019;;;
+AP-2025-0020;Desvio de modelo;alto;aberto;RL-08;2025-08-27;AL-RCRED;AL-RCRED;P.CRE.PF;auditoria;2026-08-28;Area responsavel;primeira;Desvio de modelo no processo P.CRE.PF;CT-003;;;
+AP-2025-0021;Fraude em canal;medio;em_tratamento;RL-16;2025-12-02;AL-CORE;AL-RISCO;P.TEC.CAN;gestao;2026-03-28;Area responsavel;primeira;Fraude em canal no processo P.TEC.CAN;CT-013;;;78000
+AP-2025-0022;Exposicao cambial;baixo;aberto;RL-05;2025-12-02;AL-CAM;AL-TES;P.OPE.CAM;controles_internos;2026-08-28;Area responsavel;primeira;Exposicao cambial no processo P.OPE.CAM;CT-017;;;
+AP-2025-0023;Reclamacao reputacional;baixo;aberto;RL-15;2025-08-13;AL-VAR;AL-OUVID;P.NEG.VEN;ouvidoria;2026-04-28;Area responsavel;primeira;Reclamacao reputacional no processo P.NEG.VEN;;;;

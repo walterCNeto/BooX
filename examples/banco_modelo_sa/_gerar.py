@@ -102,19 +102,24 @@ PROCESSOS = [
 ]
 
 def g_b1():
+    import random as _r
+    freqs=["continuo","diario","semanal","mensal","trimestral"]
     L=[]
     for pid,nome,niv,nuc,par,area in PROCESSOS:
         bia = 5 if niv>=1 and any(k in pid for k in ["CRE","SI","PLD","COR","CAD"]) else (4 if niv>=1 else "")
-        L.append([pid,pid,nome,niv,nuc,par,nome,area,"","",bia])
+        freq = _r.choice(freqs) if niv>=1 else ""
+        vol = _r.choice([1000,5000,12000,30000,80000]) if niv>=1 else ""
+        L.append([pid,nome,niv,area,par,nuc,bia,nome,"","","2025-12-01",freq,vol])
     escrever("B1_processos.csv",
-     ["id","codigo","nome","nivel","nucleo","parent_id","descricao","owner_area","entrada","saida","criticidade_bia"],L)
+     ["id","nome","nivel","area_responsavel","parent_id","nucleo","criticidade_bia",
+      "descricao","entrada","saida","data_revisao","frequencia_execucao","volume_transacional"],L)
 
 def g_b6_riscos():
     L=[]
     for rid,nome,canon,disc in RISCOS:
-        L.append([rid,rid,nome,0,"U","","","DISC_"+disc,f"Risco local mapeado para {canon}"])
+        L.append([rid,nome,0,"","DISC_"+disc,f"Risco local mapeado para {canon}",""])
     escrever("B6_riscos.csv",
-     ["id","codigo","nome","nivel","nucleo","parent_id","categoria_basileia","disciplina_id","descricao"],L)
+     ["id","nome","nivel","parent_id","disciplina_id","descricao","categoria_basileia"],L)
 
 # ---------------------------------------------------------------------
 # B6 VINCULO PROCESSO x RISCO (a tabela central — cada linha = 1 bolha)
@@ -159,10 +164,9 @@ VINCULOS = [
 def g_b6_vinc():
     L=[]
     for i,(p,r,m,af,ge,fa) in enumerate(VINCULOS,1):
-        L.append([i,p,r,m,"CRO",af,ge,fa,""])
+        L.append([p,r,m,"CRO",""])
     escrever("B6_vinculo_processo_risco.csv",
-     ["id","processo_id","risco_id","materialidade_inerente","materialidade_declarada_por",
-      "area_afetada","area_gestora","eh_gestora_e_afetada","notas"],L)
+     ["processo_id","risco_id","materialidade_inerente","materialidade_declarada_por","notas"],L)
 
 print("Gerando Banco Modelo S.A. (parte estrutural)...")
 g_b1(); g_b6_riscos(); g_b6_vinc()
@@ -203,32 +207,33 @@ def g_b5():
 # B2 APONTAMENTOS — mix realista, concentrados nos pares mais fracos
 # ---------------------------------------------------------------------
 def g_b2():
+    # mapa par->(afetada,gestora) a partir dos vinculos
+    par_area={(p,r):(af,ge) for (p,r,m,af,ge,fa) in VINCULOS}
     L=[]; n=1
-    # apontamentos "plantados" para criar gradiente no 20-box
     plantados = [
-      ("RL-07","P.TEC.CAN","critico","aberto","auditoria","CT-009"),
-      ("RL-07","P.TEC.CAN","alto","em_tratamento","controles_internos","CT-009"),
-      ("RL-07","P.TEC.SI","alto","aberto","auditoria","CT-008"),
-      ("RL-13","P.OPE.CAD","critico","aberto","regulador","CT-007"),
-      ("RL-13","P.OPE.CAD","alto","em_tratamento","compliance","CT-007"),
-      ("RL-13","P.CIN.PLD","alto","aberto","auditoria","CT-006"),
-      ("RL-14","P.CIN.LGP","alto","aberto","compliance","CT-014"),
-      ("RL-14","P.OPE.CAD","medio","aberto","controles_internos",""),
-      ("RL-12","P.CRE.CON","critico","aberto","regulador","CT-012"),
-      ("RL-12","P.NEG.VEN","alto","vencido","compliance","CT-012"),
-      ("RL-12","P.CRE.COB","medio","em_tratamento","ouvidoria",""),
-      ("RL-01","P.CRE.PJ","medio","aberto","controles_internos","CT-001"),
-      ("RL-01","P.CRE.COB","alto","aberto","auditoria","CT-018"),
-      ("RL-09","P.TEC.COR","alto","em_tratamento","gestao","CT-010"),
-      ("RL-09","P.OPE.LIQ","medio","aberto","controles_internos",""),
-      ("RL-06","P.OPE.LIQ","medio","aberto","auditoria","CT-011"),
-      ("RL-06","P.OPE.CAD","medio","fechado","controles_internos","CT-020"),
-      ("RL-11","P.CIN.CON","medio","em_tratamento","regulador","CT-016"),
-      ("RL-10","P.TEC.INF","alto","aberto","controles_internos","CT-019"),
-      ("RL-08","P.CRE.PF","alto","aberto","auditoria","CT-003"),
-      ("RL-16","P.TEC.CAN","medio","em_tratamento","gestao","CT-013"),
-      ("RL-05","P.OPE.CAM","baixo","aberto","controles_internos","CT-017"),
-      ("RL-15","P.NEG.VEN","baixo","aberto","ouvidoria",""),
+      ("RL-07","P.TEC.CAN","critico","aberto","auditoria","CT-009","reincidente",0),
+      ("RL-07","P.TEC.CAN","alto","em_tratamento","controles_internos","CT-009","primeira",0),
+      ("RL-07","P.TEC.SI","alto","aberto","auditoria","CT-008","primeira",0),
+      ("RL-13","P.OPE.CAD","critico","aberto","regulador","CT-007","reincidente",0),
+      ("RL-13","P.OPE.CAD","alto","em_tratamento","compliance","CT-007","primeira",0),
+      ("RL-13","P.CIN.PLD","alto","aberto","auditoria","CT-006","primeira",0),
+      ("RL-14","P.CIN.LGP","alto","aberto","compliance","CT-014","primeira",0),
+      ("RL-14","P.OPE.CAD","medio","aberto","controles_internos","","primeira",0),
+      ("RL-12","P.CRE.CON","critico","aberto","regulador","CT-012","reincidente",250000),
+      ("RL-12","P.NEG.VEN","alto","vencido","compliance","CT-012","reincidente",120000),
+      ("RL-12","P.CRE.COB","medio","em_tratamento","ouvidoria","","primeira",0),
+      ("RL-01","P.CRE.PJ","medio","aberto","controles_internos","CT-001","primeira",0),
+      ("RL-01","P.CRE.COB","alto","aberto","auditoria","CT-018","primeira",0),
+      ("RL-09","P.TEC.COR","alto","em_tratamento","gestao","CT-010","primeira",0),
+      ("RL-09","P.OPE.LIQ","medio","aberto","controles_internos","","primeira",0),
+      ("RL-06","P.OPE.LIQ","medio","aberto","auditoria","CT-011","primeira",45000),
+      ("RL-06","P.OPE.CAD","medio","fechado","controles_internos","CT-020","primeira",0),
+      ("RL-11","P.CIN.CON","medio","em_tratamento","regulador","CT-016","primeira",0),
+      ("RL-10","P.TEC.INF","alto","aberto","controles_internos","CT-019","primeira",0),
+      ("RL-08","P.CRE.PF","alto","aberto","auditoria","CT-003","primeira",0),
+      ("RL-16","P.TEC.CAN","medio","em_tratamento","gestao","CT-013","primeira",78000),
+      ("RL-05","P.OPE.CAM","baixo","aberto","controles_internos","CT-017","primeira",0),
+      ("RL-15","P.NEG.VEN","baixo","aberto","ouvidoria","","primeira",0),
     ]
     titulos={"RL-07":"Deficiencia em controle cibernetico","RL-13":"Lacuna em monitoramento PLD",
      "RL-14":"Gap de privacidade","RL-12":"Falha de suitability na venda","RL-01":"Fragilidade em concessao",
@@ -236,17 +241,20 @@ def g_b2():
      "RL-10":"Risco de fornecedor","RL-08":"Desvio de modelo","RL-16":"Fraude em canal","RL-05":"Exposicao cambial",
      "RL-15":"Reclamacao reputacional"}
     base_ano=2025
-    for r,p,sev,st,orig,ctrl in plantados:
+    for r,p,sev,st,orig,ctrl,rec,perda in plantados:
+        af,ge=par_area.get((p,r),("",""))
         mes=random.randint(6,12); dia=random.randint(1,28)
         ab=f"{base_ano}-{mes:02d}-{dia:02d}"
         prazo=f"2026-{random.randint(2,8):02d}-28"
         fech=f"2026-{random.randint(1,4):02d}-15" if st=="fechado" else ""
-        L.append([f"AP-2025-{n:04d}",titulos.get(r,"Apontamento"),
-          f"{titulos.get(r,'Apontamento')} no processo {p}",orig,sev,st,p,r,ctrl,ab,prazo,fech,"Area responsavel"])
+        L.append([f"AP-2025-{n:04d}",titulos.get(r,"Apontamento"),sev,st,r,ab,af,ge,
+          p,orig,prazo,"Area responsavel",rec,
+          f"{titulos.get(r,'Apontamento')} no processo {p}",ctrl,fech,"",perda if perda else ""])
         n+=1
     escrever("B2_apontamentos.csv",
-     ["id","titulo","descricao","origem","severidade","status","processo_id","risco_id",
-      "controle_id","data_abertura","data_prazo","data_fechamento","responsavel"],L)
+     ["id","titulo","severidade","status","risco_id","data_abertura","area_afetada","area_gestora",
+      "processo_id","origem","data_prazo","responsavel","recorrencia",
+      "descricao","controle_id","data_fechamento","plano_acao","valor_perda"],L)
 
 # ---------------------------------------------------------------------
 # B10 INDICADORES (KRIs) + serie temporal
@@ -287,32 +295,38 @@ def g_b10():
     L=[]; S=[]
     for k in KRIS:
         kid,nome,r,p,disc,uni,dire,am,ver,meta,perfil=k
-        L.append([kid,nome,nome,r,p,"DISC_"+disc,uni,dire,am,ver,meta])
+        L.append([kid,nome,dire,r,am,ver,p,"DISC_"+disc,uni,nome,meta,"Area de RO","Sistema interno","mensal"])
         for comp,val in serie(perfil,am,ver,dire):
             S.append([kid,comp,val])
     escrever("B10_indicadores.csv",
-     ["id","nome","descricao","risco_id","processo_id","disciplina_id","unidade","direcao","limite_amarelo","limite_vermelho","meta"],L)
+     ["id","nome","direcao","risco_id","limite_amarelo","limite_vermelho","processo_id","disciplina_id",
+      "unidade","descricao","meta","responsavel_apuracao","fonte_dado","frequencia_apuracao"],L)
     escrever("B10_indicador_serie.csv",["indicador_id","competencia","valor"],S)
 
 # ---------------------------------------------------------------------
 # B8 EXTERNOS — sinais publicos vinculados a riscos/disciplinas
 # ---------------------------------------------------------------------
 def g_b8():
+    # layout: id,fonte,tipo,data,risco_id,disciplina_id,quantidade,severidade,descricao,processo_id,status,valor_metrica,valor_anterior,periodo
     L=[
-     ["EXT-001","bacen","procedente","Procedentes sobre cobranca indevida","RL-12","","DISC_CONDUTA","",18,"","","","2025-12-31","2025-Q4"],
-     ["EXT-002","bacen","procedente","Procedentes sobre oferta de credito","RL-01","","DISC_CREDITO","",9,"","","","2025-12-31","2025-Q4"],
-     ["EXT-003","bacen","ranking_reclamacoes","Posicao no ranking de reclamacoes","RL-15","","DISC_REPUTACIONAL",3,"","","","","2025-12-31","2025-Q4"],
-     ["EXT-004","cvm","processo_em_curso","PAS sobre suitability","RL-12","","DISC_CONDUTA","",1,"em_curso","","","2025-11-20","2025-Q4"],
-     ["EXT-005","procon","procedente","Reclamacoes Procon sobre cobranca","RL-12","","DISC_CONDUTA","",12,"","","","2025-12-31","2025-Q4"],
-     ["EXT-006","midia","noticia_adversa","Reportagem sobre vazamento de dados","RL-14","","DISC_LGPD",4,1,"","","","2025-10-15","2025-Q4"],
-     ["EXT-007","midia","noticia_adversa","Materia sobre golpe em canal digital","RL-16","","DISC_FRAUDE",3,1,"","","","2025-11-05","2025-Q4"],
-     ["EXT-008","reclame_aqui","nota_periodo","Nota geral do periodo","RL-15","","DISC_REPUTACIONAL","",1,"",6.4,7.1,"2025-12-31","2025-Q4"],
-     ["EXT-009","anbima","carta_recomendacao","Carta sobre distribuicao","RL-12","","DISC_CONDUTA","",2,"","","","2025-09-30","2025-Q3"],
-     ["EXT-010","bacen","procedente","Procedentes sobre conta e cadastro","RL-06","","DISC_OPERACIONAL","",6,"","","","2025-12-31","2025-Q4"],
+     ["EXT-001","bacen","procedente","2025-12-31","RL-12","DISC_CONDUTA",18,"","Procedentes sobre cobranca indevida","","","","","2025-Q4"],
+     ["EXT-002","bacen","procedente","2025-12-31","RL-01","DISC_CREDITO",9,"","Procedentes sobre oferta de credito","","","","","2025-Q4"],
+     ["EXT-003","bacen","ranking_reclamacoes","2025-12-31","RL-15","DISC_REPUTACIONAL","",3,"Posicao no ranking de reclamacoes","","","","","2025-Q4"],
+     ["EXT-004","cvm","processo_em_curso","2025-11-20","RL-12","DISC_CONDUTA",1,"","PAS sobre suitability","","em_curso","","","2025-Q4"],
+     ["EXT-005","procon","procedente","2025-12-31","RL-12","DISC_CONDUTA",12,"","Reclamacoes Procon sobre cobranca","","","","","2025-Q4"],
+     ["EXT-006","midia","noticia_adversa","2025-10-15","RL-14","DISC_LGPD",1,4,"Reportagem sobre vazamento de dados","","","","","2025-Q4"],
+     ["EXT-007","midia","noticia_adversa","2025-11-05","RL-16","DISC_FRAUDE",1,3,"Materia sobre golpe em canal digital","","","","","2025-Q4"],
+     ["EXT-008","reclame_aqui","nota_periodo","2025-12-31","RL-15","DISC_REPUTACIONAL",1,"","Nota geral do periodo","","",6.4,7.1,"2025-Q4"],
+     ["EXT-009","anbima","carta_recomendacao","2025-09-30","RL-12","DISC_CONDUTA",2,"","Carta sobre distribuicao","","","","","2025-Q3"],
+     ["EXT-010","bacen","procedente","2025-12-31","RL-06","DISC_OPERACIONAL",6,"","Procedentes sobre conta e cadastro","","","","","2025-Q4"],
+     ["EXT-011","ouvidoria","reclamacao_procedente","2025-12-31","RL-12","DISC_CONDUTA",14,"","Reclamacoes procedentes de Ouvidoria sobre venda","P.NEG.VEN","procedente","","","2025-Q4"],
+     ["EXT-012","ouvidoria","reclamacao_procedente","2025-12-31","RL-01","DISC_CREDITO",7,"","Reclamacoes procedentes sobre cobranca de credito","P.CRE.COB","procedente","","","2025-Q4"],
+     ["EXT-013","sac","reclamacao","2025-12-31","RL-06","DISC_OPERACIONAL",120,"","Reclamacoes de SAC sobre falhas operacionais","","","","","2025-Q4"],
+     ["EXT-014","sac","solicitacao_nao_resolvida","2025-12-31","RL-09","DISC_BIA",35,"","Solicitacoes nao resolvidas por indisponibilidade","P.TEC.COR","","","","2025-Q4"],
     ]
     escrever("B8_externos.csv",
-     ["id","fonte","tipo","descricao","risco_id","processo_id","disciplina_id","severidade",
-      "quantidade","status","valor_metrica","valor_anterior","data","periodo"],L)
+     ["id","fonte","tipo","data","risco_id","disciplina_id","quantidade","severidade",
+      "descricao","processo_id","status","valor_metrica","valor_anterior","periodo"],L)
 
 # ---------------------------------------------------------------------
 # B4 REGULACAO + vinculo
@@ -346,13 +360,18 @@ def g_b4():
 # B9 DISCIPLINAS (subconjunto usado, referenciando canonico)
 # ---------------------------------------------------------------------
 def g_b9():
+    resp={"DISC_CREDITO":"AL-RCRED","DISC_MERCADO":"AL-TES","DISC_LIQUIDEZ":"AL-TES",
+     "DISC_JUROS":"AL-TES","DISC_OPERACIONAL":"AL-RISCO","DISC_CYBER":"AL-CYBER",
+     "DISC_MODELO":"AL-RCRED","DISC_BIA":"AL-INFRA","DISC_FORNECEDORES":"AL-RISCO",
+     "DISC_CONFORMIDADE":"AL-COMPL","DISC_CONDUTA":"AL-COMPL","DISC_LD":"AL-DPLD",
+     "DISC_LGPD":"AL-LGPD","DISC_REPUTACIONAL":"AL-OUVID","DISC_FRAUDE":"AL-RISCO"}
     usados=sorted({"DISC_"+r[3] for r in RISCOS})
     L=[]
     for d in usados:
         nome=DISC_NOME.get(d.replace("DISC_",""),d)
-        L.append([d,nome,f"Disciplina {nome}","operacional","",""])
+        L.append([d,nome,resp.get(d,""),f"Disciplina {nome}","operacional"])
     escrever("B9_disciplinas.csv",
-     ["id","nome","descricao","categoria_basileia","responsavel_2linha",""][:5],L)
+     ["id","nome","responsavel_2linha","descricao","categoria_basileia"],L)
 
 # ---------------------------------------------------------------------
 # B7 VISOES + filtros

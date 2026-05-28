@@ -24,3 +24,29 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/).
 - Fase 3: CLI `boox run`
 - Fase 4: Geração do 20-box HTML interativo
 - Futuro: Books B3, B11, B12, B13; frontend web; banco de dados
+
+### Templates Excel + Analise de Suficiencia
+
+#### Adicionado
+- 13 templates Excel (`templates/*.xlsx`), um por Book, com:
+  - Campos coloridos por categoria (obrigatorio/recomendado/opcional)
+  - Listas suspensas (data validation) nos campos enumerados
+  - Comentarios com a dica de cada campo
+  - Aba de instrucoes com a tabela de campos e legenda
+- Especificacao unica de campos em `schema/campos.py` (fonte da verdade dos
+  121 campos dos 13 Books, com categoria e tipo)
+- Modulo `boox/suficiencia.py` — analise de suficiencia que diagnostica,
+  por Book: % de preenchimento dos obrigatorios e recomendados, status
+  (completo / valido-baixa-confianca / incompleto / ausente) e alertas
+  estruturais cruzados (hierarquia, de-para, 5W2H incompleto, series curtas)
+- `python -m boox` agora gera tambem `suficiencia.md`
+
+#### Alterado
+- B2 (Apontamentos): area_afetada e area_gestora agora OBRIGATORIAS (o risco
+  materializado tem dono e responsavel); adicionados recorrencia e valor_perda
+- B6 (Vinculo): enxugado para o mundo inerente (sem afetada/gestora — estas
+  vivem no apontamento). Area do par no inerente = area dona do processo (B1)
+- B1 (Processos): area_responsavel agora OBRIGATORIA; adicionados data_revisao,
+  frequencia_execucao, volume_transacional
+- B8: ampliado para incluir Ouvidoria e SAC alem dos sinais externos publicos
+- Banco Modelo S.A. regenerado com todos os campos novos

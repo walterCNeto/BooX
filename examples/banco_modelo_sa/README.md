@@ -39,7 +39,7 @@ python -m boox examples/banco_modelo_sa --out output --visao VIS_CONDUTA
 | B2_apontamentos.csv | 23 | apontamentos de varias fontes |
 | B10_indicadores.csv | 16 | KRIs |
 | B10_indicador_serie.csv | 96 | serie temporal dos KRIs (6 meses) |
-| B8_externos.csv | 10 | sinais externos (BACEN, CVM, etc.) |
+| B8_externos.csv | 14 | sinais externos (BACEN, CVM, etc.) |
 | B4_regulacao.csv | 8 | normas externas |
 | B9_disciplinas.csv | 15 | disciplinas usadas |
 | B7_visoes.csv | 5 | visoes registradas |
@@ -61,3 +61,19 @@ Os dados sao produzidos por um gerador deterministico:
 cd examples/banco_modelo_sa
 python _gerar.py
 ```
+
+## Analise de suficiencia
+
+Ao rodar `python -m boox`, alem do 20-box e do parecer, e gerado
+`suficiencia.md` — um diagnostico que diz, por Book, se os campos
+obrigatorios estao 100% preenchidos, quanto dos recomendados foi informado,
+e lista alertas estruturais (hierarquia quebrada, riscos sem de-para,
+controles com 5W2H incompleto, KRIs com serie curta). E o "raio-x" da
+qualidade dos dados antes de confiar no mapa.
+
+## Templates Excel
+
+Os templates em `../../templates/*.xlsx` sao o ponto de partida para um
+banco real preencher seus proprios dados. Cada template tem os campos
+coloridos por categoria (obrigatorio/recomendado/opcional), listas
+suspensas e uma aba de instrucoes.

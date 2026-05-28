@@ -1,29 +1,29 @@
-id;codigo;nome;nivel;nucleo;parent_id;descricao;owner_area;entrada;saida;criticidade_bia
-P.NEG;P.NEG;Negocios e Comercial;0;B;;Negocios e Comercial;AL-VAR;;;
-P.NEG.VAR;P.NEG.VAR;Atendimento Varejo PF;1;B;P.NEG;Atendimento Varejo PF;AL-VAR;;;4
-P.NEG.ALT;P.NEG.ALT;Atendimento Alta Renda;1;B;P.NEG;Atendimento Alta Renda;AL-DIA;;;4
-P.NEG.EMP;P.NEG.EMP;Atendimento Empresas;1;B;P.NEG;Atendimento Empresas;AL-EMP;;;4
-P.NEG.VEN;P.NEG.VEN;Venda e oferta de produtos;2;B;P.NEG.VAR;Venda e oferta de produtos;AL-VAR;;;4
-P.CRE;P.CRE;Credito;0;B;;Credito;AL-CPF;;;
-P.CRE.PF;P.CRE.PF;Concessao de credito PF;1;B;P.CRE;Concessao de credito PF;AL-CPF;;;5
-P.CRE.PJ;P.CRE.PJ;Concessao de credito PJ;1;B;P.CRE;Concessao de credito PJ;AL-CPJ;;;5
-P.CRE.CON;P.CRE.CON;Credito consignado INSS;2;B;P.CRE.PF;Credito consignado INSS;AL-CPF;;;5
-P.CRE.IMO;P.CRE.IMO;Credito imobiliario;2;B;P.CRE.PF;Credito imobiliario;AL-CPF;;;5
-P.CRE.COB;P.CRE.COB;Recuperacao e cobranca;1;B;P.CRE;Recuperacao e cobranca;AL-COB;;;5
-P.OPE;P.OPE;Operacoes;0;U;;Operacoes;AL-CAD;;;
-P.OPE.CAD;P.OPE.CAD;Cadastro e KYC;1;U;P.OPE;Cadastro e KYC;AL-CAD;;;5
-P.OPE.CAM;P.OPE.CAM;Operacoes de cambio;1;B;P.OPE;Operacoes de cambio;AL-CAM;;;4
-P.OPE.LIQ;P.OPE.LIQ;Liquidacao e processamento;1;U;P.OPE;Liquidacao e processamento;AL-CORE;;;4
-P.TES;P.TES;Tesouraria;0;B;;Tesouraria;AL-TES;;;
-P.TES.ALM;P.TES.ALM;Gestao de liquidez (ALM);1;B;P.TES;Gestao de liquidez (ALM);AL-TES;;;4
-P.TES.MES;P.TES.MES;Mesa proprietaria;1;MC;P.TES;Mesa proprietaria;AL-TES;;;4
-P.TEC;P.TEC;Tecnologia;0;U;;Tecnologia;AL-CORE;;;
-P.TEC.COR;P.TEC.COR;Operacao do core banking;1;U;P.TEC;Operacao do core banking;AL-CORE;;;5
-P.TEC.CAN;P.TEC.CAN;Canais digitais;1;U;P.TEC;Canais digitais;AL-CORE;;;4
-P.TEC.SI;P.TEC.SI;Seguranca da informacao;1;U;P.TEC;Seguranca da informacao;AL-CYBER;;;5
-P.TEC.INF;P.TEC.INF;Infraestrutura e nuvem;1;U;P.TEC;Infraestrutura e nuvem;AL-INFRA;;;4
-P.CIN;P.CIN;Controles e Compliance;0;U;;Controles e Compliance;AL-COMPL;;;
-P.CIN.PLD;P.CIN.PLD;Prevencao a lavagem (PLD-FT);1;U;P.CIN;Prevencao a lavagem (PLD-FT);AL-DPLD;;;5
-P.CIN.CON;P.CIN.CON;Conformidade regulatoria;1;U;P.CIN;Conformidade regulatoria;AL-COMPL;;;4
-P.CIN.LGP;P.CIN.LGP;Privacidade e protecao de dados;1;U;P.CIN;Privacidade e protecao de dados;AL-LGPD;;;4
-P.CIN.CTI;P.CIN.CTI;Controles internos;1;U;P.CIN;Controles internos;AL-DICOI;;;4
+id;nome;nivel;area_responsavel;parent_id;nucleo;criticidade_bia;descricao;entrada;saida;data_revisao;frequencia_execucao;volume_transacional
+P.NEG;Negocios e Comercial;0;AL-VAR;;B;;Negocios e Comercial;;;2025-12-01;;
+P.NEG.VAR;Atendimento Varejo PF;1;AL-VAR;P.NEG;B;4;Atendimento Varejo PF;;;2025-12-01;continuo;1000
+P.NEG.ALT;Atendimento Alta Renda;1;AL-DIA;P.NEG;B;4;Atendimento Alta Renda;;;2025-12-01;semanal;5000
+P.NEG.EMP;Atendimento Empresas;1;AL-EMP;P.NEG;B;4;Atendimento Empresas;;;2025-12-01;diario;5000
+P.NEG.VEN;Venda e oferta de produtos;2;AL-VAR;P.NEG.VAR;B;4;Venda e oferta de produtos;;;2025-12-01;continuo;80000
+P.CRE;Credito;0;AL-CPF;;B;;Credito;;;2025-12-01;;
+P.CRE.PF;Concessao de credito PF;1;AL-CPF;P.CRE;B;5;Concessao de credito PF;;;2025-12-01;continuo;80000
+P.CRE.PJ;Concessao de credito PJ;1;AL-CPJ;P.CRE;B;5;Concessao de credito PJ;;;2025-12-01;mensal;1000
+P.CRE.CON;Credito consignado INSS;2;AL-CPF;P.CRE.PF;B;5;Credito consignado INSS;;;2025-12-01;continuo;1000
+P.CRE.IMO;Credito imobiliario;2;AL-CPF;P.CRE.PF;B;5;Credito imobiliario;;;2025-12-01;diario;5000
+P.CRE.COB;Recuperacao e cobranca;1;AL-COB;P.CRE;B;5;Recuperacao e cobranca;;;2025-12-01;trimestral;80000
+P.OPE;Operacoes;0;AL-CAD;;U;;Operacoes;;;2025-12-01;;
+P.OPE.CAD;Cadastro e KYC;1;AL-CAD;P.OPE;U;5;Cadastro e KYC;;;2025-12-01;continuo;80000
+P.OPE.CAM;Operacoes de cambio;1;AL-CAM;P.OPE;B;4;Operacoes de cambio;;;2025-12-01;diario;80000
+P.OPE.LIQ;Liquidacao e processamento;1;AL-CORE;P.OPE;U;4;Liquidacao e processamento;;;2025-12-01;mensal;5000
+P.TES;Tesouraria;0;AL-TES;;B;;Tesouraria;;;2025-12-01;;
+P.TES.ALM;Gestao de liquidez (ALM);1;AL-TES;P.TES;B;4;Gestao de liquidez (ALM);;;2025-12-01;mensal;80000
+P.TES.MES;Mesa proprietaria;1;AL-TES;P.TES;MC;4;Mesa proprietaria;;;2025-12-01;semanal;1000
+P.TEC;Tecnologia;0;AL-CORE;;U;;Tecnologia;;;2025-12-01;;
+P.TEC.COR;Operacao do core banking;1;AL-CORE;P.TEC;U;5;Operacao do core banking;;;2025-12-01;diario;30000
+P.TEC.CAN;Canais digitais;1;AL-CORE;P.TEC;U;4;Canais digitais;;;2025-12-01;semanal;12000
+P.TEC.SI;Seguranca da informacao;1;AL-CYBER;P.TEC;U;5;Seguranca da informacao;;;2025-12-01;diario;5000
+P.TEC.INF;Infraestrutura e nuvem;1;AL-INFRA;P.TEC;U;4;Infraestrutura e nuvem;;;2025-12-01;semanal;1000
+P.CIN;Controles e Compliance;0;AL-COMPL;;U;;Controles e Compliance;;;2025-12-01;;
+P.CIN.PLD;Prevencao a lavagem (PLD-FT);1;AL-DPLD;P.CIN;U;5;Prevencao a lavagem (PLD-FT);;;2025-12-01;continuo;30000
+P.CIN.CON;Conformidade regulatoria;1;AL-COMPL;P.CIN;U;4;Conformidade regulatoria;;;2025-12-01;continuo;12000
+P.CIN.LGP;Privacidade e protecao de dados;1;AL-LGPD;P.CIN;U;4;Privacidade e protecao de dados;;;2025-12-01;semanal;80000
+P.CIN.CTI;Controles internos;1;AL-DICOI;P.CIN;U;4;Controles internos;;;2025-12-01;semanal;1000

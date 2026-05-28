@@ -6,8 +6,8 @@ Pares processo x risco avaliados: **34**.
 
 - **Critico**: 1
 - **Alto**: 1
-- **Medio**: 16
-- **Baixo**: 16
+- **Medio**: 15
+- **Baixo**: 17
 
 ## Pares que exigem tratamento (Critico e Alto)
 
@@ -15,13 +15,13 @@ Pares processo x risco avaliados: **34**.
 - Risco local: Venda inadequada ao cliente (RL-12)
 - Processo: Credito consignado INSS
 - Impacto: Alto · Ambiente: - (Atencao) · score_x=68.6
-- Area afetada: AL-CPF · Area gestora: AL-COMPL
+- Area afetada: AL-CPF · Area gestora: AL-CPF
 
 ### R0.U.13 em P.OPE.CAD — Critico
 - Risco local: Lavagem de dinheiro (RL-13)
 - Processo: Cadastro e KYC
 - Impacto: Elevado · Ambiente: - (Atencao) · score_x=62.0
-- Area afetada: AL-CAD · Area gestora: AL-DPLD
+- Area afetada: AL-CAD · Area gestora: AL-CAD
 
 ---
 _Gerado pelo BooX a partir do Banco Modelo S.A. (dados sinteticos)._

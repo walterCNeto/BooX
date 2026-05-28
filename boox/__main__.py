@@ -2,6 +2,7 @@
 import sys, os
 from boox.compute import carregar
 from boox.render import render_20box, render_csv, render_parecer
+from boox.suficiencia import analisar, render_md
 
 def main():
     if len(sys.argv)<2:
@@ -21,7 +22,10 @@ def main():
     render_20box(res,titulo,os.path.join(out,"20box.html"))
     render_csv(res,os.path.join(out,"detalhamento.csv"))
     render_parecer(res,titulo,os.path.join(out,"parecer.md"))
-    print(f"Gerado em {out}/ : 20box.html, detalhamento.csv, parecer.md")
+    rel=analisar(pasta); render_md(rel,os.path.join(out,"suficiencia.md"))
+    rr=rel["resumo"]
+    print(f"Gerado em {out}/ : 20box.html, detalhamento.csv, parecer.md, suficiencia.md")
+    print(f"Suficiencia: {rr['obrigatorios_completos']}/{rr['obrigatorios_total']} campos obrigatorios completos, {len(rel['alertas'])} alerta(s)")
     print(f"Pares: {len(res)}")
 
 def aplicar_visao(inst,res,visao_id):
