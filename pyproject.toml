@@ -33,6 +33,7 @@ dependencies = []
 
 [project.optional-dependencies]
 templates = ["openpyxl>=3.1"]
+app = ["streamlit>=1.40", "pandas>=2.0"]
 
 [project.urls]
 Homepage = "https://github.com/walterCNeto/BooX"
@@ -42,6 +43,7 @@ Issues = "https://github.com/walterCNeto/BooX/issues"
 [project.scripts]
 boox = "boox.__main__:main"
 boox-gap = "boox.gap_regulatorio:main"
+boox-app = "boox.app_launcher:main"
 
 [tool.setuptools.packages.find]
 where = ["."]

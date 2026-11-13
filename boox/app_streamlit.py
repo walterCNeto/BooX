@@ -1,0 +1,476 @@
+# -*- coding: utf-8 -*-
+"""BooX — Interface Streamlit (demonstracao publica).
+
+Esta e a camada de apresentacao do BooX. Toda a logica de dominio vive em
+boox/compute.py, render.py, suficiencia.py e gap_regulatorio.py.
+
+Uso:
+    streamlit run boox/app_streamlit.py
+
+Dados: por padrao usa examples/banco_modelo_sa (Banco Modelo S.A., ficticio).
+"""
+import os
+import sys
+import csv
+import base64
+from pathlib import Path
+
+import streamlit as st
+
+# ---------------------------------------------------------------------------
+# Localizar a raiz do projeto (funciona rodando da raiz ou como pacote)
+# ---------------------------------------------------------------------------
+HERE = Path(__file__).resolve().parent
+ROOT = HERE.parent
+sys.path.insert(0, str(ROOT))
+
+from boox.compute import carregar
+from boox.render import render_20box, render_csv, render_parecer
+from boox.suficiencia import analisar, render_md
+from boox.gap_regulatorio import analisar as analisar_gap, render_md as render_gap_md
+from boox import _campos as campos_mod
+
+DEFAULT_PASTA = str(ROOT / "examples" / "banco_modelo_sa")
+CANONICO = str(ROOT / "canonico")
+
+# ---------------------------------------------------------------------------
+# Config global da pagina
+# ---------------------------------------------------------------------------
+st.set_page_config(
+    page_title="BooX — Risco Operacional",
+    page_icon="📊",
+    layout="wide",
+    initial_sidebar_state="expanded",
+)
+
+# Tema verde-escuro BooX
+st.markdown(
+    """
+    <style>
+      :root {
+        --boox-primary: #0f3d3e;
+        --boox-accent: #1d9e75;
+        --boox-ink: #1f2a30;
+        --boox-soft: #f0f7f4;
+      }
+      .block-container { padding-top: 1.5rem; }
+      h1, h2, h3 { color: var(--boox-primary); }
+      .st-emotion-cache-16idsys p, .st-emotion-cache-16idsys { color: var(--boox-ink); }
+      .boox-hero {
+        background: linear-gradient(135deg, #0f3d3e 0%, #1d9e75 100%);
+        color: #fff;
+        padding: 18px 22px;
+        border-radius: 10px;
+        margin-bottom: 18px;
+      }
+      .boox-hero h1 { color: #fff; margin: 0 0 4px; font-size: 24pt; }
+      .boox-hero p  { color: #e8f3ee; margin: 0; font-size: 11pt; }
+      .boox-badge {
+        display:inline-block; background: #fff2; color: #fff;
+        padding: 2px 9px; border-radius: 10px; font-size: 9pt;
+        margin-left: 8px; vertical-align: middle;
+      }
+      .metric-tile {
+        background: var(--boox-soft);
+        border-left: 4px solid var(--boox-accent);
+        padding: 10px 14px; border-radius: 0 6px 6px 0;
+      }
+      .metric-tile .lab { color: #5a6b66; font-size: 10pt; margin: 0; }
+      .metric-tile .val { color: var(--boox-primary); font-size: 22pt; font-weight: 600; margin: 0; line-height: 1.1; }
+      .pill-crit  { background:#fcebeb; color:#7a2020; padding:2px 8px; border-radius:10px; font-size:9pt; font-weight:600; }
+      .pill-alto  { background:#fdf3ec; color:#8a4a18; padding:2px 8px; border-radius:10px; font-size:9pt; font-weight:600; }
+      .pill-medio { background:#fbf5ea; color:#7a5f12; padding:2px 8px; border-radius:10px; font-size:9pt; font-weight:600; }
+      .pill-baixo { background:#eef7ea; color:#2a5312; padding:2px 8px; border-radius:10px; font-size:9pt; font-weight:600; }
+      .pill-ok    { background:#e4f3ef; color:#0d5a43; padding:2px 8px; border-radius:10px; font-size:9pt; font-weight:600; }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+# ---------------------------------------------------------------------------
+# Header
+# ---------------------------------------------------------------------------
+_ver = "?"
+try:
+    _ver = (ROOT / "canonico" / "VERSION").read_text().strip()
+except Exception:
+    pass
+
+st.markdown(
+    f"""
+    <div class="boox-hero">
+      <h1>BooX <span class="boox-badge">framework aberto</span></h1>
+      <p>Risco operacional e controles internos para instituições financeiras brasileiras ·
+      canônico v{_ver} · <a href="https://github.com/walterCNeto/BooX" style="color:#e8f3ee">github.com/walterCNeto/BooX</a></p>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+# ---------------------------------------------------------------------------
+# Sidebar — selecao da instancia
+# ---------------------------------------------------------------------------
+with st.sidebar:
+    st.markdown("### Instância de dados")
+    pasta = st.text_input("Pasta dos Books", value=DEFAULT_PASTA, help="Pasta contendo os CSVs dos Books. Default: Banco Modelo S.A. (fictício).")
+    if not os.path.isdir(pasta):
+        st.error(f"Pasta não encontrada: {pasta}")
+        st.stop()
+
+    st.markdown("---")
+    st.markdown("### Sobre a demonstração")
+    st.markdown(
+        "Esta instância usa o **Banco Modelo S.A.**, uma corretora/banco fictício "
+        "com dados sintéticos. Serve para explorar o framework sem expor dados reais.\n\n"
+        "Para rodar com seus próprios Books, troque o caminho acima."
+    )
+    st.markdown("---")
+    st.caption("MIT (código) · CC BY 4.0 (dados do canônico)")
+
+# ---------------------------------------------------------------------------
+# Cache de carregamento (evita re-ler CSVs a cada interacao)
+# ---------------------------------------------------------------------------
+@st.cache_data(show_spinner=False)
+def carregar_instancia(_pasta):
+    inst = carregar(_pasta)
+    res = inst.computar()
+    alertas = inst.alertas_descobertura()
+    return res, alertas, {
+        "processos": len(inst.processos),
+        "riscos": len(inst.riscos),
+        "vinculos": len(inst.vinculos),
+        "controles": len(inst.controles),
+        "apontamentos": len(inst.apontamentos),
+        "indicadores": len(inst.indicadores),
+        "externos": len(inst.externos),
+        "bmap": len(inst.bmap),
+    }
+
+@st.cache_data(show_spinner=False)
+def carregar_visoes(_pasta):
+    with open(os.path.join(_pasta, "B7_visoes.csv"), encoding="utf-8") as f:
+        return list(csv.DictReader(f, delimiter=";"))
+
+@st.cache_data(show_spinner=False)
+def carregar_canonico():
+    def _ler(nome):
+        p = os.path.join(CANONICO, nome)
+        if not os.path.exists(p): return []
+        with open(p, encoding="utf-8") as f:
+            return list(csv.DictReader(f, delimiter=";"))
+    return {
+        "dominios":    _ler("B_ORG_dominios.csv"),
+        "areas":       _ler("B_ORG_areas.csv"),
+        "riscos":      _ler("B6_riscos_canonico.csv"),
+        "disciplinas": _ler("B9_disciplinas_canonico.csv"),
+        "fatores":     _ler("B_FR_canonico.csv"),
+        "testes":      _ler("B_TESTES_canonico.csv"),
+    }
+
+res, alertas, counts = carregar_instancia(pasta)
+visoes = carregar_visoes(pasta)
+canon = carregar_canonico()
+
+# ---------------------------------------------------------------------------
+# Abas
+# ---------------------------------------------------------------------------
+tab_mapa, tab_gap, tab_suf, tab_canon = st.tabs(
+    ["🗺️ 20-box", "📋 Gap Regulatório", "🔎 Suficiência", "📚 Canônico"]
+)
+
+# ===========================================================================
+# ABA 1 — 20-BOX
+# ===========================================================================
+with tab_mapa:
+    col_filtros, col_metricas = st.columns([2, 3])
+    with col_filtros:
+        visao_opts = [("Casa toda", None)] + [(v["nome"], v["id"]) for v in visoes]
+        visao_label = st.selectbox(
+            "Visão (recorte)",
+            [v[0] for v in visao_opts],
+            help="Recortes definidos em B7_visoes.csv.",
+        )
+        visao_id = dict(visao_opts)[visao_label]
+
+    # aplicar visao se selecionada
+    def _aplicar_visao(res_, visao_id_):
+        if not visao_id_:
+            return res_, "Casa toda"
+        with open(os.path.join(pasta, "B7_visao_filtros.csv"), encoding="utf-8") as f:
+            filtros = [r for r in csv.DictReader(f, delimiter=";") if r["visao_id"] == visao_id_]
+        if not filtros:
+            return res_, visao_label
+        def passa(r):
+            por_dim = {}
+            for f in filtros:
+                por_dim.setdefault(f["dimensao"], []).append(f)
+            for dim, fs in por_dim.items():
+                ok = False
+                for f in fs:
+                    val = f["valor"]; op = f["operador"]
+                    alvo = {"processo": r["processo_id"], "disciplina": r["disciplina"],
+                            "risco": r["risco_id"]}.get(dim, "")
+                    if op == "igual" and alvo == val: ok = True
+                    elif op == "prefixo" and alvo.startswith(val): ok = True
+                    elif op == "em" and alvo in val.split("|"): ok = True
+                if not ok: return False
+            return True
+        return [r for r in res_ if passa(r)], visao_label
+
+    res_filtrado, titulo_visao = _aplicar_visao(res, visao_id)
+
+    # metricas
+    from collections import Counter
+    prio = Counter(r["prioridade"] for r in res_filtrado)
+    cob_media = round(sum(r.get("cobertura_pct", 0) for r in res_filtrado) / len(res_filtrado), 1) if res_filtrado else 0
+
+    with col_metricas:
+        c1, c2, c3, c4, c5 = st.columns(5)
+        for col, label, val, cls in [
+            (c1, "Críticos", prio.get("Critico", 0), "pill-crit"),
+            (c2, "Altos",   prio.get("Alto", 0),    "pill-alto"),
+            (c3, "Médios",  prio.get("Medio", 0),   "pill-medio"),
+            (c4, "Baixos",  prio.get("Baixo", 0),   "pill-baixo"),
+            (c5, "OK",      prio.get("OK", 0),      "pill-ok"),
+        ]:
+            col.markdown(f'<div class="metric-tile"><p class="lab">{label}</p><p class="val">{val}</p></div>', unsafe_allow_html=True)
+
+    st.markdown("")
+
+    # renderizar 20-box
+    import tempfile
+    with tempfile.TemporaryDirectory() as tmp:
+        html_path = os.path.join(tmp, "20box.html")
+        render_20box(res_filtrado, f"Banco Modelo S.A. — {titulo_visao}",
+                     html_path, alertas_descobertura=alertas if not visao_id else None)
+        html_content = open(html_path, encoding="utf-8").read()
+    # ajustar altura dinamica
+    st.components.v1.html(html_content, height=850, scrolling=True)
+
+    # tabela de pares criticos/altos
+    criticos = sorted(
+        [r for r in res_filtrado if r["prioridade"] in ("Critico", "Alto")],
+        key=lambda x: -x["score_x"],
+    )
+    st.markdown(f"### Pares que exigem tratamento — {len(criticos)}")
+    st.caption(f"Cobertura média (validação independente): **{cob_media}%**")
+    if criticos:
+        import pandas as pd
+        df = pd.DataFrame([{
+            "Prioridade": r["prioridade"],
+            "Processo": r["processo_id"],
+            "Risco local": r["risco_id"],
+            "Risco canônico": r["risco_canonico"],
+            "Impacto": r["nivel_y"],
+            "Ambiente": r["nivel_x"],
+            "score_x": r["score_x"],
+            "Cobertura %": r.get("cobertura_pct", 0),
+            "Área": r["area_afetada"],
+        } for r in criticos])
+        st.dataframe(df, use_container_width=True, hide_index=True)
+    else:
+        st.info("Nenhum par em prioridade crítica ou alta neste recorte.")
+
+    # alertas de descobertura
+    if alertas and not visao_id:
+        st.markdown("### Decisões pendentes")
+        st.caption("Sinais (KRI, externos) sem apontamento associado — decisão: abrir apontamento ou justificar.")
+        import pandas as pd
+        df_al = pd.DataFrame([{
+            "Tipo": a["tipo"],
+            "Processo": a["par"][0],
+            "Risco": a["par"][1],
+            "Detalhe": a["detalhe"],
+        } for a in alertas])
+        st.dataframe(df_al, use_container_width=True, hide_index=True)
+
+# ===========================================================================
+# ABA 2 — GAP REGULATORIO
+# ===========================================================================
+with tab_gap:
+    col_tipo, col_info = st.columns([1, 3])
+    with col_tipo:
+        tipos = campos_mod.ENUM.get("tipo_instituicao", ["corretora", "banco_multiplo"])
+        tipo = st.selectbox("Tipo de instituição", tipos, index=tipos.index("corretora") if "corretora" in tipos else 0)
+    with col_info:
+        st.info(
+            "O gap regulatório cruza os **testes canônicos aplicáveis** ao tipo de instituição "
+            "com o que o banco **declara executar** (B_TESTES_execucao). "
+            "Os testes BSM PQO 2025 Cap 1 estão **ativos e rastreados**; testes seed ainda estão como proposto."
+        )
+
+    rel = analisar_gap(pasta, tipo_instituicao=tipo)
+    if rel.get("erro"):
+        st.error(rel["erro"])
+    else:
+        c1, c2, c3, c4 = st.columns(4)
+        c1.markdown(f'<div class="metric-tile"><p class="lab">Testes aplicáveis</p><p class="val">{rel["testes_aplicaveis"]}</p></div>', unsafe_allow_html=True)
+        c2.markdown(f'<div class="metric-tile"><p class="lab">Gaps críticos</p><p class="val">{len(rel["gaps_criticos"])}</p></div>', unsafe_allow_html=True)
+        c3.markdown(f'<div class="metric-tile"><p class="lab">Controles órfãos</p><p class="val">{len(rel["controles_orfaos"])}</p></div>', unsafe_allow_html=True)
+        c4.markdown(f'<div class="metric-tile"><p class="lab">FR descobertos</p><p class="val">{len(rel["fatores_risco_descobertos"])}</p></div>', unsafe_allow_html=True)
+
+        st.markdown("### Cobertura por regulador")
+        import pandas as pd
+        rows = []
+        for reg, s in sorted(rel["cobertura_por_regulador"].items()):
+            pct = round(100 * s["atendido"] / s["total"], 1) if s["total"] else 0
+            rows.append({
+                "Regulador": reg, "Total": s["total"],
+                "Atendido": f'{s["atendido"]} ({pct}%)',
+                "Parcial": s["parcial"], "Não conforme": s["nao_conforme"],
+                "Sem execução": s["sem_execucao"], "N/A": s["na"],
+            })
+        st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+
+        if rel["gaps_criticos"]:
+            st.markdown(f"### Gaps críticos — {len(rel['gaps_criticos'])}")
+            df_gc = pd.DataFrame([{
+                "Regulador": r["regulador"], "Teste": r["teste_id"],
+                "Norma": r["norma_id"], "Título": r["titulo"], "Estado": r["estado"],
+            } for r in rel["gaps_criticos"]])
+            st.dataframe(df_gc, use_container_width=True, hide_index=True)
+
+        if rel["controles_orfaos"]:
+            with st.expander(f"Controles órfãos — {len(rel['controles_orfaos'])}"):
+                st.caption("Controles reais do banco sem teste canônico associado. Podem ser legítimos (específicos do banco) ou dívida de mapeamento.")
+                df_orf = pd.DataFrame([{
+                    "ID": c["id"], "Ação": c.get("acao", "")[:80],
+                    "Risco local": c.get("risco_id", ""),
+                } for c in rel["controles_orfaos"]])
+                st.dataframe(df_orf, use_container_width=True, hide_index=True)
+
+        if rel["fatores_risco_descobertos"]:
+            with st.expander(f"Fatores de Risco descobertos — {len(rel['fatores_risco_descobertos'])}"):
+                st.caption("FRs canônicos cujos testes NÃO estão atendidos — sinal de vulnerabilidade estrutural.")
+                df_fr = pd.DataFrame([{
+                    "FR": f, "Testes": s["total_testes"], "Atendidos": s["testes_atendidos"],
+                } for f, s in rel["fatores_risco_descobertos"]])
+                st.dataframe(df_fr, use_container_width=True, hide_index=True)
+
+# ===========================================================================
+# ABA 3 — SUFICIENCIA
+# ===========================================================================
+with tab_suf:
+    rel_suf = analisar(pasta)
+    r = rel_suf["resumo"]
+    c1, c2, c3 = st.columns(3)
+    c1.markdown(f'<div class="metric-tile"><p class="lab">Books presentes</p><p class="val">{r["books_presentes"]}/{r["books_total"]}</p></div>', unsafe_allow_html=True)
+    c2.markdown(f'<div class="metric-tile"><p class="lab">Obrig. completos</p><p class="val">{r["obrigatorios_completos"]}/{r["obrigatorios_total"]}</p></div>', unsafe_allow_html=True)
+    c3.markdown(f'<div class="metric-tile"><p class="lab">Alertas estruturais</p><p class="val">{len(rel_suf["alertas"])}</p></div>', unsafe_allow_html=True)
+
+    st.markdown("### Diagnóstico por Book")
+    st.caption("Lê os Books preenchidos e diagnostica qualidade dos dados **antes** de confiar no 20-box.")
+    import pandas as pd
+    emoji = {"completo": "🟢 OK", "valido_baixa_confianca": "🟡 ATENÇÃO",
+             "incompleto": "🔴 FALHA", "ausente": "⚪ AUSENTE"}
+    rows = []
+    for b in rel_suf["books"]:
+        if not b["presente"]:
+            rows.append({"Book": b["titulo"], "Status": emoji["ausente"], "Registros": 0,
+                         "Obrig. mín. %": "-", "Recom. médio %": "-"})
+        else:
+            rows.append({
+                "Book": b["titulo"], "Status": emoji.get(b["status"], b["status"]),
+                "Registros": b["registros"],
+                "Obrig. mín. %": b.get("preenchimento_obrigatorio_min", "-"),
+                "Recom. médio %": b.get("preenchimento_recomendado_medio", "-"),
+            })
+    st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+
+    if rel_suf["alertas"]:
+        st.markdown("### Alertas estruturais")
+        for tipo_al, msg in rel_suf["alertas"]:
+            st.warning(f"**[{tipo_al}]** {msg}")
+
+    st.markdown("### Contagens da instância")
+    c1, c2, c3, c4 = st.columns(4)
+    c1.metric("Processos", counts["processos"])
+    c2.metric("Riscos", counts["riscos"])
+    c3.metric("Pares (vínculos)", counts["vinculos"])
+    c4.metric("Controles", counts["controles"])
+    c1.metric("Apontamentos", counts["apontamentos"])
+    c2.metric("Indicadores", counts["indicadores"])
+    c3.metric("Externos", counts["externos"])
+    c4.metric("B_MAP", counts["bmap"])
+
+# ===========================================================================
+# ABA 4 — CANONICO
+# ===========================================================================
+with tab_canon:
+    st.markdown(
+        "Camada **canônica** do BooX: o vocabulário comum que serve a todo banco. "
+        "Cada ID aqui pode ser referenciado via B_MAP pelo vocabulário local do banco."
+    )
+
+    sub = st.selectbox(
+        "Explorar",
+        ["Riscos (hierarquia R0 → R4)", "Áreas organizacionais", "Disciplinas",
+         "Fatores de Risco", "Testes regulamentares"],
+    )
+
+    import pandas as pd
+    if sub.startswith("Riscos"):
+        st.caption(f"{len(canon['riscos'])} riscos canônicos (R0 a R4). Hoje foca em Cyber, Conformidade e PLD-FT na granularidade fina.")
+        df = pd.DataFrame(canon["riscos"])[["id", "nome", "nivel", "parent_id", "categoria_basileia", "status"]]
+        nivel_filtro = st.multiselect("Filtrar por nível", sorted(df["nivel"].unique()), default=sorted(df["nivel"].unique()))
+        df = df[df["nivel"].isin(nivel_filtro)]
+        st.dataframe(df, use_container_width=True, hide_index=True, height=500)
+
+    elif sub.startswith("Áreas"):
+        st.caption(f"{len(canon['areas'])} áreas canônicas distribuídas em {len(canon['dominios'])} domínios (1ª, 2ª e 3ª linhas de defesa).")
+        df = pd.DataFrame(canon["areas"])[["id", "nome", "dominio_id", "descricao"]]
+        st.dataframe(df, use_container_width=True, hide_index=True, height=500)
+
+    elif sub.startswith("Disciplinas"):
+        st.caption(f"{len(canon['disciplinas'])} disciplinas transversais (crédito, mercado, cyber, PLD, LGPD, ...)")
+        df = pd.DataFrame(canon["disciplinas"])
+        st.dataframe(df, use_container_width=True, hide_index=True, height=500)
+
+    elif sub.startswith("Fatores"):
+        st.caption(f"{len(canon['fatores'])} Fatores de Risco canônicos (causas-raiz específicas).")
+        df = pd.DataFrame(canon["fatores"])
+        st.dataframe(df, use_container_width=True, hide_index=True, height=500)
+
+    elif sub.startswith("Testes"):
+        ts = canon["testes"]
+        ativos = [t for t in ts if t.get("status") == "ativo"]
+        propostos = [t for t in ts if t.get("status") == "proposto"]
+        st.caption(
+            f"**{len(ts)} testes canônicos** — {len(ativos)} ativos rastreados (BSM PQO 2025 Cap 1) e {len(propostos)} seeds propostos."
+        )
+        status_filtro = st.radio("Status", ["Todos", "Ativo (rastreado)", "Proposto (seed)"], horizontal=True)
+        df_src = ts
+        if status_filtro == "Ativo (rastreado)":
+            df_src = ativos
+        elif status_filtro == "Proposto (seed)":
+            df_src = propostos
+        df = pd.DataFrame(df_src)[
+            ["id", "regulador", "norma_id", "artigo", "titulo", "criticidade",
+             "aplicabilidade", "status"]
+        ]
+        st.dataframe(df, use_container_width=True, hide_index=True, height=520)
+
+        with st.expander("Ver detalhes de um teste"):
+            tid = st.selectbox("ID do teste", [t["id"] for t in df_src])
+            if tid:
+                t = next(x for x in df_src if x["id"] == tid)
+                st.markdown(f"**{t['titulo']}**")
+                st.markdown(f"- **Regulador:** {t['regulador']}  ·  **Norma:** `{t['norma_id']}`  ·  **Artigo:** {t.get('artigo','—')}")
+                st.markdown(f"- **Aplicabilidade:** {t['aplicabilidade']}")
+                st.markdown(f"- **Criticidade:** {t.get('criticidade','—')}  ·  **Status:** `{t['status']}`")
+                st.markdown(f"**Descrição:** {t.get('descricao','—')}")
+                if t.get("metodo_verificacao"):
+                    st.markdown(f"**Método de verificação:** {t['metodo_verificacao']}")
+                if t.get("evidencia_esperada"):
+                    st.markdown(f"**Evidência esperada:** {t['evidencia_esperada']}")
+                if t.get("fonte_url"):
+                    st.markdown(f"**Fonte oficial:** {t['fonte_url']}")
+
+# ---------------------------------------------------------------------------
+# Rodape
+# ---------------------------------------------------------------------------
+st.markdown("---")
+st.caption(
+    "BooX · Framework open-source · [MIT](https://github.com/walterCNeto/BooX/blob/main/LICENSE) · "
+    "Banco Modelo S.A. e todos seus dados são fictícios e sintéticos."
+)
