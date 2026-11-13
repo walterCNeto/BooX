@@ -1,18 +1,21 @@
 # BooX — dependencias de execucao
 #
-# A ENGINE do BooX nao tem dependencias externas (so biblioteca padrao).
-# Este arquivo lista apenas o PACOTE OPCIONAL para templates Excel.
+# Streamlit + pandas: para o app Streamlit (boox/app_streamlit.py)
+#                     — tambem consumido pelo Streamlit Community Cloud
+# openpyxl: pacote opcional para o gerador de templates Excel
 #
-# Instalacao minima (sem templates):
+# Instalacao minima (engine de calculo pura — sem dependencias):
 #   pip install .
 #
-# Instalacao com templates:
-#   pip install ".[templates]"
+# Instalacao com o app Streamlit:
+#   pip install .
+#   pip install -r requirements.txt
 #
 # Para ambiente corporativo com Artifactory/Nexus interno, usar o indice
 # interno em vez do PyPI publico. Exemplo:
-#   pip install --index-url https://nexus.seu-banco.local/pypi/simple .
+#   pip install --index-url https://nexus.seu-banco.local/pypi/simple -r requirements.txt
 #
-# Versao fixada e aprovavel por SI (openpyxl e amplamente usada e
-# auditada pelo mercado):
+# Versoes fixadas:
+streamlit==1.40.1
+pandas==2.2.3
 openpyxl==3.1.5
