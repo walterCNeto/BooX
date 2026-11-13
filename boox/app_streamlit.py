@@ -7,18 +7,22 @@ boox/compute.py, render.py, suficiencia.py e gap_regulatorio.py.
 Uso:
     streamlit run boox/app_streamlit.py
 
-Dados: por padrao usa examples/banco_modelo_sa (Banco Modelo S.A., ficticio).
+Dois modos de entrada de dados (sidebar):
+  1. Demo (Banco Modelo S.A.) - padrao, usa CSVs do repo
+  2. Upload de CSVs - arrasta/seleciona seus Books (apenas sessao)
 """
 import os
 import sys
 import csv
-import base64
+import io
+import zipfile
+import tempfile
 from pathlib import Path
 
 import streamlit as st
 
 # ---------------------------------------------------------------------------
-# Localizar a raiz do projeto (funciona rodando da raiz ou como pacote)
+# Localizar a raiz do projeto
 # ---------------------------------------------------------------------------
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
@@ -30,8 +34,16 @@ from boox.suficiencia import analisar, render_md
 from boox.gap_regulatorio import analisar as analisar_gap, render_md as render_gap_md
 from boox import _campos as campos_mod
 
-DEFAULT_PASTA = str(ROOT / "examples" / "banco_modelo_sa")
+DEMO_PASTA = str(ROOT / "examples" / "banco_modelo_sa")
 CANONICO = str(ROOT / "canonico")
+
+CSVS_OBRIGATORIOS_MIN = {
+    "B1_processos.csv",
+    "B6_riscos.csv",
+    "B6_vinculo_processo_risco.csv",
+    "B5_controles.csv",
+    "B2_apontamentos.csv",
+}
 
 # ---------------------------------------------------------------------------
 # Config global da pagina
@@ -43,7 +55,6 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# Tema verde-escuro BooX
 st.markdown(
     """
     <style>
@@ -55,7 +66,6 @@ st.markdown(
       }
       .block-container { padding-top: 1.5rem; }
       h1, h2, h3 { color: var(--boox-primary); }
-      .st-emotion-cache-16idsys p, .st-emotion-cache-16idsys { color: var(--boox-ink); }
       .boox-hero {
         background: linear-gradient(135deg, #0f3d3e 0%, #1d9e75 100%);
         color: #fff;
@@ -77,11 +87,12 @@ st.markdown(
       }
       .metric-tile .lab { color: #5a6b66; font-size: 10pt; margin: 0; }
       .metric-tile .val { color: var(--boox-primary); font-size: 22pt; font-weight: 600; margin: 0; line-height: 1.1; }
-      .pill-crit  { background:#fcebeb; color:#7a2020; padding:2px 8px; border-radius:10px; font-size:9pt; font-weight:600; }
-      .pill-alto  { background:#fdf3ec; color:#8a4a18; padding:2px 8px; border-radius:10px; font-size:9pt; font-weight:600; }
-      .pill-medio { background:#fbf5ea; color:#7a5f12; padding:2px 8px; border-radius:10px; font-size:9pt; font-weight:600; }
-      .pill-baixo { background:#eef7ea; color:#2a5312; padding:2px 8px; border-radius:10px; font-size:9pt; font-weight:600; }
-      .pill-ok    { background:#e4f3ef; color:#0d5a43; padding:2px 8px; border-radius:10px; font-size:9pt; font-weight:600; }
+      .source-badge {
+        display:inline-block; padding:3px 10px; border-radius:12px;
+        font-size:9pt; font-weight:600; margin-left:6px;
+      }
+      .source-demo    { background:#e4f3ef; color:#0d5a43; }
+      .source-upload  { background:#eef2fa; color:#1e3a8a; }
     </style>
     """,
     unsafe_allow_html=True,
@@ -108,29 +119,99 @@ st.markdown(
 )
 
 # ---------------------------------------------------------------------------
-# Sidebar — selecao da instancia
+# Sidebar
 # ---------------------------------------------------------------------------
 with st.sidebar:
-    st.markdown("### Instância de dados")
-    pasta = st.text_input("Pasta dos Books", value=DEFAULT_PASTA, help="Pasta contendo os CSVs dos Books. Default: Banco Modelo S.A. (fictício).")
-    if not os.path.isdir(pasta):
-        st.error(f"Pasta não encontrada: {pasta}")
-        st.stop()
+    st.markdown("### Fonte de dados")
+    modo = st.radio(
+        "Como você quer alimentar o BooX?",
+        ["Demo (Banco Modelo S.A.)", "Upload dos meus CSVs"],
+        index=0,
+        help=(
+            "Demo: usa a instância fictícia do repositório. "
+            "Upload: carrega seus CSVs pela interface (ficam só na sessão, não vão para o servidor permanentemente)."
+        ),
+    )
+
+    pasta = None
+    status_msg = None
+
+    if modo.startswith("Demo"):
+        pasta = DEMO_PASTA
+        status_msg = ("source-demo", "Instância de demonstração (dados fictícios)")
+    else:  # Upload
+        st.caption(
+            "Arraste todos os CSVs dos seus Books de uma vez (`B1_processos.csv`, "
+            "`B6_riscos.csv`, etc.). Os arquivos ficam na sessão do seu navegador — "
+            "**não são persistidos** no servidor."
+        )
+        arquivos = st.file_uploader(
+            "Arraste os CSVs aqui",
+            type=["csv"],
+            accept_multiple_files=True,
+            help="Nomes esperados conforme o padrão do BooX — baixe o ZIP de referência abaixo.",
+        )
+        if arquivos:
+            if "_tmpdir" not in st.session_state:
+                st.session_state["_tmpdir"] = tempfile.mkdtemp(prefix="boox_")
+            tmp = st.session_state["_tmpdir"]
+            nomes_recebidos = set()
+            for f in arquivos:
+                destino = os.path.join(tmp, f.name)
+                with open(destino, "wb") as out:
+                    out.write(f.getbuffer())
+                nomes_recebidos.add(f.name)
+            faltam_min = CSVS_OBRIGATORIOS_MIN - nomes_recebidos
+            if faltam_min:
+                st.warning(
+                    f"Faltam CSVs mínimos para o 20-box: {', '.join(sorted(faltam_min))}. "
+                    "O app pode mostrar diagnósticos parciais."
+                )
+            else:
+                st.success(f"{len(arquivos)} CSV(s) carregado(s) nesta sessão.")
+            pasta = tmp
+            status_msg = ("source-upload", f"Upload — {len(arquivos)} CSV(s) na sessão")
+        else:
+            st.info("Arraste os CSVs acima para começar. Enquanto isso, a Demo continua carregada.")
+            pasta = DEMO_PASTA
+            status_msg = ("source-demo", "Demo (upload vazio)")
 
     st.markdown("---")
-    st.markdown("### Sobre a demonstração")
-    st.markdown(
-        "Esta instância usa o **Banco Modelo S.A.**, uma corretora/banco fictício "
-        "com dados sintéticos. Serve para explorar o framework sem expor dados reais.\n\n"
-        "Para rodar com seus próprios Books, troque o caminho acima."
+    st.markdown("### Templates para preencher")
+    st.caption(
+        "Para começar com seus próprios dados, baixe o ZIP com os CSVs da Demo "
+        "como referência de estrutura. Depois preencha com seus dados reais e "
+        "faça upload."
     )
+
+    @st.cache_data(show_spinner=False)
+    def _demo_zip():
+        buf = io.BytesIO()
+        with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as z:
+            for f in sorted(os.listdir(DEMO_PASTA)):
+                if f.endswith(".csv"):
+                    z.write(os.path.join(DEMO_PASTA, f), arcname=f)
+        return buf.getvalue()
+
+    st.download_button(
+        "⬇️ Baixar CSVs da Demo (ZIP)",
+        data=_demo_zip(),
+        file_name="boox_demo_banco_modelo_sa.zip",
+        mime="application/zip",
+        width="stretch",
+    )
+
     st.markdown("---")
     st.caption("MIT (código) · CC BY 4.0 (dados do canônico)")
 
+if status_msg:
+    cls, txt = status_msg
+    st.markdown(f'<span class="source-badge {cls}">● {txt}</span>', unsafe_allow_html=True)
+
 # ---------------------------------------------------------------------------
-# Cache de carregamento (evita re-ler CSVs a cada interacao)
+# Cache
 # ---------------------------------------------------------------------------
-@st.cache_data(show_spinner=False)
+@st.cache_data(show_spinner="Carregando Books...")
 def carregar_instancia(_pasta):
     inst = carregar(_pasta)
     res = inst.computar()
@@ -148,7 +229,10 @@ def carregar_instancia(_pasta):
 
 @st.cache_data(show_spinner=False)
 def carregar_visoes(_pasta):
-    with open(os.path.join(_pasta, "B7_visoes.csv"), encoding="utf-8") as f:
+    arq = os.path.join(_pasta, "B7_visoes.csv")
+    if not os.path.exists(arq):
+        return []
+    with open(arq, encoding="utf-8") as f:
         return list(csv.DictReader(f, delimiter=";"))
 
 @st.cache_data(show_spinner=False)
@@ -167,7 +251,12 @@ def carregar_canonico():
         "testes":      _ler("B_TESTES_canonico.csv"),
     }
 
-res, alertas, counts = carregar_instancia(pasta)
+try:
+    res, alertas, counts = carregar_instancia(pasta)
+except Exception as e:
+    st.error(f"Não consegui carregar os Books em `{pasta}`. Detalhe: {e}")
+    st.stop()
+
 visoes = carregar_visoes(pasta)
 canon = carregar_canonico()
 
@@ -192,11 +281,13 @@ with tab_mapa:
         )
         visao_id = dict(visao_opts)[visao_label]
 
-    # aplicar visao se selecionada
     def _aplicar_visao(res_, visao_id_):
         if not visao_id_:
             return res_, "Casa toda"
-        with open(os.path.join(pasta, "B7_visao_filtros.csv"), encoding="utf-8") as f:
+        arq = os.path.join(pasta, "B7_visao_filtros.csv")
+        if not os.path.exists(arq):
+            return res_, visao_label
+        with open(arq, encoding="utf-8") as f:
             filtros = [r for r in csv.DictReader(f, delimiter=";") if r["visao_id"] == visao_id_]
         if not filtros:
             return res_, visao_label
@@ -219,35 +310,31 @@ with tab_mapa:
 
     res_filtrado, titulo_visao = _aplicar_visao(res, visao_id)
 
-    # metricas
     from collections import Counter
     prio = Counter(r["prioridade"] for r in res_filtrado)
     cob_media = round(sum(r.get("cobertura_pct", 0) for r in res_filtrado) / len(res_filtrado), 1) if res_filtrado else 0
 
     with col_metricas:
         c1, c2, c3, c4, c5 = st.columns(5)
-        for col, label, val, cls in [
-            (c1, "Críticos", prio.get("Critico", 0), "pill-crit"),
-            (c2, "Altos",   prio.get("Alto", 0),    "pill-alto"),
-            (c3, "Médios",  prio.get("Medio", 0),   "pill-medio"),
-            (c4, "Baixos",  prio.get("Baixo", 0),   "pill-baixo"),
-            (c5, "OK",      prio.get("OK", 0),      "pill-ok"),
+        for col, label, val in [
+            (c1, "Críticos", prio.get("Critico", 0)),
+            (c2, "Altos",   prio.get("Alto", 0)),
+            (c3, "Médios",  prio.get("Medio", 0)),
+            (c4, "Baixos",  prio.get("Baixo", 0)),
+            (c5, "OK",      prio.get("OK", 0)),
         ]:
             col.markdown(f'<div class="metric-tile"><p class="lab">{label}</p><p class="val">{val}</p></div>', unsafe_allow_html=True)
 
     st.markdown("")
 
-    # renderizar 20-box
-    import tempfile
-    with tempfile.TemporaryDirectory() as tmp:
+    import tempfile as _tf
+    with _tf.TemporaryDirectory() as tmp:
         html_path = os.path.join(tmp, "20box.html")
-        render_20box(res_filtrado, f"Banco Modelo S.A. — {titulo_visao}",
+        render_20box(res_filtrado, f"Instância — {titulo_visao}",
                      html_path, alertas_descobertura=alertas if not visao_id else None)
         html_content = open(html_path, encoding="utf-8").read()
-    # ajustar altura dinamica
     st.components.v1.html(html_content, height=850, scrolling=True)
 
-    # tabela de pares criticos/altos
     criticos = sorted(
         [r for r in res_filtrado if r["prioridade"] in ("Critico", "Alto")],
         key=lambda x: -x["score_x"],
@@ -267,22 +354,19 @@ with tab_mapa:
             "Cobertura %": r.get("cobertura_pct", 0),
             "Área": r["area_afetada"],
         } for r in criticos])
-        st.dataframe(df, use_container_width=True, hide_index=True)
+        st.dataframe(df, width="stretch", hide_index=True)
     else:
         st.info("Nenhum par em prioridade crítica ou alta neste recorte.")
 
-    # alertas de descobertura
     if alertas and not visao_id:
         st.markdown("### Decisões pendentes")
         st.caption("Sinais (KRI, externos) sem apontamento associado — decisão: abrir apontamento ou justificar.")
         import pandas as pd
         df_al = pd.DataFrame([{
-            "Tipo": a["tipo"],
-            "Processo": a["par"][0],
-            "Risco": a["par"][1],
-            "Detalhe": a["detalhe"],
+            "Tipo": a["tipo"], "Processo": a["par"][0],
+            "Risco": a["par"][1], "Detalhe": a["detalhe"],
         } for a in alertas])
-        st.dataframe(df_al, use_container_width=True, hide_index=True)
+        st.dataframe(df_al, width="stretch", hide_index=True)
 
 # ===========================================================================
 # ABA 2 — GAP REGULATORIO
@@ -291,12 +375,13 @@ with tab_gap:
     col_tipo, col_info = st.columns([1, 3])
     with col_tipo:
         tipos = campos_mod.ENUM.get("tipo_instituicao", ["corretora", "banco_multiplo"])
-        tipo = st.selectbox("Tipo de instituição", tipos, index=tipos.index("corretora") if "corretora" in tipos else 0)
+        default_idx = tipos.index("corretora") if "corretora" in tipos else 0
+        tipo = st.selectbox("Tipo de instituição", tipos, index=default_idx)
     with col_info:
         st.info(
             "O gap regulatório cruza os **testes canônicos aplicáveis** ao tipo de instituição "
             "com o que o banco **declara executar** (B_TESTES_execucao). "
-            "Os testes BSM PQO 2025 Cap 1 estão **ativos e rastreados**; testes seed ainda estão como proposto."
+            "Testes BSM PQO 2025 Cap 1 estão **ativos e rastreados**; seeds ainda estão como proposto."
         )
 
     rel = analisar_gap(pasta, tipo_instituicao=tipo)
@@ -320,7 +405,7 @@ with tab_gap:
                 "Parcial": s["parcial"], "Não conforme": s["nao_conforme"],
                 "Sem execução": s["sem_execucao"], "N/A": s["na"],
             })
-        st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+        st.dataframe(pd.DataFrame(rows), width="stretch", hide_index=True)
 
         if rel["gaps_criticos"]:
             st.markdown(f"### Gaps críticos — {len(rel['gaps_criticos'])}")
@@ -328,16 +413,16 @@ with tab_gap:
                 "Regulador": r["regulador"], "Teste": r["teste_id"],
                 "Norma": r["norma_id"], "Título": r["titulo"], "Estado": r["estado"],
             } for r in rel["gaps_criticos"]])
-            st.dataframe(df_gc, use_container_width=True, hide_index=True)
+            st.dataframe(df_gc, width="stretch", hide_index=True)
 
         if rel["controles_orfaos"]:
             with st.expander(f"Controles órfãos — {len(rel['controles_orfaos'])}"):
-                st.caption("Controles reais do banco sem teste canônico associado. Podem ser legítimos (específicos do banco) ou dívida de mapeamento.")
+                st.caption("Controles reais do banco sem teste canônico associado. Podem ser legítimos ou dívida de mapeamento.")
                 df_orf = pd.DataFrame([{
                     "ID": c["id"], "Ação": c.get("acao", "")[:80],
                     "Risco local": c.get("risco_id", ""),
                 } for c in rel["controles_orfaos"]])
-                st.dataframe(df_orf, use_container_width=True, hide_index=True)
+                st.dataframe(df_orf, width="stretch", hide_index=True)
 
         if rel["fatores_risco_descobertos"]:
             with st.expander(f"Fatores de Risco descobertos — {len(rel['fatores_risco_descobertos'])}"):
@@ -345,7 +430,7 @@ with tab_gap:
                 df_fr = pd.DataFrame([{
                     "FR": f, "Testes": s["total_testes"], "Atendidos": s["testes_atendidos"],
                 } for f, s in rel["fatores_risco_descobertos"]])
-                st.dataframe(df_fr, use_container_width=True, hide_index=True)
+                st.dataframe(df_fr, width="stretch", hide_index=True)
 
 # ===========================================================================
 # ABA 3 — SUFICIENCIA
@@ -363,19 +448,29 @@ with tab_suf:
     import pandas as pd
     emoji = {"completo": "🟢 OK", "valido_baixa_confianca": "🟡 ATENÇÃO",
              "incompleto": "🔴 FALHA", "ausente": "⚪ AUSENTE"}
+
+    def _fmt_pct(v):
+        """Sempre string: evita ArrowInvalid por coluna mista int/str."""
+        if v is None or v == "-":
+            return "—"
+        try:
+            return f"{int(v)}%"
+        except (ValueError, TypeError):
+            return str(v)
+
     rows = []
     for b in rel_suf["books"]:
         if not b["presente"]:
             rows.append({"Book": b["titulo"], "Status": emoji["ausente"], "Registros": 0,
-                         "Obrig. mín. %": "-", "Recom. médio %": "-"})
+                         "Obrig. mín.": "—", "Recom. médio": "—"})
         else:
             rows.append({
                 "Book": b["titulo"], "Status": emoji.get(b["status"], b["status"]),
                 "Registros": b["registros"],
-                "Obrig. mín. %": b.get("preenchimento_obrigatorio_min", "-"),
-                "Recom. médio %": b.get("preenchimento_recomendado_medio", "-"),
+                "Obrig. mín.": _fmt_pct(b.get("preenchimento_obrigatorio_min")),
+                "Recom. médio": _fmt_pct(b.get("preenchimento_recomendado_medio")),
             })
-    st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+    st.dataframe(pd.DataFrame(rows), width="stretch", hide_index=True)
 
     if rel_suf["alertas"]:
         st.markdown("### Alertas estruturais")
@@ -414,22 +509,22 @@ with tab_canon:
         df = pd.DataFrame(canon["riscos"])[["id", "nome", "nivel", "parent_id", "categoria_basileia", "status"]]
         nivel_filtro = st.multiselect("Filtrar por nível", sorted(df["nivel"].unique()), default=sorted(df["nivel"].unique()))
         df = df[df["nivel"].isin(nivel_filtro)]
-        st.dataframe(df, use_container_width=True, hide_index=True, height=500)
+        st.dataframe(df, width="stretch", hide_index=True, height=500)
 
     elif sub.startswith("Áreas"):
         st.caption(f"{len(canon['areas'])} áreas canônicas distribuídas em {len(canon['dominios'])} domínios (1ª, 2ª e 3ª linhas de defesa).")
         df = pd.DataFrame(canon["areas"])[["id", "nome", "dominio_id", "descricao"]]
-        st.dataframe(df, use_container_width=True, hide_index=True, height=500)
+        st.dataframe(df, width="stretch", hide_index=True, height=500)
 
     elif sub.startswith("Disciplinas"):
         st.caption(f"{len(canon['disciplinas'])} disciplinas transversais (crédito, mercado, cyber, PLD, LGPD, ...)")
         df = pd.DataFrame(canon["disciplinas"])
-        st.dataframe(df, use_container_width=True, hide_index=True, height=500)
+        st.dataframe(df, width="stretch", hide_index=True, height=500)
 
     elif sub.startswith("Fatores"):
         st.caption(f"{len(canon['fatores'])} Fatores de Risco canônicos (causas-raiz específicas).")
         df = pd.DataFrame(canon["fatores"])
-        st.dataframe(df, use_container_width=True, hide_index=True, height=500)
+        st.dataframe(df, width="stretch", hide_index=True, height=500)
 
     elif sub.startswith("Testes"):
         ts = canon["testes"]
@@ -448,7 +543,7 @@ with tab_canon:
             ["id", "regulador", "norma_id", "artigo", "titulo", "criticidade",
              "aplicabilidade", "status"]
         ]
-        st.dataframe(df, use_container_width=True, hide_index=True, height=520)
+        st.dataframe(df, width="stretch", hide_index=True, height=520)
 
         with st.expander("Ver detalhes de um teste"):
             tid = st.selectbox("ID do teste", [t["id"] for t in df_src])
