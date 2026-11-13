@@ -1,0 +1,6 @@
+id;tipo;titulo;data;local;responsavel;descricao;hash
+EV-001;relatorio;Relatorio IAM - contas admin sem MFA;2026-04-15;SharePoint SI;Nucleo Cyber;Extracao IAM com 47 contas admin e status MFA;
+EV-002;print;Console DLP com regras ativas;2026-04-20;SharePoint SI;Nucleo Cyber;Print da console DLP mostrando regras de bloqueio;
+EV-003;ata;Atas do Comite de Riscos 2025;2026-01-30;GED Compliance;Compliance;12 atas comprovando cumprimento da periodicidade;
+EV-004;relatorio;Amostragem PEP Q1-2026;2026-03-10;GED PLD;DPLD;30 cadastros PEP amostrados com DD documentada;
+EV-005;relatorio;SLA tratamento alertas PLD - Abr/2026;2026-05-05;GED PLD;DPLD;Extracao com data de alerta vs data de parecer;

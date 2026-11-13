@@ -28,6 +28,8 @@ ARQS = {
     "areas":      "B_ORG_areas.csv",
     "riscos":     "B6_riscos_canonico.csv",
     "disciplinas":"B9_disciplinas_canonico.csv",
+    "fatores":    "B_FR_canonico.csv",
+    "testes":     "B_TESTES_canonico.csv",
 }
 
 def _ler(arq):

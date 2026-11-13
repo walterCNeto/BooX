@@ -63,6 +63,33 @@ def main():
         if p and p not in ris_ids:
             erros.append(f"[riscos] {r['id']}: parent_id '{p}' nao existe")
 
+
+    # ---- extensoes fase 1: FR e testes canonicos ----
+    import os as _os
+    fr_path = _os.path.join(AQUI,"B_FR_canonico.csv")
+    ts_path = _os.path.join(AQUI,"B_TESTES_canonico.csv")
+    fr = ler("B_FR_canonico.csv") if _os.path.exists(fr_path) else []
+    ts = ler("B_TESTES_canonico.csv") if _os.path.exists(ts_path) else []
+    if fr:
+        checa_dup(fr, "fatores"); checa_subst(fr, "fatores")
+        for x in fr:
+            rc = x.get("risco_canonico_id","").strip()
+            if rc and rc not in ris_ids:
+                erros.append(f"[fatores] {x['id']}: risco_canonico_id '{rc}' nao existe")
+    fr_ids = {x["id"] for x in fr}
+    if ts:
+        checa_dup(ts, "testes"); checa_subst(ts, "testes")
+        for x in ts:
+            rc = x.get("risco_r0_canonico","").strip()
+            fc = x.get("fator_risco_canonico_id","").strip()
+            if rc and rc not in ris_ids:
+                erros.append(f"[testes] {x['id']}: risco_r0_canonico '{rc}' nao existe")
+            if fc and fc not in fr_ids:
+                erros.append(f"[testes] {x['id']}: fator_risco_canonico_id '{fc}' nao existe")
+    if fr or ts:
+        propostos_ts = sum(1 for x in ts if x.get("status")=="proposto")
+        print(f"  fatores={len(fr)} testes_canonicos={len(ts)} (propostos={propostos_ts})")
+
     ver = open(os.path.join(AQUI,"VERSION")).read().strip() if os.path.exists(os.path.join(AQUI,"VERSION")) else "?"
     print(f"Validacao do canonico v{ver}")
     print(f"  dominios={len(dom)} areas={len(are)} riscos={len(ris)} disciplinas={len(dis)}")

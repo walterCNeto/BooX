@@ -1,0 +1,10 @@
+id;nome;risco_canonico_id;descricao;categoria;status;substituido_por
+FR.CYBER.001;Ausencia de MFA em acesso privilegiado;R4.U.7.1.1.1.1;Sistema critico permite login admin sem segundo fator;sistema;ativo;
+FR.CYBER.002;Compartilhamento operacional de credenciais admin;R3.U.7.1.1.1;Cultura ou procedimento permite compartilhar login admin;pessoa;ativo;
+FR.CYBER.003;Falta de DLP em canais de saida;R4.U.7.2.1.1.1;Nao ha ferramenta de prevencao a vazamento em email/upload;sistema;ativo;
+FR.CYBER.004;Classificacao de dados ausente;R2.U.7.2.1;Dados sensiveis nao rotulados impedem controle automatico;processo;ativo;
+FR.CONF.001;Regimento do comite sem periodicidade minima;R4.U.11.1.1.1.1;Documento nao fixa frequencia minima exigida por norma;processo;ativo;
+FR.CONF.002;Ausencia de agenda estruturada do comite;R3.U.11.1.1.1;Reunioes convocadas ad-hoc sem calendario fixo;processo;ativo;
+FR.PLDFT.001;Cadastro sem checagem de PEP contra lista oficial;R4.U.13.1.1.1.1;Onboarding aceita cadastro sem verificacao ativa;processo;ativo;
+FR.PLDFT.002;Regra de monitoramento sem SLA de tratamento;R4.U.13.2.1.1.1;Sistema gera alerta mas nao ha prazo obrigatorio;processo;ativo;
+FR.PLDFT.003;Fila de alertas sem gestao ativa;R4.U.13.2.1.1.1;Alertas ficam sem parecer por falta de responsavel claro;pessoa;ativo;

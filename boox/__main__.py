@@ -19,14 +19,15 @@ def main():
     titulo="Banco Modelo S.A. — Casa toda"
     if visao:
         res,titulo=aplicar_visao(inst,res,visao)
-    render_20box(res,titulo,os.path.join(out,"20box.html"))
+    alertas=inst.alertas_descobertura()
+    render_20box(res,titulo,os.path.join(out,"20box.html"),alertas_descobertura=alertas)
     render_csv(res,os.path.join(out,"detalhamento.csv"))
-    render_parecer(res,titulo,os.path.join(out,"parecer.md"))
+    render_parecer(res,titulo,os.path.join(out,"parecer.md"),alertas_descobertura=alertas)
     rel=analisar(pasta); render_md(rel,os.path.join(out,"suficiencia.md"))
     rr=rel["resumo"]
     print(f"Gerado em {out}/ : 20box.html, detalhamento.csv, parecer.md, suficiencia.md")
     print(f"Suficiencia: {rr['obrigatorios_completos']}/{rr['obrigatorios_total']} campos obrigatorios completos, {len(rel['alertas'])} alerta(s)")
-    print(f"Pares: {len(res)}")
+    print(f"Pares: {len(res)}  |  Decisoes pendentes (descobertura): {len(alertas)}")
 
 def aplicar_visao(inst,res,visao_id):
     filtros=[f for f in inst.filtros if f["visao_id"]==visao_id]

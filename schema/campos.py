@@ -228,3 +228,90 @@ BOOKS = {
    ],
  },
 }
+
+# ============================================================
+# FASE 1 — Cadeia regulamentar (adicao)
+# ============================================================
+
+ENUM.update({
+    "tipo_instituicao": ["banco_multiplo","banco_comercial","corretora","dtvm","distribuidora",
+                         "seguradora","previdencia","capitalizacao","cooperativa","consorcio",
+                         "administrador_fiduciario","gestor_recursos","fintech_pagamentos",
+                         "instituicao_pagamento","fintech_credito"],
+    "criticidade_teste": ["alta","media","baixa"],
+    "metodo_verificacao": ["revisao_documental","teste_amostral","observacao","reexecucao",
+                           "entrevista","analitico","automatizado"],
+    "resultado_teste": ["nao_executado","conforme","nao_conforme","parcialmente_conforme","na"],
+    "status_teste_canonico": ["ativo","deprecado","proposto"],
+})
+
+BOOKS["B_TESTES_canonico"] = {
+   "titulo": "B_TESTES — Testes regulamentares canonicos",
+   "desc": "Catalogo canonico de testes exigidos pelos reguladores. Camada CANONICA.",
+   "campos": [
+     ("id","OBR","texto","ID unico do teste (ex: TST.BSM.PQO.CAD.001)"),
+     ("regulador","OBR","texto","Regulador emissor (BACEN, CVM, SUSEP, BSM, ANBIMA, COAF)"),
+     ("norma_id","OBR","texto","Norma originaria (ChassiRO ou local)"),
+     ("titulo","OBR","texto","Titulo curto do teste"),
+     ("aplicabilidade","OBR","texto","Tipos de instituicao (lista com |)"),
+     ("artigo","REC","texto","Artigo/item da norma"),
+     ("descricao","REC","texto","O que o teste verifica"),
+     ("metodo_verificacao","REC","lista","metodo_verificacao"),
+     ("evidencia_esperada","REC","texto","Que evidencia comprova"),
+     ("frequencia_minima","REC","texto","diario, mensal, trimestral, por_evento"),
+     ("criticidade","REC","lista","criticidade_teste"),
+     ("risco_r0_canonico","REC","texto","R0 canonico associado"),
+     ("fator_risco_canonico_id","REC","texto","FR canonico (ref. B_FR_canonico)"),
+     ("controle_esperado_texto","REC","texto","Descricao do controle-alvo exigido"),
+     ("status","OBR","lista","status_teste_canonico"),
+     ("substituido_por","OPC","texto","ID substituto (se deprecado)"),
+     ("data_publicacao","OPC","data","Quando o teste entrou no catalogo"),
+     ("fonte_url","OPC","texto","URL da norma oficial"),
+   ],
+}
+
+BOOKS["B_FR_canonico"] = {
+   "titulo": "B_FR — Fatores de Risco canonicos",
+   "desc": "Biblioteca canonica de Fatores de Risco (causas-raiz). Camada CANONICA.",
+   "campos": [
+     ("id","OBR","texto","ID unico do FR (ex: FR.CYBER.001)"),
+     ("nome","OBR","texto","Nome do fator de risco"),
+     ("risco_canonico_id","OBR","texto","Risco canonico associado (ref. B6_riscos_canonico)"),
+     ("descricao","REC","texto","Descricao da causa-raiz"),
+     ("categoria","REC","texto","pessoa | processo | sistema | evento_externo"),
+     ("status","OBR","lista","status_teste_canonico"),
+     ("substituido_por","OPC","texto","ID substituto (se deprecado)"),
+   ],
+}
+
+BOOKS["B_TESTES_execucao"] = {
+   "titulo": "B_TESTES_execucao — Execucao dos testes pelo banco",
+   "desc": "Camada LOCAL: quais testes canonicos o banco executa, com resultado.",
+   "campos": [
+     ("id","OBR","texto","ID unico da execucao"),
+     ("teste_canonico_id","OBR","texto","ID do teste canonico"),
+     ("controle_id","OBR","texto","Controle real do banco (ref. B5)"),
+     ("resultado_ultimo","OBR","lista","resultado_teste"),
+     ("data_ultimo","OBR","data","Data da ultima execucao"),
+     ("executado_por","REC","texto","Papel/area responsavel"),
+     ("evidencia_id","REC","texto","Referencia a evidencia (B_EVIDENCIA)"),
+     ("frequencia_real","REC","texto","Com que frequencia o banco executa"),
+     ("apontamento_id","OPC","texto","Apontamento se nao_conforme (ref. B2)"),
+     ("observacoes","OPC","texto","Notas da execucao"),
+   ],
+}
+
+BOOKS["B_EVIDENCIA"] = {
+   "titulo": "B_EVIDENCIA — Evidencias de atendimento",
+   "desc": "Camada LOCAL: catalogo das evidencias do banco para cada teste.",
+   "campos": [
+     ("id","OBR","texto","ID unico da evidencia"),
+     ("tipo","OBR","texto","log|ata|relatorio|print|politica|procedimento|outros"),
+     ("titulo","OBR","texto","Titulo/nome da evidencia"),
+     ("data","OBR","data","Data da evidencia"),
+     ("local","REC","texto","Onde esta armazenada"),
+     ("responsavel","REC","texto","Custodio/responsavel"),
+     ("descricao","OPC","texto","Descricao adicional"),
+     ("hash","OPC","texto","Hash de integridade"),
+   ],
+}

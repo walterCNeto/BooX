@@ -10,6 +10,6 @@ API:
     inst = carregar("examples/banco_modelo_sa")
     res = inst.computar()   # lista de pares processo x risco com score e prioridade
 """
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 __author__ = "Walter C. Neto"
 __license__ = "MIT"

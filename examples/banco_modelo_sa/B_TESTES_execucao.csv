@@ -1,0 +1,6 @@
+id;teste_canonico_id;controle_id;resultado_ultimo;data_ultimo;executado_por;evidencia_id;frequencia_real;apontamento_id;observacoes
+EXEC-2026-001;TST.SEED.CYBER.001;CT-009;nao_conforme;2026-04-15;Nucleo Cyber;EV-001;semestral;AP-2026-0001;3 contas admin sem MFA identificadas
+EXEC-2026-002;TST.SEED.CYBER.003;CT-015;conforme;2026-04-20;Nucleo Cyber;EV-002;trimestral;;DLP operando com regras vigentes
+EXEC-2026-003;TST.SEED.CONF.001;CT-016;conforme;2026-01-30;Compliance;EV-003;anual;;Regimento revisado e periodicidade cumprida
+EXEC-2026-004;TST.SEED.PLDFT.001;CT-007;parcialmente_conforme;2026-03-10;DPLD;EV-004;trimestral;;80% da amostra com DD adequada
+EXEC-2026-005;TST.SEED.PLDFT.002;CT-006;nao_conforme;2026-05-05;DPLD;EV-005;mensal;AP-2026-0005;12% dos alertas alta prioridade excederam SLA

@@ -65,3 +65,43 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/).
 - `canonico/validar.py` — validacao de integridade do canonico
 - Analise de suficiencia agora detecta de-paras apontando para IDs
   canonicos deprecados ou inexistentes
+
+## [0.2.0] — 2026-11-13
+
+### v0.2 — Mudancas metodologicas (bolhas-pizza + apontamentos no eixo X)
+
+#### Mudado
+- **Eixo X passa a usar apenas apontamentos + controles + cobertura.**
+  KRIs e sinais externos saem do calculo direto do score. Tese: todo
+  problema concreto deve virar apontamento (com plano de acao); KRIs e
+  externos sao fontes POTENCIAIS de apontamento.
+- **Cobertura entra como dimensao de primeira classe.** Cada par carrega
+  percentual derivado de `status_validacao` dos controles
+  (apenas_autoavaliado=25, doc=50, amostral=75, completo=100).
+- **Bolhas viraram pizzas** no 20-box: preto = coberto, cinza = nao
+  coberto. Contorno colorido = prioridade; tamanho = materialidade.
+
+#### Adicionado
+- **Alertas de descobertura**: KRIs vermelho/amarelo e externos relevantes
+  sem apontamento associado viram "decisoes pendentes" listadas no 20-box
+  e parecer. Forca decisao: abrir apontamento ou justificar.
+- `detalhamento.csv` ganha coluna `cobertura_pct`.
+
+### Fase 1 — Cadeia regulamentar (Processo → Risco → FR → Controle → Teste)
+
+#### Adicionado
+- **Cadeia hierarquica completa** em `docs/cadeia_regulamentar.md`
+- **Extensao da taxonomia de riscos ate R4** (20 R1-R4 seed em 3 ramos:
+  Cyber, Conformidade, PLD-FT) — total agora: 41 riscos canonicos
+- **Book canonico `B_FR_canonico`** — 9 Fatores de Risco seed
+- **Book canonico `B_TESTES_canonico`** — 7 testes seed marcados como
+  `proposto` (arcabouco, nao conteudo regulatorio validado — Fase 2 traz
+  piloto BSM PQO com fonte oficial rastreada)
+- **Books locais** `B_TESTES_execucao` e `B_EVIDENCIA`
+- **Engine `boox/gap_regulatorio.py`** — cobertura por regulador, gaps
+  criticos, controles orfaos, FRs descobertos
+- **Filtro por tipo de instituicao** (banco_multiplo, corretora, DTVM,
+  seguradora, cooperativa...)
+- Curador estendido com dominios `fatores` e `testes`
+- Validador confere integridade das referencias (FR→risco, teste→FR,
+  teste→risco)
