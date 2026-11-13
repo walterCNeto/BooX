@@ -1,20 +1,26 @@
 # Analise de Gap Regulatorio — BooX
 
 Tipo de instituicao: **corretora**
-Testes canonicos aplicaveis: **6**
+Testes canonicos aplicaveis: **20**
 
 ## Cobertura por regulador
 
 | Regulador | Total | Atendido | Parcial | Nao conforme | Sem execucao | N/A |
 |-----------|-------|----------|---------|--------------|--------------|-----|
 | **BACEN** | 3 | 1 (33.3%) | 0 | 1 | 1 | 0 |
+| **BSM** | 14 | 3 (21.4%) | 1 | 1 | 9 | 0 |
 | **COAF** | 3 | 0 (0.0%) | 1 | 1 | 1 | 0 |
 
-## Gaps criticos (alta criticidade sem atendimento): **3**
+## Gaps criticos (alta criticidade sem atendimento): **8**
 
 - **[BACEN]** TST.SEED.CYBER.001 — MFA em acesso privilegiado a sistemas criticos (estado: nao_conforme)
 - **[COAF]** TST.SEED.PLDFT.001 — Identificacao e classificacao de PEP no cadastro (estado: parcial)
 - **[COAF]** TST.SEED.PLDFT.002 — SLA de tratamento de alertas de alta prioridade (estado: nao_conforme)
+- **[BSM]** TST.BSM.PQO.CAD.006 — Conteudo minimo do cadastro do Cliente (7 pontos obrigatorios) (estado: parcial)
+- **[BSM]** TST.BSM.PQO.CAD.007 — Firmar contrato de intermediacao com conteudo minimo B3 (estado: sem_execucao)
+- **[BSM]** TST.BSM.PQO.CAD.008 — Contrato de custodia com disposicoes regulamentares (Agentes de Custodia) (estado: sem_execucao)
+- **[BSM]** TST.BSM.PQO.CAD.011 — Cadastro simplificado de Cliente investidor nao residente (estado: sem_execucao)
+- **[BSM]** TST.BSM.PQO.CAD.012 — Cadastro do Cliente nos sistemas internos identico ao da B3 (estado: nao_conforme)
 
 ## Controles orfaos (sem teste canonico associado): **15**
 

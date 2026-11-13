@@ -4,3 +4,8 @@ EV-002;print;Console DLP com regras ativas;2026-04-20;SharePoint SI;Nucleo Cyber
 EV-003;ata;Atas do Comite de Riscos 2025;2026-01-30;GED Compliance;Compliance;12 atas comprovando cumprimento da periodicidade;
 EV-004;relatorio;Amostragem PEP Q1-2026;2026-03-10;GED PLD;DPLD;30 cadastros PEP amostrados com DD documentada;
 EV-005;relatorio;SLA tratamento alertas PLD - Abr/2026;2026-05-05;GED PLD;DPLD;Extracao com data de alerta vs data de parecer;
+EV-010;politica;RPA vigente - Corretora Modelo;2026-02-10;GED Compliance;Compliance;RPA revisada em Fev/2026 com os 19 pontos do PQO;
+EV-011;relatorio;Amostragem cadastros PLD 5 anos;2026-04-28;GED PLD;DPLD;50 cadastros amostrados, 100% dentro do intervalo;
+EV-012;relatorio;Amostragem conteudo minimo cadastro;2026-04-28;GED PLD;DPLD;50 cadastros amostrados, 47 conformes, 3 com declaracao pendente;
+EV-013;relatorio;Reconciliacao cadastral interno vs B3 - Abr/2026;2026-05-10;GED Compliance;Compliance;"12 divergencias encontradas; apontamento AP-2026-0010";
+EV-014;procedimento;Procedimento de classificacao de clientes;2026-03-15;GED Compliance;Compliance;Procedimento formal para qualificados/profissionais;

@@ -105,3 +105,25 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/).
 - Curador estendido com dominios `fatores` e `testes`
 - Validador confere integridade das referencias (FR→risco, teste→FR,
   teste→risco)
+
+## [0.2.1] — 2026-11-13
+
+### Fase 2 piloto — BSM PQO 2025, Capitulo 1 (CADASTRAR CLIENTES)
+
+#### Adicionado
+- **14 testes canonicos ATIVOS** rastreados item-a-item ao Roteiro PQO BSM 2025,
+  Capitulo 1 (TST.BSM.PQO.CAD.001 a 014) — primeiros testes do BooX com
+  **conteudo regulatorio validado por fonte oficial**
+- `docs/fase2_bsm_pqo.md` — metodologia de extracao (fidelidade vs
+  interpretacao do mantenedor), codificacao de normas CVM, e roadmap
+  dos demais capitulos
+- Execucoes e evidencias BSM no Banco Modelo (`B_TESTES_execucao.csv` e
+  `B_EVIDENCIA.csv`) demonstrando os quatro estados: conforme, parcial,
+  nao conforme, sem execucao
+- Gap regulatorio filtrado por tipo=corretora agora mostra 20 testes
+  aplicaveis (14 BSM + 6 seeds) com cobertura por regulador
+
+#### Status dos testes canonicos
+- Ativos: 14 (todos BSM PQO Cap 1)
+- Propostos: 7 (seeds Cyber, Conformidade, PLDFT — aguardando conversao
+  em proximas iteracoes da Fase 2)

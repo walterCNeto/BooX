@@ -4,3 +4,8 @@ EXEC-2026-002;TST.SEED.CYBER.003;CT-015;conforme;2026-04-20;Nucleo Cyber;EV-002;
 EXEC-2026-003;TST.SEED.CONF.001;CT-016;conforme;2026-01-30;Compliance;EV-003;anual;;Regimento revisado e periodicidade cumprida
 EXEC-2026-004;TST.SEED.PLDFT.001;CT-007;parcialmente_conforme;2026-03-10;DPLD;EV-004;trimestral;;80% da amostra com DD adequada
 EXEC-2026-005;TST.SEED.PLDFT.002;CT-006;nao_conforme;2026-05-05;DPLD;EV-005;mensal;AP-2026-0005;12% dos alertas alta prioridade excederam SLA
+EXEC-2026-010;TST.BSM.PQO.CAD.001;CT-016;conforme;2026-02-10;Compliance;EV-010;anual;;RPA vigente com todos os 19 pontos revisada em Fev/2026
+EXEC-2026-011;TST.BSM.PQO.CAD.004;CT-007;conforme;2026-04-28;DPLD;EV-011;trimestral;;Amostra de 50 cadastros com datas dentro do intervalo de 5 anos
+EXEC-2026-012;TST.BSM.PQO.CAD.006;CT-007;parcialmente_conforme;2026-04-28;DPLD;EV-012;trimestral;;"3 de 50 cadastros sem declaracao do Cliente formalizada; plano de correcao aberto"
+EXEC-2026-013;TST.BSM.PQO.CAD.012;CT-016;nao_conforme;2026-05-10;Compliance;EV-013;mensal;AP-2026-0010;Reconciliacao cadastral vs. B3 apresentou 12 divergencias em Abr/2026
+EXEC-2026-015;TST.BSM.PQO.CAD.014;CT-007;conforme;2026-03-15;Compliance;EV-014;continuo;;Procedimento de classificacao de clientes qualificados/profissionais com evidencia no cadastro

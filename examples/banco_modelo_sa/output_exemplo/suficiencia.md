@@ -21,8 +21,8 @@ Books presentes: **15/17** · Campos obrigatorios 100% preenchidos: **57/57**
 | B7 — Filtros das visoes | 6 | OK | 100 | 100 |
 | B_TESTES — Testes regulamentares canonicos | 0 | AUSENTE | - | - |
 | B_FR — Fatores de Risco canonicos | 0 | AUSENTE | - | - |
-| B_TESTES_execucao — Execucao dos testes pelo banco | 5 | OK | 100 | 100 |
-| B_EVIDENCIA — Evidencias de atendimento | 5 | OK | 100 | 100 |
+| B_TESTES_execucao — Execucao dos testes pelo banco | 10 | OK | 100 | 100 |
+| B_EVIDENCIA — Evidencias de atendimento | 10 | OK | 100 | 100 |
 
 ## Alertas
 
