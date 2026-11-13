@@ -4,6 +4,19 @@
 Compara os TESTES CANONICOS aplicaveis ao tipo de instituicao com o que
 o banco executa (B_TESTES_execucao) e os controles que enderecam (B5).
 
+Introduz duas analises complementares:
+
+  1. Requisitos regulatorios nao atendidos — TODOS os testes aplicaveis
+     que nao estao em estado 'atendido' (independente de criticidade).
+     Agrupados por estado (parcial / nao_conforme / sem_execucao).
+
+  2. Controles internos (nao regulatorios) — controles do B5 sem teste
+     canonico especifico mapeado. Aplicamos inferencia por moldura: se
+     o controle visa risco operacional, conformidade, cyber, PLD ou
+     privacidade, ele atende a norma-moldura correspondente (CMN 4.557
+     etc.) mesmo sem teste pontual. Controles sem nenhuma moldura
+     inferida ficam como 'sem_moldura' — candidatos a revisao.
+
 Uso:
     python -m boox.gap_regulatorio <pasta_instancia> [--tipo <tipo>] [--out <arquivo.md>]
 """
@@ -23,13 +36,49 @@ def _canonico_dir(pasta):
         if os.path.isdir(cand): return cand
     return None
 
+# ---------------------------------------------------------------------------
+# Regra de inferencia por moldura regulatoria
+# ---------------------------------------------------------------------------
+# Dado o risco R0 canonico que um controle visa (resolvido via B_MAP),
+# retorna a norma-moldura mais ampla que esse controle automaticamente
+# atende, mesmo sem teste pontual mapeado.
+MOLDURA_POR_R0 = {
+    "R0.U.1":  ("CMN 4.557", "Gerenciamento de risco de credito"),
+    "R0.U.2":  ("CMN 4.557", "Gerenciamento de risco de mercado"),
+    "R0.U.3":  ("CMN 4.557", "Gerenciamento de risco de liquidez"),
+    "R0.U.4":  ("CMN 4.557", "Gerenciamento de risco de taxa de juros (IRRBB)"),
+    "R0.U.5":  ("CMN 4.557", "Gerenciamento de risco de variacao cambial"),
+    "R0.U.6":  ("CMN 4.557", "Gerenciamento de risco operacional"),
+    "R0.U.7":  ("CMN 4.893", "Politica de seguranca cibernetica"),
+    "R0.U.8":  ("CMN 4.557", "Gerenciamento de risco de modelo"),
+    "R0.U.9":  ("CMN 4.557", "Gerenciamento de resiliencia operacional"),
+    "R0.U.10": ("CMN 4.557", "Gerenciamento de risco de fornecedores e terceiros"),
+    "R0.U.11": ("CMN 4.557", "Gerenciamento de risco de conformidade"),
+    "R0.U.12": ("CMN 4.860", "Gestao de ouvidoria e conduta"),
+    "R0.U.13": ("Lei 9.613", "Prevencao a lavagem de dinheiro e FT"),
+    "R0.U.14": ("LGPD (Lei 13.709)", "Protecao de dados pessoais"),
+}
+
+def _moldura_para_r0(r0):
+    """Resolve R0 ou qualquer subnivel R1-R4 para a mesma moldura do R0."""
+    if not r0: return None
+    r0_raiz = ".".join(r0.split(".")[:3]) if r0.count(".") >= 2 else r0
+    return MOLDURA_POR_R0.get(r0_raiz)
+
 def analisar(pasta, tipo_instituicao=None):
     canon = _canonico_dir(pasta)
     if not canon: return {"erro":"Camada canonica nao encontrada"}
     testes = _ler(os.path.join(canon,"B_TESTES_canonico.csv"))
     fr = _ler(os.path.join(canon,"B_FR_canonico.csv"))
+    riscos_canon = _ler(os.path.join(canon,"B6_riscos_canonico.csv"))
     execs = _ler(os.path.join(pasta,"B_TESTES_execucao.csv"))
     controles = _ler(os.path.join(pasta,"B5_controles.csv"))
+    bmap = _ler(os.path.join(pasta,"B_MAP_taxonomia.csv"))
+
+    # de-para risco local -> canonico
+    canon_by_local = {m["termo_local_id"]: m["canonico_id"]
+                      for m in bmap if m.get("dominio") == "risco"
+                      and m.get("status") in ("aprovado", "ajustado")}
 
     aplicaveis=[]
     for t in testes:
@@ -64,9 +113,17 @@ def analisar(pasta, tipo_instituicao=None):
             "estado":estado,"resultado":res,"controle_id_real":cid,
         })
 
+    # --- gaps criticos (compat: criticidade alta sem atendimento) ---
     gaps_criticos=[r for r in resultados if r["criticidade"]=="alta"
                    and r["estado"] not in ("atendido","nao_aplicavel_declarado")]
 
+    # --- requisitos nao atendidos (TODOS, por criticidade) ---
+    nao_atendidos = [r for r in resultados if r["estado"] not in ("atendido","nao_aplicavel_declarado")]
+    nao_atendidos_por_crit = {"alta": [], "media": [], "baixa": []}
+    for r in nao_atendidos:
+        nao_atendidos_por_crit.setdefault(r["criticidade"], []).append(r)
+
+    # --- cobertura por regulador ---
     por_reg=defaultdict(lambda:{"total":0,"atendido":0,"parcial":0,"nao_conforme":0,"sem_execucao":0,"na":0})
     for r in resultados:
         reg=r["regulador"] or "?"
@@ -77,9 +134,33 @@ def analisar(pasta, tipo_instituicao=None):
         elif r["estado"]=="nao_aplicavel_declarado": por_reg[reg]["na"]+=1
         else: por_reg[reg]["sem_execucao"]+=1
 
+    # --- controles internos (nao regulatorios) + inferencia por moldura ---
     ctrl_em_exec={e.get("controle_id","") for e in execs if _preenchido(e.get("controle_id"))}
-    orfaos=[c for c in controles if c["id"] not in ctrl_em_exec]
+    nao_mapeados = [c for c in controles if c["id"] not in ctrl_em_exec]
 
+    internos_classificados = []
+    for c in nao_mapeados:
+        risco_local = c.get("risco_id","")
+        r0 = canon_by_local.get(risco_local, "")
+        moldura = _moldura_para_r0(r0)
+        internos_classificados.append({
+            "id": c["id"],
+            "acao": c.get("acao",""),
+            "risco_local": risco_local,
+            "risco_r0_canonico": r0,
+            "moldura_norma": moldura[0] if moldura else "",
+            "moldura_descricao": moldura[1] if moldura else "",
+            "classificacao": "atende_moldura" if moldura else "sem_moldura",
+        })
+    atendem_moldura = [c for c in internos_classificados if c["classificacao"]=="atende_moldura"]
+    sem_moldura     = [c for c in internos_classificados if c["classificacao"]=="sem_moldura"]
+
+    # agregado de molduras inferidas
+    por_moldura = defaultdict(int)
+    for c in atendem_moldura:
+        por_moldura[c["moldura_norma"]] += 1
+
+    # --- fatores de risco descobertos ---
     fr_status=defaultdict(lambda:{"total_testes":0,"testes_atendidos":0})
     for r in resultados:
         f=r.get("fator_risco","")
@@ -94,7 +175,14 @@ def analisar(pasta, tipo_instituicao=None):
         "testes_avaliados":resultados,
         "cobertura_por_regulador":dict(por_reg),
         "gaps_criticos":gaps_criticos,
-        "controles_orfaos":orfaos,
+        "requisitos_nao_atendidos":nao_atendidos,
+        "requisitos_nao_atendidos_por_criticidade":nao_atendidos_por_crit,
+        "controles_internos_nao_mapeados":internos_classificados,
+        "controles_internos_atendem_moldura":atendem_moldura,
+        "controles_internos_sem_moldura":sem_moldura,
+        "molduras_inferidas":dict(por_moldura),
+        # compat retroativa
+        "controles_orfaos":nao_mapeados,
         "fatores_risco_descobertos":fr_descob,
     }
 
@@ -106,6 +194,7 @@ def render_md(rel, caminho):
     tipo=rel.get("tipo_instituicao") or "(todos os tipos)"
     L.append(f"Tipo de instituicao: **{tipo}**")
     L.append(f"Testes canonicos aplicaveis: **{rel['testes_aplicaveis']}**"); L.append("")
+
     L.append("## Cobertura por regulador"); L.append("")
     L.append("| Regulador | Total | Atendido | Parcial | Nao conforme | Sem execucao | N/A |")
     L.append("|-----------|-------|----------|---------|--------------|--------------|-----|")
@@ -113,22 +202,48 @@ def render_md(rel, caminho):
         pct=round(100*s["atendido"]/s["total"],1) if s["total"] else 0
         L.append(f"| **{reg}** | {s['total']} | {s['atendido']} ({pct}%) | {s['parcial']} | {s['nao_conforme']} | {s['sem_execucao']} | {s['na']} |")
     L.append("")
-    gc=rel["gaps_criticos"]
-    L.append(f"## Gaps criticos (alta criticidade sem atendimento): **{len(gc)}**"); L.append("")
-    if gc:
-        for r in gc[:30]:
-            L.append(f"- **[{r['regulador']}]** {r['teste_id']} — {r['titulo']} (estado: {r['estado']})")
-    else:
-        L.append("Nenhum gap critico identificado.")
+
+    na = rel["requisitos_nao_atendidos"]
+    L.append(f"## Requisitos regulatorios nao atendidos — **{len(na)}**")
     L.append("")
-    orf=rel["controles_orfaos"]
-    L.append(f"## Controles orfaos (sem teste canonico associado): **{len(orf)}**"); L.append("")
-    L.append("Podem ser controles especificos do banco (legitimos) ou trabalho sem sustentacao regulatoria. Vale revisar.")
-    if orf:
+    L.append("Testes canonicos aplicaveis que NAO estao em estado 'atendido'. Inclui parcial, nao conforme e sem execucao.")
+    L.append("")
+    por_c = rel["requisitos_nao_atendidos_por_criticidade"]
+    for crit in ["alta","media","baixa"]:
+        if por_c.get(crit):
+            L.append(f"### Criticidade {crit} — {len(por_c[crit])}")
+            for r in por_c[crit][:30]:
+                L.append(f"- **[{r['regulador']}]** {r['teste_id']} — {r['titulo']} (estado: {r['estado']})")
+            L.append("")
+
+    im = rel["controles_internos_nao_mapeados"]
+    am = rel["controles_internos_atendem_moldura"]
+    sm = rel["controles_internos_sem_moldura"]
+    L.append(f"## Controles internos (nao regulatorios) — **{len(im)}**")
+    L.append("")
+    L.append("Controles do banco (B5) sem teste canonico especifico mapeado. Analise por moldura:")
+    L.append(f"- **{len(am)}** atendem norma-moldura (ex: CMN 4.557 para risco operacional) — legitimos, mas sem teste pontual mapeado")
+    L.append(f"- **{len(sm)}** sem moldura inferida — candidatos a revisao")
+    L.append("")
+    if rel["molduras_inferidas"]:
+        L.append("### Agregado por moldura inferida")
         L.append("")
-        for c in orf[:15]:
-            L.append(f"- {c['id']} — {c.get('acao','')[:70]}")
-    L.append("")
+        L.append("| Moldura | Qtd controles |")
+        L.append("|---------|---------------|")
+        for norma, qtd in sorted(rel["molduras_inferidas"].items(), key=lambda x: -x[1]):
+            L.append(f"| **{norma}** | {qtd} |")
+        L.append("")
+    if am:
+        L.append("### Controles que atendem moldura (amostra)")
+        for c in am[:15]:
+            L.append(f"- {c['id']} ({c['moldura_norma']}) — {c['acao'][:70]}")
+        L.append("")
+    if sm:
+        L.append("### Controles sem moldura identificada")
+        for c in sm[:15]:
+            L.append(f"- {c['id']} — {c['acao'][:70]}")
+        L.append("")
+
     fd=rel["fatores_risco_descobertos"]
     L.append(f"## Fatores de Risco descobertos: **{len(fd)}**"); L.append("")
     L.append("FRs canonicos cujos testes NAO estao atendidos — sinal de vulnerabilidade."); L.append("")
@@ -152,8 +267,11 @@ def main():
         print("ERRO:",rel["erro"]); sys.exit(1)
     print(f"Gap regulatorio gerado em: {saida}")
     print(f"  Testes aplicaveis: {rel['testes_aplicaveis']}")
-    print(f"  Gaps criticos: {len(rel['gaps_criticos'])}")
-    print(f"  Controles orfaos: {len(rel['controles_orfaos'])}")
+    print(f"  Requisitos nao atendidos: {len(rel['requisitos_nao_atendidos'])}")
+    print(f"  Gaps criticos (alta): {len(rel['gaps_criticos'])}")
+    print(f"  Controles internos (nao regulatorios): {len(rel['controles_internos_nao_mapeados'])}")
+    print(f"    - atendem moldura: {len(rel['controles_internos_atendem_moldura'])}")
+    print(f"    - sem moldura: {len(rel['controles_internos_sem_moldura'])}")
     print(f"  Fatores descobertos: {len(rel['fatores_risco_descobertos'])}")
 
 if __name__=="__main__": main()

@@ -390,8 +390,8 @@ with tab_gap:
     else:
         c1, c2, c3, c4 = st.columns(4)
         c1.markdown(f'<div class="metric-tile"><p class="lab">Testes aplicáveis</p><p class="val">{rel["testes_aplicaveis"]}</p></div>', unsafe_allow_html=True)
-        c2.markdown(f'<div class="metric-tile"><p class="lab">Gaps críticos</p><p class="val">{len(rel["gaps_criticos"])}</p></div>', unsafe_allow_html=True)
-        c3.markdown(f'<div class="metric-tile"><p class="lab">Controles órfãos</p><p class="val">{len(rel["controles_orfaos"])}</p></div>', unsafe_allow_html=True)
+        c2.markdown(f'<div class="metric-tile"><p class="lab">Requisitos não atendidos</p><p class="val">{len(rel["requisitos_nao_atendidos"])}</p></div>', unsafe_allow_html=True)
+        c3.markdown(f'<div class="metric-tile"><p class="lab">Controles sem teste</p><p class="val">{len(rel["controles_internos_nao_mapeados"])}</p></div>', unsafe_allow_html=True)
         c4.markdown(f'<div class="metric-tile"><p class="lab">FR descobertos</p><p class="val">{len(rel["fatores_risco_descobertos"])}</p></div>', unsafe_allow_html=True)
 
         st.markdown("### Cobertura por regulador")
@@ -407,22 +407,64 @@ with tab_gap:
             })
         st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
 
-        if rel["gaps_criticos"]:
-            st.markdown(f"### Gaps críticos — {len(rel['gaps_criticos'])}")
-            df_gc = pd.DataFrame([{
-                "Regulador": r["regulador"], "Teste": r["teste_id"],
-                "Norma": r["norma_id"], "Título": r["titulo"], "Estado": r["estado"],
-            } for r in rel["gaps_criticos"]])
-            st.dataframe(df_gc, use_container_width=True, hide_index=True)
+        # --- NOVO: requisitos regulatorios nao atendidos (todos, por criticidade) ---
+        na = rel["requisitos_nao_atendidos"]
+        if na:
+            st.markdown(f"### Requisitos regulatórios não atendidos — {len(na)}")
+            st.caption("Testes canônicos aplicáveis que **não** estão em estado 'atendido' — inclui parcial, não conforme e sem execução, todas as criticidades.")
+            por_c = rel["requisitos_nao_atendidos_por_criticidade"]
+            crit_opt = st.radio(
+                "Filtrar por criticidade",
+                ["Todas", "Alta", "Média", "Baixa"],
+                horizontal=True, key="crit_filtro",
+            )
+            if crit_opt == "Alta": na_filt = por_c.get("alta", [])
+            elif crit_opt == "Média": na_filt = por_c.get("media", [])
+            elif crit_opt == "Baixa": na_filt = por_c.get("baixa", [])
+            else: na_filt = na
+            df_na = pd.DataFrame([{
+                "Criticidade": r["criticidade"],
+                "Regulador": r["regulador"],
+                "Teste": r["teste_id"],
+                "Norma": r["norma_id"],
+                "Título": r["titulo"],
+                "Estado": r["estado"],
+            } for r in na_filt])
+            st.dataframe(df_na, use_container_width=True, hide_index=True)
 
-        if rel["controles_orfaos"]:
-            with st.expander(f"Controles órfãos — {len(rel['controles_orfaos'])}"):
-                st.caption("Controles reais do banco sem teste canônico associado. Podem ser legítimos ou dívida de mapeamento.")
-                df_orf = pd.DataFrame([{
-                    "ID": c["id"], "Ação": c.get("acao", "")[:80],
-                    "Risco local": c.get("risco_id", ""),
-                } for c in rel["controles_orfaos"]])
-                st.dataframe(df_orf, use_container_width=True, hide_index=True)
+        # --- RENOMEADO: controles internos (nao regulatorios) com inferencia por moldura ---
+        im = rel["controles_internos_nao_mapeados"]
+        if im:
+            am = rel["controles_internos_atendem_moldura"]
+            sm = rel["controles_internos_sem_moldura"]
+            st.markdown(f"### Controles internos (não regulatórios) — {len(im)}")
+            st.caption(
+                "Controles do banco sem teste canônico específico mapeado. "
+                "A inferência por moldura regulatória classifica cada um: controles ligados a "
+                "risco operacional, cyber, PLD ou LGPD atendem a norma-moldura correspondente, "
+                "mesmo sem teste pontual. Controles **sem moldura** são candidatos a revisão."
+            )
+            col_a, col_b = st.columns(2)
+            col_a.markdown(f'<div class="metric-tile"><p class="lab">Atendem norma-moldura</p><p class="val">{len(am)}</p></div>', unsafe_allow_html=True)
+            col_b.markdown(f'<div class="metric-tile"><p class="lab">Sem moldura (revisar)</p><p class="val">{len(sm)}</p></div>', unsafe_allow_html=True)
+
+            if rel["molduras_inferidas"]:
+                st.markdown("**Agregado por moldura inferida:**")
+                df_mold = pd.DataFrame(
+                    [{"Moldura": k, "Qtd controles": v}
+                     for k, v in sorted(rel["molduras_inferidas"].items(), key=lambda x: -x[1])]
+                )
+                st.dataframe(df_mold, use_container_width=True, hide_index=True)
+
+            with st.expander(f"Lista detalhada — {len(im)} controles"):
+                df_im = pd.DataFrame([{
+                    "ID": c["id"],
+                    "Ação": c.get("acao", "")[:80],
+                    "Classificação": "atende moldura" if c["classificacao"] == "atende_moldura" else "sem moldura",
+                    "Moldura inferida": c.get("moldura_norma", "") or "—",
+                    "Risco R0 canônico": c.get("risco_r0_canonico", "") or "—",
+                } for c in im])
+                st.dataframe(df_im, use_container_width=True, hide_index=True)
 
         if rel["fatores_risco_descobertos"]:
             with st.expander(f"Fatores de Risco descobertos — {len(rel['fatores_risco_descobertos'])}"):
