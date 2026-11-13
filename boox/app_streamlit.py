@@ -198,7 +198,7 @@ with st.sidebar:
         data=_demo_zip(),
         file_name="boox_demo_banco_modelo_sa.zip",
         mime="application/zip",
-        width="stretch",
+        use_container_width=True,
     )
 
     st.markdown("---")
@@ -354,7 +354,7 @@ with tab_mapa:
             "Cobertura %": r.get("cobertura_pct", 0),
             "Área": r["area_afetada"],
         } for r in criticos])
-        st.dataframe(df, width="stretch", hide_index=True)
+        st.dataframe(df, use_container_width=True, hide_index=True)
     else:
         st.info("Nenhum par em prioridade crítica ou alta neste recorte.")
 
@@ -366,7 +366,7 @@ with tab_mapa:
             "Tipo": a["tipo"], "Processo": a["par"][0],
             "Risco": a["par"][1], "Detalhe": a["detalhe"],
         } for a in alertas])
-        st.dataframe(df_al, width="stretch", hide_index=True)
+        st.dataframe(df_al, use_container_width=True, hide_index=True)
 
 # ===========================================================================
 # ABA 2 — GAP REGULATORIO
@@ -405,7 +405,7 @@ with tab_gap:
                 "Parcial": s["parcial"], "Não conforme": s["nao_conforme"],
                 "Sem execução": s["sem_execucao"], "N/A": s["na"],
             })
-        st.dataframe(pd.DataFrame(rows), width="stretch", hide_index=True)
+        st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
 
         if rel["gaps_criticos"]:
             st.markdown(f"### Gaps críticos — {len(rel['gaps_criticos'])}")
@@ -413,7 +413,7 @@ with tab_gap:
                 "Regulador": r["regulador"], "Teste": r["teste_id"],
                 "Norma": r["norma_id"], "Título": r["titulo"], "Estado": r["estado"],
             } for r in rel["gaps_criticos"]])
-            st.dataframe(df_gc, width="stretch", hide_index=True)
+            st.dataframe(df_gc, use_container_width=True, hide_index=True)
 
         if rel["controles_orfaos"]:
             with st.expander(f"Controles órfãos — {len(rel['controles_orfaos'])}"):
@@ -422,7 +422,7 @@ with tab_gap:
                     "ID": c["id"], "Ação": c.get("acao", "")[:80],
                     "Risco local": c.get("risco_id", ""),
                 } for c in rel["controles_orfaos"]])
-                st.dataframe(df_orf, width="stretch", hide_index=True)
+                st.dataframe(df_orf, use_container_width=True, hide_index=True)
 
         if rel["fatores_risco_descobertos"]:
             with st.expander(f"Fatores de Risco descobertos — {len(rel['fatores_risco_descobertos'])}"):
@@ -430,7 +430,7 @@ with tab_gap:
                 df_fr = pd.DataFrame([{
                     "FR": f, "Testes": s["total_testes"], "Atendidos": s["testes_atendidos"],
                 } for f, s in rel["fatores_risco_descobertos"]])
-                st.dataframe(df_fr, width="stretch", hide_index=True)
+                st.dataframe(df_fr, use_container_width=True, hide_index=True)
 
 # ===========================================================================
 # ABA 3 — SUFICIENCIA
@@ -470,7 +470,7 @@ with tab_suf:
                 "Obrig. mín.": _fmt_pct(b.get("preenchimento_obrigatorio_min")),
                 "Recom. médio": _fmt_pct(b.get("preenchimento_recomendado_medio")),
             })
-    st.dataframe(pd.DataFrame(rows), width="stretch", hide_index=True)
+    st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
 
     if rel_suf["alertas"]:
         st.markdown("### Alertas estruturais")
@@ -509,22 +509,22 @@ with tab_canon:
         df = pd.DataFrame(canon["riscos"])[["id", "nome", "nivel", "parent_id", "categoria_basileia", "status"]]
         nivel_filtro = st.multiselect("Filtrar por nível", sorted(df["nivel"].unique()), default=sorted(df["nivel"].unique()))
         df = df[df["nivel"].isin(nivel_filtro)]
-        st.dataframe(df, width="stretch", hide_index=True, height=500)
+        st.dataframe(df, use_container_width=True, hide_index=True, height=500)
 
     elif sub.startswith("Áreas"):
         st.caption(f"{len(canon['areas'])} áreas canônicas distribuídas em {len(canon['dominios'])} domínios (1ª, 2ª e 3ª linhas de defesa).")
         df = pd.DataFrame(canon["areas"])[["id", "nome", "dominio_id", "descricao"]]
-        st.dataframe(df, width="stretch", hide_index=True, height=500)
+        st.dataframe(df, use_container_width=True, hide_index=True, height=500)
 
     elif sub.startswith("Disciplinas"):
         st.caption(f"{len(canon['disciplinas'])} disciplinas transversais (crédito, mercado, cyber, PLD, LGPD, ...)")
         df = pd.DataFrame(canon["disciplinas"])
-        st.dataframe(df, width="stretch", hide_index=True, height=500)
+        st.dataframe(df, use_container_width=True, hide_index=True, height=500)
 
     elif sub.startswith("Fatores"):
         st.caption(f"{len(canon['fatores'])} Fatores de Risco canônicos (causas-raiz específicas).")
         df = pd.DataFrame(canon["fatores"])
-        st.dataframe(df, width="stretch", hide_index=True, height=500)
+        st.dataframe(df, use_container_width=True, hide_index=True, height=500)
 
     elif sub.startswith("Testes"):
         ts = canon["testes"]
@@ -543,7 +543,7 @@ with tab_canon:
             ["id", "regulador", "norma_id", "artigo", "titulo", "criticidade",
              "aplicabilidade", "status"]
         ]
-        st.dataframe(df, width="stretch", hide_index=True, height=520)
+        st.dataframe(df, use_container_width=True, hide_index=True, height=520)
 
         with st.expander("Ver detalhes de um teste"):
             tid = st.selectbox("ID do teste", [t["id"] for t in df_src])

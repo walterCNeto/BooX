@@ -1,0 +1,32 @@
+
+[     UTC     ] Logs for booxriscs.streamlit.app/
+────────────────────────────────────────────────────────────────────────────────────────
+[17:51:04] 🖥 Provisioning machine...
+[17:51:04] 🎛 Preparing system...
+[17:51:04] ⛓ Spinning up manager process...
+[17:50:12] 🚀 Starting up repository: 'boox', branch: 'main', main module: 'boox/app_streamlit.py'
+[17:50:12] 🐙 Cloning repository...
+[17:50:12] 🐙 Cloning into '/mount/src/boox'...
+
+[17:50:12] 🐙 Cloned repository!
+[17:50:12] 🐙 Pulling code changes from Github...
+[17:50:13] 📦 Processing dependencies...
+
+──────────────────────────────────────── uv ───────────────────────────────────────────
+
+Using uv pip install.
+Using Python 3.14.10 environment at: /home/adminuser/venv
+Resolved 42 packages in 429ms
+Downloading numpy (15.9MiB)
+Downloading pyarrow (52.5MiB)
+Downloading pydeck (10.9MiB)
+Downloading pygments (1.2MiB)
+Downloading streamlit (8.2MiB)
+Downloading pillow (6.3MiB)
+ Downloaded pygments
+ Downloaded pillow
+ Downloaded streamlit
+ Downloaded pydeck
+ Downloaded numpy
+   Building pandas==2.2.3
+ Downloaded pyarrow
