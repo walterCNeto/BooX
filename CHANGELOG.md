@@ -127,3 +127,26 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/).
 - Ativos: 14 (todos BSM PQO Cap 1)
 - Propostos: 7 (seeds Cyber, Conformidade, PLDFT — aguardando conversao
   em proximas iteracoes da Fase 2)
+
+## [0.2.2] — 2026-11-13
+
+### Empacotamento para uso profissional / corporativo
+
+#### Adicionado
+- `pyproject.toml` — pacote `boox-ro` instalavel com `pip install .`
+- Entry points `boox` e `boox-gap` disponiveis globalmente apos instalacao
+- `SECURITY.md` — documento para equipes de SI do banco: superficie de
+  ataque, dependencias, o que o BooX faz e nao faz
+- Flag `--air-gapped` na engine: intercepta `socket.connect` em runtime
+  e alerta sobre proxies ativos (defesa em profundidade)
+- `Dockerfile` + `.dockerignore` — imagem minima para rodar com
+  `--network=none` (isolamento de rede provado pelo runtime)
+- `requirements.txt` — documentacao de dependencias (openpyxl opcional
+  para templates)
+- Secao "Instalacao" e "Seguranca" no README
+
+#### Mudado
+- `boox/_campos.py` criado como copia canonica da spec de campos
+- `schema/campos.py` virou shim de compatibilidade, re-exportando de
+  `boox._campos` (necessario para o pacote funcionar quando instalado
+  fora do diretorio do repositorio)

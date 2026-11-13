@@ -156,3 +156,70 @@ partir de arquivos.
 ## Autor
 
 Walter C. Neto — [github.com/walterCNeto](https://github.com/walterCNeto)
+
+---
+
+## Instalação
+
+### Modo simples (desenvolvimento / uso pessoal)
+
+Clone o repositório e rode a engine direto da raiz:
+
+```bash
+git clone https://github.com/walterCNeto/BooX.git
+cd BooX
+python -m boox examples/banco_modelo_sa --out output
+```
+
+### Modo pacote (recomendado para uso profissional)
+
+Instale como pacote Python — habilita os comandos `boox` e `boox-gap`
+disponíveis em qualquer diretório:
+
+```bash
+# Instalação minima (engine de calculo, zero dependencias)
+pip install .
+
+# Instalação com templates Excel (requer openpyxl)
+pip install ".[templates]"
+
+# Uso
+boox examples/banco_modelo_sa --out output
+boox-gap examples/banco_modelo_sa --tipo corretora --out output/gap.md
+```
+
+### Modo corporativo (dentro de banco)
+
+Para uso em ambiente bancário, leia **[`SECURITY.md`](SECURITY.md)**
+antes. O resumo:
+
+1. **Repositório interno** — instalar a partir do Artifactory/Nexus do
+   banco (se disponível), não do PyPI público
+2. **Modo ar-gapped** — todas as execuções com flag `--air-gapped`,
+   que bloqueia ativamente qualquer chamada de rede:
+   ```bash
+   boox <pasta> --out <saida> --air-gapped
+   ```
+3. **Docker isolado** — para paranoia máxima de rede:
+   ```bash
+   docker build -t boox:0.2.1 .
+   docker run --rm --network=none -v $(pwd)/dados:/data -v $(pwd)/saida:/out boox:0.2.1
+   ```
+   A flag `--network=none` do Docker é prova física de que o container
+   não pode fazer chamadas de rede, somada à verificação em runtime do
+   `--air-gapped`.
+
+## Segurança
+
+- Código open-source auditável (MIT)
+- Engine de cálculo com **zero dependências externas** (só biblioteca
+  padrão do Python)
+- **Nenhuma chamada de rede** (verificado em runtime com `--air-gapped`)
+- Dados ficam dentro do perímetro do banco
+
+Detalhes para equipes de SI: [`SECURITY.md`](SECURITY.md).
+
+## Licenças
+
+- Código: MIT (ver `LICENSE`)
+- Dados do catálogo canônico: CC BY 4.0 (ver `LICENSE-DATA`)

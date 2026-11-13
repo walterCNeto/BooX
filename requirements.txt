@@ -1,0 +1,18 @@
+# BooX — dependencias de execucao
+#
+# A ENGINE do BooX nao tem dependencias externas (so biblioteca padrao).
+# Este arquivo lista apenas o PACOTE OPCIONAL para templates Excel.
+#
+# Instalacao minima (sem templates):
+#   pip install .
+#
+# Instalacao com templates:
+#   pip install ".[templates]"
+#
+# Para ambiente corporativo com Artifactory/Nexus interno, usar o indice
+# interno em vez do PyPI publico. Exemplo:
+#   pip install --index-url https://nexus.seu-banco.local/pypi/simple .
+#
+# Versao fixada e aprovavel por SI (openpyxl e amplamente usada e
+# auditada pelo mercado):
+openpyxl==3.1.5

@@ -1,0 +1,13 @@
+.git
+.gitignore
+.github
+examples
+templates
+docs
+CHANGELOG.md
+*.pyc
+__pycache__
+*.pdf
+*.zip
+output
+output_exemplo

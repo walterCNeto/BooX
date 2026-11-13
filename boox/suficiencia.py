@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 """Analise de suficiencia — diagnostica se os Books preenchidos bastam para avaliar."""
-import csv, os, sys
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "schema"))
-import campos as _campos
+import csv, os
+from boox import _campos
 
 def _ler(caminho):
     if not os.path.exists(caminho): return None

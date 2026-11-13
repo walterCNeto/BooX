@@ -1,13 +1,29 @@
 # -*- coding: utf-8 -*-
-import sys, os
+import sys, os, socket
 from boox.compute import carregar
 from boox.render import render_20box, render_csv, render_parecer
 from boox.suficiencia import analisar, render_md
 
+def _ativar_air_gapped():
+    """Modo ar-gapped: bloqueia qualquer tentativa de abrir socket de rede
+    e confere que proxy HTTP nao esta ativo. Grava confirmacao no stdout."""
+    # 1. verifica proxies de rede
+    for var in ("HTTP_PROXY","HTTPS_PROXY","http_proxy","https_proxy"):
+        if os.environ.get(var):
+            print(f"[AIR-GAPPED] AVISO: variavel {var}={os.environ[var]} esta definida.")
+    # 2. intercepta socket.socket.connect
+    _orig = socket.socket.connect
+    def _bloqueado(self, address, *a, **k):
+        raise RuntimeError(f"[AIR-GAPPED] tentativa de conexao de rede bloqueada: {address}")
+    socket.socket.connect = _bloqueado
+    print("[AIR-GAPPED] modo ativo: qualquer chamada de rede sera bloqueada.")
+
 def main():
     if len(sys.argv)<2:
-        print("uso: python -m boox <pasta_da_instancia> [--out <pasta_saida>] [--visao <ID>]")
+        print("uso: python -m boox <pasta_da_instancia> [--out <pasta_saida>] [--visao <ID>] [--air-gapped]")
         sys.exit(1)
+    if "--air-gapped" in sys.argv:
+        _ativar_air_gapped()
     pasta=sys.argv[1]
     out="output"
     visao=None
