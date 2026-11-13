@@ -46,7 +46,7 @@ def render_20box(res, titulo, caminho_html, alertas_descobertura=None):
     cell_w, cell_h = 122, 96
     x0, y0 = 150, 72
     W = x0 + 5*cell_w + 110
-    H = y0 + 5*cell_h + 130
+    H = y0 + 5*cell_h + 145
     P=[f'<svg width="100%" viewBox="0 0 {W} {H}" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">']
     P.append(f'<text x="{W/2}" y="32" text-anchor="middle" font-size="18" font-weight="600">{titulo}</text>')
     P.append(f'<text x="{W/2}" y="52" text-anchor="middle" font-size="12" fill="#777">Impacto x Ambiente de Controles — {len(res)} pares processo x risco</text>')
@@ -75,18 +75,29 @@ def render_20box(res, titulo, caminho_html, alertas_descobertura=None):
         cx=x0+ix*cell_w+cell_w/2
         P.append(f'<text x="{cx}" y="{y0+5*cell_h+20}" text-anchor="middle" font-size="11" fill="#444">{nx} {ROT_X[nx]}</text>')
     P.append(f'<text x="{x0+5*cell_w/2}" y="{y0+5*cell_h+44}" text-anchor="middle" font-size="12" fill="#444">Ambiente de Controles</text>')
+    # Legenda linha 1 — prioridade (circulo 100% colorido, SEM pizza)
     ly=y0+5*cell_h+70; lx=x0
+    P.append(f'<text x="{lx}" y="{ly+9}" font-size="10" fill="#555" font-weight="600">Prioridade:</text>')
+    lx+=78
     for prio in ["Critico","Alto","Medio","Baixo","OK"]:
-        P.append(_pizza_svg(lx+7,ly+5,7,60,COR_PRIO[prio]))
+        c=COR_PRIO[prio]
+        P.append(f'<circle cx="{lx+7}" cy="{ly+5}" r="7" fill="{c}" stroke="{c}" stroke-width="1.3"/>')
         P.append(f'<text x="{lx+20}" y="{ly+9}" font-size="10" fill="#555">{prio}</text>')
-        lx+=80
+        lx+=70
+
+    # Legenda linha 2 — cobertura (pizza progressiva, cinza+preto, sem cor)
     ly=y0+5*cell_h+96; lx=x0
     P.append(f'<text x="{lx}" y="{ly+9}" font-size="10" fill="#555" font-weight="600">Cobertura:</text>')
-    lx+=72
+    lx+=78
     for pct in [0,25,50,75,100]:
         P.append(_pizza_svg(lx+7,ly+5,7,pct,"#888"))
         P.append(f'<text x="{lx+20}" y="{ly+9}" font-size="10" fill="#555">{pct}%</text>')
         lx+=56
+
+    # Nota conceitual explicando que as duas dimensoes se combinam na bolha
+    ly=y0+5*cell_h+120; lx=x0
+    P.append(f'<text x="{lx}" y="{ly}" font-size="9" fill="#777" font-style="italic">Cada bolha do mapa combina as duas dimensoes: contorno colorido = prioridade · preenchimento preto = cobertura.</text>')
+
     P.append('</svg>')
     svg="\n".join(P)
     bloco=""
