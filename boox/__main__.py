@@ -32,7 +32,7 @@ def main():
     os.makedirs(out,exist_ok=True)
     inst=carregar(pasta)
     res=inst.computar()
-    titulo="Banco Modelo S.A. — Casa toda"
+    titulo="Banco Modelo S.A. — Visão geral"
     if visao:
         res,titulo=aplicar_visao(inst,res,visao)
     alertas=inst.alertas_descobertura()

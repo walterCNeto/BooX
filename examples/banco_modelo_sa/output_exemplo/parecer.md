@@ -1,4 +1,4 @@
-# Parecer BooX — Banco Modelo S.A. — Casa toda
+# Parecer BooX — Banco Modelo S.A. — Visão geral
 
 Pares processo x risco avaliados: **34**.
 Cobertura media (validacao independente): **32.4%**.

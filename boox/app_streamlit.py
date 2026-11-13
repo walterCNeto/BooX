@@ -273,7 +273,7 @@ tab_mapa, tab_gap, tab_suf, tab_canon = st.tabs(
 with tab_mapa:
     col_filtros, col_metricas = st.columns([2, 3])
     with col_filtros:
-        visao_opts = [("Casa toda", None)] + [(v["nome"], v["id"]) for v in visoes]
+        visao_opts = [("Visão geral", None)] + [(v["nome"], v["id"]) for v in visoes]
         visao_label = st.selectbox(
             "Visão (recorte)",
             [v[0] for v in visao_opts],
@@ -283,7 +283,7 @@ with tab_mapa:
 
     def _aplicar_visao(res_, visao_id_):
         if not visao_id_:
-            return res_, "Casa toda"
+            return res_, "Visão geral"
         arq = os.path.join(pasta, "B7_visao_filtros.csv")
         if not os.path.exists(arq):
             return res_, visao_label

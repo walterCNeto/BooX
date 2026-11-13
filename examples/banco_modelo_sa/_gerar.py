@@ -378,7 +378,7 @@ def g_b9():
 # ---------------------------------------------------------------------
 def g_b7():
     V=[
-     ["VIS_CASA","Casa toda","livre","Visao consolidada de todos os riscos","CRO",""],
+     ["VIS_GERAL","Visão geral","livre","Visao consolidada de todos os riscos","CRO",""],
      ["VIS_CONSIGNADO","Consignado INSS","produto","Risco do produto consignado ponta a ponta","AL-CPF",""],
      ["VIS_CYBER_LGPD","Cyber e LGPD","disciplina","Seguranca cibernetica e privacidade","AL-CYBER",""],
      ["VIS_CREDITO","Credito E2E","e2e","Todo o ciclo de credito","AL-RCRED",""],
