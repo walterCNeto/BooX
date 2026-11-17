@@ -4,6 +4,10 @@ Todas as mudanças notáveis do BooX são documentadas aqui.
 
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/).
 
+## 1.11.7 - PATCH
+- Promovidos a `ativo` 57 testes revisados pelo responsavel: Res. CVM 21, Res. CVM 32 (consolidada com a Res. CVM 209/24) e Res. CVM 33, todos de criticidade alta.
+- Os demais testes dessas normas seguem `proposto`.
+
 ## 1.11.6 - PATCH
 - Promovidos a `ativo` 36 testes da Res. CVM 35 (texto consolidado com as Res. CVM 134/22, 179/23 e 209/24; vigente a redacao dada pela Res. CVM 134/22 aos arts. 20, 21, 22, 31 e 49), revisados pelo responsavel.
 - Os demais testes da CVM 35 seguem `proposto`.
