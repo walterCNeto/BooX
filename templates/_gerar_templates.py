@@ -87,6 +87,8 @@ def gerar_book(nome, spec):
 # Mantemos 1 arquivo por tabela para simplicidade do preenchimento.
 gerados = []
 for nome, spec in campos.BOOKS.items():
+    if nome.endswith("_canonico"):
+        continue  # camada canonica nao e preenchida pelo banco
     gerados.append(gerar_book(nome, spec))
 print(f"{len(gerados)} templates gerados:")
 for g in gerados: print("  ", os.path.basename(g))

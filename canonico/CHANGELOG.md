@@ -6,6 +6,11 @@ Versionamento semantico do vocabulario canonico.
 - **MINOR** (x.Y.0): adicao de novos IDs (aditivo, nao quebra de-paras).
 - **MAJOR** (X.0.0): deprecacao de IDs em uso ou mudanca incompativel.
 
+## [1.6.1] — 2026-11-17 (PATCH)
+
+- Preenchido `equivale_a` em 3 testes cuja obrigacao e a mesma de um teste PQO ja ativo: TST.CVM035.015 -> TST.BSM.PQO.CAD.001 (art. 21, regras de execucao de ordens), TST.CVM035.007 -> TST.BSM.PQO.CAD.013 (art. 6, par. 3, pessoas autorizadas a emitir ordens) e TST.CVM032.004 -> TST.BSM.PQO.CAD.008 (art. 10, contrato de custodia).
+- Vinculos conservadores: sobreposicoes apenas parciais (por exemplo CAD.006 e CVM035.004, CAD.002 e CVM035.016) nao foram ligadas, para nao subcontar obrigacoes. Revisar caso a caso na validacao.
+
 ## [1.6.0] — 2026-11-17 (MINOR)
 
 - B_TESTES_canonico ganha 4 colunas opcionais, vazias por padrao: `equivale_a` (ID de outro teste que cobre o mesmo requisito), `vigencia_inicio`, `vigencia_fim` (AAAA-MM-DD) e `revogada_por`. Nenhum teste existente foi alterado; nenhum texto de artigo ou descricao mudou.
