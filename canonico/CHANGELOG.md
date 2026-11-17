@@ -6,6 +6,10 @@ Versionamento semantico do vocabulario canonico.
 - **MINOR** (x.Y.0): adicao de novos IDs (aditivo, nao quebra de-paras).
 - **MAJOR** (X.0.0): deprecacao de IDs em uso ou mudanca incompativel.
 
+## 1.11.5 - PATCH
+- Promovidos a `ativo` 69 testes de criticidade alta revisados pelo responsavel: 54 da Res. CVM 175 (Parte Geral e Anexos I a IV) e 15 da Res. CNSP 416 (SUSEP).
+- Testes de criticidade media e baixa dessas normas seguem `proposto`. Texto da CNSP 416 conferido na versao original; alteracoes posteriores nao verificadas.
+
 ## 1.11.4 - PATCH
 - Promovidos a `ativo` 15 testes da Res. CMN 4.893 (texto consolidado vigente em 19/12/2025, com a Res. CMN 5.274/2025), revisados pelo responsavel.
 - Os testes de exemplo TST.SEED.CYBER.* (sem artigo citado) permanecem `proposto`.
