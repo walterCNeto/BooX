@@ -6,6 +6,13 @@ Versionamento semantico do vocabulario canonico.
 - **MINOR** (x.Y.0): adicao de novos IDs (aditivo, nao quebra de-paras).
 - **MAJOR** (X.0.0): deprecacao de IDs em uso ou mudanca incompativel.
 
+## [1.3.0] — 2026-11-17 (MINOR)
+
+- Adicionados 37 testes `TST.CMN4557.001-037` (RES_CMN_4557, arts. 33 a 36 e 56), todos `proposto`.
+- Fonte: texto da Res. CMN 4.557/2017 com redacoes da CMN 4.943/2021 e da CMN 5.076/2023 (indicadas no campo `artigo`).
+- Art. 32 (definicao de risco operacional) nao gera teste. Art. 56 truncado no texto recebido apos o par. 1, inciso III.
+- Aplicabilidade restrita a banco_multiplo e banco_comercial. Enquadramento por segmento (S1 a S5) e atividades de pagamento a validar.
+
 ## [1.2.0] — 2026-11-17 (MINOR)
 
 - Adicionados 45 testes `TST.CMN4968.001-045` (RES_CMN_4968, arts. 4 a 10), todos `proposto`.
