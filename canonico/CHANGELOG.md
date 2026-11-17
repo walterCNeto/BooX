@@ -6,6 +6,10 @@ Versionamento semantico do vocabulario canonico.
 - **MINOR** (x.Y.0): adicao de novos IDs (aditivo, nao quebra de-paras).
 - **MAJOR** (X.0.0): deprecacao de IDs em uso ou mudanca incompativel.
 
+## [1.9.1] — 2026-11-17 (PATCH)
+
+- Coluna atividades refinada em 30 testes da CVM 21 e CVM 175: gestao_recursos, administracao_fiduciaria e custodia separadas pelo texto de cada artigo; em duvida, mantidas as duas atividades. CVM 35 e CVM 30 mantidas.
+
 ## [1.9.0] — 2026-11-17 (MINOR)
 
 - B_TESTES_canonico ganha a coluna opcional `atividades` (lista com `|`, vazia = vale para qualquer atividade), no fim do cabecalho. Novo enum `atividade`: administracao_fiduciaria, gestao_recursos, distribuicao, intermediacao, custodia, escrituracao, consultoria.

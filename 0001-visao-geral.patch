@@ -1,0 +1,108 @@
+From 93a1f65da64e64f21f2a69dc8ea45b1768d35ef3 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Fri, 13 Nov 2026 16:51:43 -0300
+Subject: [PATCH] Rename visao padrao: "Casa toda" -> "Visao geral" (VIS_GERAL)
+
+Co-Authored-By: Claude Opus 4.7 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01EZh4HiPEhCworApsGbxjqN
+---
+ boox/__main__.py                                   | 2 +-
+ boox/app_streamlit.py                              | 4 ++--
+ examples/banco_modelo_sa/B7_visoes.csv             | 2 +-
+ examples/banco_modelo_sa/_gerar.py                 | 2 +-
+ examples/banco_modelo_sa/output_exemplo/20box.html | 4 ++--
+ examples/banco_modelo_sa/output_exemplo/parecer.md | 2 +-
+ 6 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/boox/__main__.py b/boox/__main__.py
+index 36a82f7..65ada85 100644
+--- a/boox/__main__.py
++++ b/boox/__main__.py
+@@ -32,7 +32,7 @@ def main():
+     os.makedirs(out,exist_ok=True)
+     inst=carregar(pasta)
+     res=inst.computar()
+-    titulo="Banco Modelo S.A. — Casa toda"
++    titulo="Banco Modelo S.A. — Visão geral"
+     if visao:
+         res,titulo=aplicar_visao(inst,res,visao)
+     alertas=inst.alertas_descobertura()
+diff --git a/boox/app_streamlit.py b/boox/app_streamlit.py
+index aebc61c..2863957 100644
+--- a/boox/app_streamlit.py
++++ b/boox/app_streamlit.py
+@@ -273,7 +273,7 @@ tab_mapa, tab_gap, tab_suf, tab_canon = st.tabs(
+ with tab_mapa:
+     col_filtros, col_metricas = st.columns([2, 3])
+     with col_filtros:
+-        visao_opts = [("Casa toda", None)] + [(v["nome"], v["id"]) for v in visoes]
++        visao_opts = [("Visão geral", None)] + [(v["nome"], v["id"]) for v in visoes]
+         visao_label = st.selectbox(
+             "Visão (recorte)",
+             [v[0] for v in visao_opts],
+@@ -283,7 +283,7 @@ with tab_mapa:
+ 
+     def _aplicar_visao(res_, visao_id_):
+         if not visao_id_:
+-            return res_, "Casa toda"
++            return res_, "Visão geral"
+         arq = os.path.join(pasta, "B7_visao_filtros.csv")
+         if not os.path.exists(arq):
+             return res_, visao_label
+diff --git a/examples/banco_modelo_sa/B7_visoes.csv b/examples/banco_modelo_sa/B7_visoes.csv
+index d16309d..20f21e9 100644
+--- a/examples/banco_modelo_sa/B7_visoes.csv
++++ b/examples/banco_modelo_sa/B7_visoes.csv
+@@ -1,5 +1,5 @@
+ id;nome;tipo;descricao;owner;regra_afetacao
+-VIS_CASA;Casa toda;livre;Visao consolidada de todos os riscos;CRO;
++VIS_GERAL;Visão geral;livre;Visao consolidada de todos os riscos;CRO;
+ VIS_CONSIGNADO;Consignado INSS;produto;Risco do produto consignado ponta a ponta;AL-CPF;
+ VIS_CYBER_LGPD;Cyber e LGPD;disciplina;Seguranca cibernetica e privacidade;AL-CYBER;
+ VIS_CREDITO;Credito E2E;e2e;Todo o ciclo de credito;AL-RCRED;
+diff --git a/examples/banco_modelo_sa/_gerar.py b/examples/banco_modelo_sa/_gerar.py
+index 0b3bce5..290aa4d 100644
+--- a/examples/banco_modelo_sa/_gerar.py
++++ b/examples/banco_modelo_sa/_gerar.py
+@@ -378,7 +378,7 @@ def g_b9():
+ # ---------------------------------------------------------------------
+ def g_b7():
+     V=[
+-     ["VIS_CASA","Casa toda","livre","Visao consolidada de todos os riscos","CRO",""],
++     ["VIS_GERAL","Visão geral","livre","Visao consolidada de todos os riscos","CRO",""],
+      ["VIS_CONSIGNADO","Consignado INSS","produto","Risco do produto consignado ponta a ponta","AL-CPF",""],
+      ["VIS_CYBER_LGPD","Cyber e LGPD","disciplina","Seguranca cibernetica e privacidade","AL-CYBER",""],
+      ["VIS_CREDITO","Credito E2E","e2e","Todo o ciclo de credito","AL-RCRED",""],
+diff --git a/examples/banco_modelo_sa/output_exemplo/20box.html b/examples/banco_modelo_sa/output_exemplo/20box.html
+index d40d0d0..e63e0cf 100644
+--- a/examples/banco_modelo_sa/output_exemplo/20box.html
++++ b/examples/banco_modelo_sa/output_exemplo/20box.html
+@@ -1,5 +1,5 @@
+ <!DOCTYPE html><html lang="pt-br"><head><meta charset="utf-8">
+-<title>BooX — Banco Modelo S.A. — Casa toda</title>
++<title>BooX — Banco Modelo S.A. — Visão geral</title>
+ <style>
+ body{margin:0;padding:24px;background:#faf9f6;font-family:Segoe UI,Arial,sans-serif;color:#222}
+ .wrap{max-width:920px;margin:0 auto;background:#fff;border:1px solid #e5e3da;border-radius:14px;padding:24px;box-shadow:0 4px 16px rgba(0,0,0,.04)}
+@@ -11,7 +11,7 @@ body{margin:0;padding:24px;background:#faf9f6;font-family:Segoe UI,Arial,sans-se
+ .alertas li{margin:2px 0}
+ </style></head>
+ <body><div class="wrap"><svg width="100%" viewBox="0 0 870 682" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+-<text x="435.0" y="32" text-anchor="middle" font-size="18" font-weight="600">Banco Modelo S.A. — Casa toda</text>
++<text x="435.0" y="32" text-anchor="middle" font-size="18" font-weight="600">Banco Modelo S.A. — Visão geral</text>
+ <text x="435.0" y="52" text-anchor="middle" font-size="12" fill="#777">Impacto x Ambiente de Controles — 34 pares processo x risco</text>
+ <text x="24" y="312.0" text-anchor="middle" font-size="12" fill="#444" transform="rotate(-90 24 312.0)">Impacto</text>
+ <text x="140" y="120.0" text-anchor="end" font-size="11" fill="#444" dominant-baseline="central">Elevado</text>
+diff --git a/examples/banco_modelo_sa/output_exemplo/parecer.md b/examples/banco_modelo_sa/output_exemplo/parecer.md
+index 86cf1d1..8a1559f 100644
+--- a/examples/banco_modelo_sa/output_exemplo/parecer.md
++++ b/examples/banco_modelo_sa/output_exemplo/parecer.md
+@@ -1,4 +1,4 @@
+-# Parecer BooX — Banco Modelo S.A. — Casa toda
++# Parecer BooX — Banco Modelo S.A. — Visão geral
+ 
+ Pares processo x risco avaliados: **34**.
+ Cobertura media (validacao independente): **32.4%**.
+-- 
+2.43.0
+

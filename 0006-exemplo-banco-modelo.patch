@@ -1,0 +1,314 @@
+From ed2c092c6fe1eab98bacade0e5706cb4cc4b846c Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Tue, 17 Nov 2026 10:56:00 -0300
+Subject: [PATCH] Exemplo banco_modelo_sa: normas vigentes e execucoes do
+ canonico 1.5.0
+
+Remove CMN 4.658 (revogada pela 4.893) e CMN 4.753 do B4, reescreve
+B_TESTES_execucao e B_EVIDENCIA com testes reais do catalogo. Corrige
+acento em titulos de testes.
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01EZh4HiPEhCworApsGbxjqN
+---
+ CHANGELOG.md                                  |  4 +
+ canonico/B_TESTES_canonico.csv                |  4 +-
+ examples/banco_modelo_sa/B4_regulacao.csv     | 13 ++--
+ examples/banco_modelo_sa/B4_vinculo_norma.csv | 14 ++--
+ examples/banco_modelo_sa/B_EVIDENCIA.csv      | 32 +++++---
+ .../banco_modelo_sa/B_TESTES_execucao.csv     | 38 +++++++---
+ examples/banco_modelo_sa/README.md            | 12 ++-
+ examples/banco_modelo_sa/_gerar.py            | 75 +++++++++++++++----
+ 8 files changed, 144 insertions(+), 48 deletions(-)
+
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index be66cfb..7cfb1c1 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -6,6 +6,10 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/).
+ 
+ ## [Não lançado]
+ 
++#### Exemplo e catálogo (canônico 1.5.0)
++- Base `banco_modelo_sa` atualizada: normas vigentes (CMN 4.893 no lugar da 4.658 revogada), 28 execuções de testes do catálogo novo e evidências coerentes.
++- Catálogo canônico: 229 testes `proposto` (CVM 21, 30, 32, 33, 35, 161; ANBIMA suitability; CMN 4.893).
++
+ ### Fase 1 — Especificação (em andamento)
+ 
+ #### Adicionado
+diff --git a/canonico/B_TESTES_canonico.csv b/canonico/B_TESTES_canonico.csv
+index b47e6e1..efc93b4 100644
+--- a/canonico/B_TESTES_canonico.csv
++++ b/canonico/B_TESTES_canonico.csv
+@@ -334,7 +334,7 @@ TST.CVM035.038;CVM;RES_CVM_35;Politica de seguranca da informacao;corretora|dtvm
+ TST.CVM035.039;CVM;RES_CVM_35;Dados sensiveis de clientes;corretora|dtvm|distribuidora;42 e 43;Regras para classificar dados sensiveis, registrar incidentes, proteger cadastro e operacoes contra acesso, vazamento ou adulteracao, conceder acessos individualizados e segregar dados;teste_amostral;Inventario de dados, revisao de acessos;semestral;alta;R0.U.14;;Protecao e controle de acesso a dados;proposto;;2021-05-26;https://conteudo.cvm.gov.br/legislacao/resolucoes/resol035.html
+ TST.CVM035.040;CVM;RES_CVM_35;Orientacoes de seguranca ao cliente;corretora|dtvm|distribuidora;44;Manter na pagina orientacoes resumidas sobre praticas de seguranca do intermediario e cuidados do cliente;observacao;Captura da pagina;anual;baixa;R0.U.7;;Orientacao de seguranca ao cliente;proposto;;2021-05-26;https://conteudo.cvm.gov.br/legislacao/resolucoes/resol035.html
+ TST.CVM035.041;CVM;RES_CVM_35;Programa de seguranca cibernetica;corretora|dtvm|distribuidora;45;Programa com identificacao de riscos, medidas de reducao de vulnerabilidade, monitoramento continuo, tratamento de incidentes, testes periodicos e participacao em compartilhamento de ameacas;revisao_documental;Programa, testes e relatorios;anual;alta;R0.U.7;;Programa de ciberseguranca;proposto;;2021-05-26;https://conteudo.cvm.gov.br/legislacao/resolucoes/resol035.html
+-TST.CVM035.042;CVM;RES_CVM_35;Comunicacao de incidentes cibernéticos e relatorio final;corretora|dtvm|distribuidora;46;Comunicar tempestivamente a administracao e a SMI incidentes relevantes, enviar relatorio final com impacto e aperfeicoamentos e manter comunicados e relatorios de investigacao;revisao_documental;Comunicacoes e relatorio final;por_evento;alta;R0.U.7;;Comunicacao de incidentes cibernéticos;proposto;;2021-05-26;https://conteudo.cvm.gov.br/legislacao/resolucoes/resol035.html
++TST.CVM035.042;CVM;RES_CVM_35;Comunicacao de incidentes ciberneticos e relatorio final;corretora|dtvm|distribuidora;46;Comunicar tempestivamente a administracao e a SMI incidentes relevantes, enviar relatorio final com impacto e aperfeicoamentos e manter comunicados e relatorios de investigacao;revisao_documental;Comunicacoes e relatorio final;por_evento;alta;R0.U.7;;Comunicacao de incidentes ciberneticos;proposto;;2021-05-26;https://conteudo.cvm.gov.br/legislacao/resolucoes/resol035.html
+ TST.CVM035.043;CVM;RES_CVM_35;Prestadores de servicos relevantes;corretora|dtvm|distribuidora;47;Identificar prestadores relevantes, avaliar seus controles e garantir por contrato conformidade com arquivos, acesso aos dados, confidencialidade, integridade, disponibilidade e acesso da CVM e autorreguladora;revisao_documental;Relacao de prestadores, contratos e avaliacoes;anual;alta;R0.U.10;;Gestao de prestadores relevantes;proposto;;2021-05-26;https://conteudo.cvm.gov.br/legislacao/resolucoes/resol035.html
+ TST.CVM035.044;CVM;RES_CVM_35;Guarda de documentos por cinco anos;corretora|dtvm|distribuidora;48;Manter por no minimo cinco anos documentos, correspondencia, papeis de trabalho, gravacoes, trilhas de auditoria e registros de origem de ordens;observacao;Repositorio com retencao e recuperacao testada;anual;media;R0.U.11;;Retencao de cinco anos;proposto;;2021-05-26;https://conteudo.cvm.gov.br/legislacao/resolucoes/resol035.html
+ TST.CVM035.045;CVM;RES_CVM_35;Financiamento e emprestimo de acoes restritos a corretoras e DTVMs;corretora|dtvm|distribuidora;Anexo I art. 2;Apenas corretoras e distribuidoras concedem financiamento para compra e emprestimo de acoes, vedado a administradores, funcionarios, socios acima de 10 por cento, parentes ate segundo grau e integrantes do sistema de distribuicao;teste_amostral;Lista de tomadores cruzada com impedidos;trimestral;alta;R0.U.12;;Impedimentos a financiados;proposto;;2021-05-26;https://conteudo.cvm.gov.br/legislacao/resolucoes/resol035.html
+@@ -398,7 +398,7 @@ TST.CMN4893.017;BACEN;RES_CMN_4893;Responsabilidade do contratante;banco_multipl
+ TST.CMN4893.018;BACEN;RES_CMN_4893;Comunicacao de contratacao ao Banco Central;banco_multiplo|banco_comercial|cooperativa|fintech_credito;15;Comunicar ao BCB em ate dez dias a contratacao de servico relevante e alteracoes contratuais, com empresa, servicos e paises e regioes;revisao_documental;Protocolos de comunicacao;por_evento;alta;R0.U.11;;Comunicacao de contratos de nuvem;proposto;;2021-02-26;https://www.bcb.gov.br/estabilidadefinanceira/exibenormativo?tipo=RESOLU%C3%87%C3%83O%20CMN&numero=4893
+ TST.CMN4893.019;BACEN;RES_CMN_4893;Requisitos para servicos prestados no exterior;banco_multiplo|banco_comercial|cooperativa|fintech_credito;16;Convenio de troca de informacoes entre BCB e autoridade do pais, ou autorizacao previa de 60 dias, definicao previa de paises e regioes, ausencia de embaraco ao BCB e alternativas de continuidade, documentados;revisao_documental;Evidencias de convenio ou autorizacao e planos de saida;por_evento;alta;R0.U.10;;Contratacao no exterior conforme;proposto;;2021-02-26;https://www.bcb.gov.br/estabilidadefinanceira/exibenormativo?tipo=RESOLU%C3%87%C3%83O%20CMN&numero=4893
+ TST.CMN4893.020;BACEN;RES_CMN_4893;Clausulas contratuais obrigatorias;banco_multiplo|banco_comercial|cooperativa|fintech_credito;17 e par. unico;Contratos preveem paises e regioes, seguranca na transmissao e armazenamento, segregacao, devolucao e exclusao de dados, acesso a informacoes e auditorias, notificacao de subcontratacao, acesso do BCB, informacao de limitacoes e, em resolucao, acesso do responsavel e aviso de 30 dias antes de interromper;teste_amostral;Amostra de contratos de servicos relevantes;anual;alta;R0.U.10;;Clausulas obrigatorias nos contratos;proposto;;2021-02-26;https://www.bcb.gov.br/estabilidadefinanceira/exibenormativo?tipo=RESOLU%C3%87%C3%83O%20CMN&numero=4893
+-TST.CMN4893.021;BACEN;RES_CMN_4893;Continuidade para incidentes cibernéticos e interrupcao de terceiros;banco_multiplo|banco_comercial|cooperativa|fintech_credito;19 e 20;Politicas e procedimentos de continuidade que tratem incidentes relevantes e interrupcao de servicos contratados, incluindo substituicao do prestador, prazos de reinicio, criterios de crise e comunicacao tempestiva ao BCB;revisao_documental;Plano de continuidade e criterios de crise documentados;anual;alta;R0.U.9;;Continuidade para incidentes e terceiros;proposto;;2021-02-26;https://www.bcb.gov.br/estabilidadefinanceira/exibenormativo?tipo=RESOLU%C3%87%C3%83O%20CMN&numero=4893
++TST.CMN4893.021;BACEN;RES_CMN_4893;Continuidade para incidentes ciberneticos e interrupcao de terceiros;banco_multiplo|banco_comercial|cooperativa|fintech_credito;19 e 20;Politicas e procedimentos de continuidade que tratem incidentes relevantes e interrupcao de servicos contratados, incluindo substituicao do prestador, prazos de reinicio, criterios de crise e comunicacao tempestiva ao BCB;revisao_documental;Plano de continuidade e criterios de crise documentados;anual;alta;R0.U.9;;Continuidade para incidentes e terceiros;proposto;;2021-02-26;https://www.bcb.gov.br/estabilidadefinanceira/exibenormativo?tipo=RESOLU%C3%87%C3%83O%20CMN&numero=4893
+ TST.CMN4893.022;BACEN;RES_CMN_4893;Mecanismos de acompanhamento e controle;banco_multiplo|banco_comercial|cooperativa|fintech_credito;21;Processos, testes e trilhas de auditoria, metricas e indicadores e identificacao e correcao de deficiencias, considerando notificacoes de subcontratacao e testes periodicos pela auditoria interna;analitico;Indicadores de seguranca e relatorios da auditoria interna;trimestral;media;R0.U.7;;Monitoramento da efetividade da politica;proposto;;2021-02-26;https://www.bcb.gov.br/estabilidadefinanceira/exibenormativo?tipo=RESOLU%C3%87%C3%83O%20CMN&numero=4893
+ TST.CMN4893.023;BACEN;RES_CMN_4893;Compartilhamento de informacoes sobre incidentes;banco_multiplo|banco_comercial|cooperativa|fintech_credito;22;Desenvolver iniciativas de compartilhamento de incidentes relevantes, inclusive os recebidos de prestadores, disponiveis ao BCB;observacao;Registros de participacao em iniciativas;anual;baixa;R0.U.7;;Compartilhamento de incidentes;proposto;;2021-02-26;https://www.bcb.gov.br/estabilidadefinanceira/exibenormativo?tipo=RESOLU%C3%87%C3%83O%20CMN&numero=4893
+ TST.CMN4893.024;BACEN;RES_CMN_4893;Guarda por cinco anos dos documentos;banco_multiplo|banco_comercial|cooperativa|fintech_credito;23;Manter a disposicao do BCB por cinco anos politica, plano, relatorio anual, due diligence, contratos, registros de acompanhamento, criterios de crise e resultados de testes de intrusao;observacao;Repositorio com retencao;anual;media;R0.U.11;;Retencao de cinco anos;proposto;;2021-02-26;https://www.bcb.gov.br/estabilidadefinanceira/exibenormativo?tipo=RESOLU%C3%87%C3%83O%20CMN&numero=4893
+diff --git a/examples/banco_modelo_sa/B4_regulacao.csv b/examples/banco_modelo_sa/B4_regulacao.csv
+index 747ba92..fbe70ca 100644
+--- a/examples/banco_modelo_sa/B4_regulacao.csv
++++ b/examples/banco_modelo_sa/B4_regulacao.csv
+@@ -1,9 +1,10 @@
+ id;tipo;numero;ano;regulador;titulo;ementa;status;url_oficial
+-RES_CMN_4557;res_cmn;4557;2017;CMN;Gerenciamento de riscos e capital;Estrutura de gerenciamento de riscos;vigente;
++RES_CMN_4557;res_cmn;4557;2017;CMN;Gerenciamento de riscos e capital;Estrutura de gerenciamento continuo e integrado de riscos e capital;vigente;
++RES_CMN_4968;res_cmn;4968;2021;CMN;Sistema de controles internos;Sistema de controles internos (substituiu a Res. CMN 2.554);vigente;
++RES_CMN_4893;res_cmn;4893;2021;CMN;Seguranca cibernetica e nuvem;Politica de seguranca cibernetica e contratacao de nuvem (revogou a Res. CMN 4.658);vigente;
+ RES_BCB_265;res_bcb;265;2022;BCB;Risco operacional;Gerenciamento continuo de risco operacional;vigente;
+-RES_CMN_4658;res_cmn;4658;2018;CMN;Politica de seguranca cibernetica;Ciberseguranca e nuvem;vigente;
++CIRC_BCB_3978;circ_bcb;3978;2020;BCB;PLD-FT;Politica, procedimentos e controles de prevencao a lavagem de dinheiro;vigente;
++LEI_9613;lei;9613;1998;Congresso;Lavagem de dinheiro;Crimes de lavagem ou ocultacao de bens, direitos e valores;vigente;
+ LEI_13709;lei;13709;2018;Congresso;LGPD;Protecao de dados pessoais;vigente;
+-LEI_9613;lei;9613;1998;Congresso;Lavagem de dinheiro;PLD-FT;vigente;
+-CIRC_BCB_3978;circ_bcb;3978;2020;BCB;PLD-FT;Politica de prevencao a lavagem;vigente;
+-RES_CVM_30;res_cvm;30;2021;CVM;Suitability;Dever de verificacao de adequacao;vigente;
+-RES_CMN_4753;res_cmn;4753;2019;CMN;Continuidade de negocios;Politica de continuidade;vigente;
++RES_CVM_30;res_cvm;30;2021;CVM;Suitability;Dever de verificacao de adequacao dos produtos ao perfil do cliente;vigente;
++ANBIMA_SUIT_01_2019;autorregulacao;1;2019;ANBIMA;Regras e Procedimentos de Suitability;Autorregulacao de suitability e Laudo ANBIMA;vigente;
+diff --git a/examples/banco_modelo_sa/B4_vinculo_norma.csv b/examples/banco_modelo_sa/B4_vinculo_norma.csv
+index d2f0c02..b894bb3 100644
+--- a/examples/banco_modelo_sa/B4_vinculo_norma.csv
++++ b/examples/banco_modelo_sa/B4_vinculo_norma.csv
+@@ -1,9 +1,11 @@
+ id;norma_id;alvo_tipo;alvo_id;tipo_vinculo;notas
+ 1;RES_CMN_4557;risco;RL-06;primaria;
+-2;RES_BCB_265;risco;RL-06;primaria;
+-3;RES_CMN_4658;risco;RL-07;primaria;
+-4;LEI_13709;risco;RL-14;primaria;
+-5;LEI_9613;risco;RL-13;primaria;
++2;RES_CMN_4968;risco;RL-11;primaria;
++3;RES_CMN_4893;risco;RL-07;primaria;
++4;RES_CMN_4893;risco;RL-09;secundaria;Arts. 19 e 20: continuidade para incidentes ciberneticos e terceiros
++5;RES_BCB_265;risco;RL-06;primaria;
+ 6;CIRC_BCB_3978;risco;RL-13;primaria;
+-7;RES_CVM_30;risco;RL-12;primaria;
+-8;RES_CMN_4753;risco;RL-09;primaria;
++7;LEI_9613;risco;RL-13;primaria;
++8;LEI_13709;risco;RL-14;primaria;
++9;RES_CVM_30;risco;RL-12;primaria;
++10;ANBIMA_SUIT_01_2019;risco;RL-12;secundaria;Laudo ANBIMA anual
+diff --git a/examples/banco_modelo_sa/B_EVIDENCIA.csv b/examples/banco_modelo_sa/B_EVIDENCIA.csv
+index 1d67065..40c0320 100644
+--- a/examples/banco_modelo_sa/B_EVIDENCIA.csv
++++ b/examples/banco_modelo_sa/B_EVIDENCIA.csv
+@@ -1,11 +1,23 @@
+ id;tipo;titulo;data;local;responsavel;descricao;hash
+-EV-001;relatorio;Relatorio IAM - contas admin sem MFA;2026-04-15;SharePoint SI;Nucleo Cyber;Extracao IAM com 47 contas admin e status MFA;
+-EV-002;print;Console DLP com regras ativas;2026-04-20;SharePoint SI;Nucleo Cyber;Print da console DLP mostrando regras de bloqueio;
+-EV-003;ata;Atas do Comite de Riscos 2025;2026-01-30;GED Compliance;Compliance;12 atas comprovando cumprimento da periodicidade;
+-EV-004;relatorio;Amostragem PEP Q1-2026;2026-03-10;GED PLD;DPLD;30 cadastros PEP amostrados com DD documentada;
+-EV-005;relatorio;SLA tratamento alertas PLD - Abr/2026;2026-05-05;GED PLD;DPLD;Extracao com data de alerta vs data de parecer;
+-EV-010;politica;RPA vigente - Corretora Modelo;2026-02-10;GED Compliance;Compliance;RPA revisada em Fev/2026 com os 19 pontos do PQO;
+-EV-011;relatorio;Amostragem cadastros PLD 5 anos;2026-04-28;GED PLD;DPLD;50 cadastros amostrados, 100% dentro do intervalo;
+-EV-012;relatorio;Amostragem conteudo minimo cadastro;2026-04-28;GED PLD;DPLD;50 cadastros amostrados, 47 conformes, 3 com declaracao pendente;
+-EV-013;relatorio;Reconciliacao cadastral interno vs B3 - Abr/2026;2026-05-10;GED Compliance;Compliance;"12 divergencias encontradas; apontamento AP-2026-0010";
+-EV-014;procedimento;Procedimento de classificacao de clientes;2026-03-15;GED Compliance;Compliance;Procedimento formal para qualificados/profissionais;
++EV-101;relatorio;Evidencia do teste TST.CMN4968.001;2026-03-31;GED Controles;Controles Internos;Pauta semanal cobre os controles relevantes;
++EV-102;relatorio;Evidencia do teste TST.CMN4968.019;2026-04-15;GED Controles;Controles Internos;Segregacao revisada em 6 de 8 areas;
++EV-103;relatorio;Evidencia do teste TST.CMN4968.030;2026-05-12;GED Controles;Nucleo Cyber;Teste de seguranca anual sem cobertura de sistemas legados;
++EV-104;relatorio;Evidencia do teste TST.CMN4968.031;2026-06-10;GED Controles;Continuidade;DR testado com RTO dentro do alvo;
++EV-105;relatorio;Evidencia do teste TST.CMN4968.037;2026-04-30;GED Controles;Controles Internos;Relatorio anual entregue no prazo;
++EV-106;relatorio;Evidencia do teste TST.CMN4557.001;2026-05-20;GED Controles;Risco Operacional;Politica existe, avaliacao de 4 de 9 fornecedores criticos pendente;
++EV-107;relatorio;Evidencia do teste TST.CMN4557.019;2026-05-20;GED Controles;Risco Operacional;2 contratos de TI sem clausula de acesso do BCB;
++EV-108;relatorio;Evidencia do teste TST.CMN4893.001;2026-02-27;GED Controles;Nucleo Cyber;Politica aprovada pelo conselho e revisada;
++EV-109;relatorio;Evidencia do teste TST.CMN4893.003;2026-04-22;GED Controles;Nucleo Cyber;Varreduras em dia, 18% das criticas sem correcao no prazo;
++EV-110;relatorio;Evidencia do teste TST.CMN4893.008;2026-04-20;GED Controles;Nucleo Cyber;Criptografia e DLP operando com regras vigentes;
++EV-111;relatorio;Evidencia do teste TST.CMN4893.014;2026-03-30;GED Controles;Nucleo Cyber;Relatorio apresentado ao conselho antes de 31 de marco;
++EV-112;relatorio;Evidencia do teste TST.CMN4893.016;2026-05-05;GED Controles;Risco Operacional;Due diligence documentada em 2 de 3 contratacoes de nuvem;
++EV-113;relatorio;Evidencia do teste TST.CMN4893.018;2026-05-08;GED Controles;Compliance;Comunicacao ao BCB em ate dez dias;
++EV-114;relatorio;Evidencia do teste TST.CIRC3978.001;2026-01-31;GED Controles;DPLD;Politica PLD-FT revisada e aprovada;
++EV-115;relatorio;Evidencia do teste TST.CIRC3978.019;2026-03-10;GED Controles;DPLD;80% da amostra com validacao de identidade adequada;
++EV-116;relatorio;Evidencia do teste TST.CIRC3978.049;2026-05-05;GED Controles;DPLD;12% dos alertas de alta prioridade excederam 45 dias;
++EV-117;relatorio;Evidencia do teste TST.CIRC3978.055;2026-05-31;GED Controles;DPLD;Comunicacoes em especie enviadas no prazo;
++EV-118;relatorio;Evidencia do teste TST.CIRC3978.067;2026-04-25;GED Controles;DPLD;Relatorio de efetividade enviado no prazo;
++EV-119;relatorio;Evidencia do teste TST.CVM030.001;2026-04-28;GED Controles;Compliance;2 vendas em 40 sem verificacao de adequacao registrada;
++EV-120;relatorio;Evidencia do teste TST.CVM030.015;2026-05-18;GED Controles;Compliance;7% dos perfis com mais de cinco anos;
++EV-121;relatorio;Evidencia do teste TST.CVM030.013;2026-04-30;GED Controles;Compliance;Relatorio do diretor entregue ate o fim de abril;
++EV-122;relatorio;Evidencia do teste TST.ANBSUIT.015;2026-03-28;GED Controles;Compliance;Laudo enviado ate o ultimo dia util de marco e revisado por area independente;
+diff --git a/examples/banco_modelo_sa/B_TESTES_execucao.csv b/examples/banco_modelo_sa/B_TESTES_execucao.csv
+index 3b409a6..d3294e0 100644
+--- a/examples/banco_modelo_sa/B_TESTES_execucao.csv
++++ b/examples/banco_modelo_sa/B_TESTES_execucao.csv
+@@ -1,11 +1,29 @@
+ id;teste_canonico_id;controle_id;resultado_ultimo;data_ultimo;executado_por;evidencia_id;frequencia_real;apontamento_id;observacoes
+-EXEC-2026-001;TST.SEED.CYBER.001;CT-009;nao_conforme;2026-04-15;Nucleo Cyber;EV-001;semestral;AP-2026-0001;3 contas admin sem MFA identificadas
+-EXEC-2026-002;TST.SEED.CYBER.003;CT-015;conforme;2026-04-20;Nucleo Cyber;EV-002;trimestral;;DLP operando com regras vigentes
+-EXEC-2026-003;TST.SEED.CONF.001;CT-016;conforme;2026-01-30;Compliance;EV-003;anual;;Regimento revisado e periodicidade cumprida
+-EXEC-2026-004;TST.SEED.PLDFT.001;CT-007;parcialmente_conforme;2026-03-10;DPLD;EV-004;trimestral;;80% da amostra com DD adequada
+-EXEC-2026-005;TST.SEED.PLDFT.002;CT-006;nao_conforme;2026-05-05;DPLD;EV-005;mensal;AP-2026-0005;12% dos alertas alta prioridade excederam SLA
+-EXEC-2026-010;TST.BSM.PQO.CAD.001;CT-016;conforme;2026-02-10;Compliance;EV-010;anual;;RPA vigente com todos os 19 pontos revisada em Fev/2026
+-EXEC-2026-011;TST.BSM.PQO.CAD.004;CT-007;conforme;2026-04-28;DPLD;EV-011;trimestral;;Amostra de 50 cadastros com datas dentro do intervalo de 5 anos
+-EXEC-2026-012;TST.BSM.PQO.CAD.006;CT-007;parcialmente_conforme;2026-04-28;DPLD;EV-012;trimestral;;"3 de 50 cadastros sem declaracao do Cliente formalizada; plano de correcao aberto"
+-EXEC-2026-013;TST.BSM.PQO.CAD.012;CT-016;nao_conforme;2026-05-10;Compliance;EV-013;mensal;AP-2026-0010;Reconciliacao cadastral vs. B3 apresentou 12 divergencias em Abr/2026
+-EXEC-2026-015;TST.BSM.PQO.CAD.014;CT-007;conforme;2026-03-15;Compliance;EV-014;continuo;;Procedimento de classificacao de clientes qualificados/profissionais com evidencia no cadastro
++EXEC-2026-001;TST.CMN4968.001;CT-016;conforme;2026-03-31;Controles Internos;EV-101;trimestral;;Pauta semanal cobre os controles relevantes
++EXEC-2026-002;TST.CMN4968.019;CT-020;parcialmente_conforme;2026-04-15;Controles Internos;EV-102;semestral;AP-2025-0016;Segregacao revisada em 6 de 8 areas
++EXEC-2026-003;TST.CMN4968.030;CT-009;nao_conforme;2026-05-12;Nucleo Cyber;EV-103;anual;AP-2025-0001;Teste de seguranca anual sem cobertura de sistemas legados
++EXEC-2026-004;TST.CMN4968.031;CT-010;conforme;2026-06-10;Continuidade;EV-104;anual;;DR testado com RTO dentro do alvo
++EXEC-2026-005;TST.CMN4968.037;CT-016;conforme;2026-04-30;Controles Internos;EV-105;anual;;Relatorio anual entregue no prazo
++EXEC-2026-006;TST.CMN4557.001;CT-019;parcialmente_conforme;2026-05-20;Risco Operacional;EV-106;anual;AP-2025-0019;Politica existe, avaliacao de 4 de 9 fornecedores criticos pendente
++EXEC-2026-007;TST.CMN4557.019;CT-019;nao_conforme;2026-05-20;Risco Operacional;EV-107;anual;AP-2025-0019;2 contratos de TI sem clausula de acesso do BCB
++EXEC-2026-008;TST.CMN4893.001;CT-008;conforme;2026-02-27;Nucleo Cyber;EV-108;anual;;Politica aprovada pelo conselho e revisada
++EXEC-2026-009;TST.CMN4893.003;CT-008;parcialmente_conforme;2026-04-22;Nucleo Cyber;EV-109;trimestral;AP-2025-0003;Varreduras em dia, 18% das criticas sem correcao no prazo
++EXEC-2026-010;TST.CMN4893.004;CT-008;nao_executado;2026-06-30;Nucleo Cyber;;anual;;Contratacao do teste de intrusao independente em andamento
++EXEC-2026-011;TST.CMN4893.005;CT-009;nao_conforme;2026-04-15;Nucleo Cyber;EV-103;trimestral;AP-2025-0001;3 contas administrativas sem MFA
++EXEC-2026-012;TST.CMN4893.008;CT-015;conforme;2026-04-20;Nucleo Cyber;EV-110;semestral;;Criptografia e DLP operando com regras vigentes
++EXEC-2026-013;TST.CMN4893.014;CT-008;conforme;2026-03-30;Nucleo Cyber;EV-111;anual;;Relatorio apresentado ao conselho antes de 31 de marco
++EXEC-2026-014;TST.CMN4893.016;CT-019;parcialmente_conforme;2026-05-05;Risco Operacional;EV-112;por_evento;AP-2025-0019;Due diligence documentada em 2 de 3 contratacoes de nuvem
++EXEC-2026-015;TST.CMN4893.018;CT-016;conforme;2026-05-08;Compliance;EV-113;por_evento;;Comunicacao ao BCB em ate dez dias
++EXEC-2026-016;TST.CMN4893.021;CT-010;conforme;2026-06-10;Continuidade;EV-104;anual;;Cenarios de incidente cibernetico incluidos no teste de DR
++EXEC-2026-017;TST.CIRC3978.001;CT-006;conforme;2026-01-31;DPLD;EV-114;anual;;Politica PLD-FT revisada e aprovada
++EXEC-2026-018;TST.CIRC3978.019;CT-007;parcialmente_conforme;2026-03-10;DPLD;EV-115;continuo;AP-2025-0004;80% da amostra com validacao de identidade adequada
++EXEC-2026-019;TST.CIRC3978.025;CT-007;conforme;2026-03-10;DPLD;EV-115;continuo;;Tratamento de PEP aderente na amostra
++EXEC-2026-020;TST.CIRC3978.049;CT-006;nao_conforme;2026-05-05;DPLD;EV-116;mensal;AP-2025-0006;12% dos alertas de alta prioridade excederam 45 dias
++EXEC-2026-021;TST.CIRC3978.055;CT-006;conforme;2026-05-31;DPLD;EV-117;mensal;;Comunicacoes em especie enviadas no prazo
++EXEC-2026-022;TST.CIRC3978.067;CT-006;conforme;2026-04-25;DPLD;EV-118;anual;;Relatorio de efetividade enviado no prazo
++EXEC-2026-023;TST.CVM030.001;CT-012;parcialmente_conforme;2026-04-28;Compliance;EV-119;continuo;AP-2025-0009;2 vendas em 40 sem verificacao de adequacao registrada
++EXEC-2026-024;TST.CVM030.015;CT-012;nao_conforme;2026-05-18;Compliance;EV-120;mensal;AP-2025-0011;7% dos perfis com mais de cinco anos
++EXEC-2026-025;TST.CVM030.013;CT-016;conforme;2026-04-30;Compliance;EV-121;anual;;Relatorio do diretor entregue ate o fim de abril
++EXEC-2026-026;TST.ANBSUIT.003;CT-012;parcialmente_conforme;2026-05-18;Compliance;EV-120;mensal;AP-2025-0011;Perfis desatualizados acima da tolerancia interna
++EXEC-2026-027;TST.ANBSUIT.015;CT-016;conforme;2026-03-28;Compliance;EV-122;anual;;Laudo enviado ate o ultimo dia util de marco e revisado por area independente
++EXEC-2026-028;TST.ANBSUIT.017;CT-012;nao_conforme;2026-03-20;Compliance;EV-122;anual;AP-2025-0010;Indicadores do laudo nao reconciliam com o sistema de cadastro
+diff --git a/examples/banco_modelo_sa/README.md b/examples/banco_modelo_sa/README.md
+index d3d92d7..c736f9a 100644
+--- a/examples/banco_modelo_sa/README.md
++++ b/examples/banco_modelo_sa/README.md
+@@ -40,7 +40,9 @@ python -m boox examples/banco_modelo_sa --out output --visao VIS_CONDUTA
+ | B10_indicadores.csv | 16 | KRIs |
+ | B10_indicador_serie.csv | 96 | serie temporal dos KRIs (6 meses) |
+ | B8_externos.csv | 14 | sinais externos (BACEN, CVM, etc.) |
+-| B4_regulacao.csv | 8 | normas externas |
++| B4_regulacao.csv | 9 | normas externas (CMN 4.557, 4.968, 4.893, BCB 265, Circ. 3.978, Lei 9.613, LGPD, CVM 30, ANBIMA) |
++| B_TESTES_execucao.csv | 28 | execucoes de testes do canonico 1.5.0, com resultados variados |
++| B_EVIDENCIA.csv | 21 | evidencias referenciadas pelas execucoes |
+ | B9_disciplinas.csv | 15 | disciplinas usadas |
+ | B7_visoes.csv | 5 | visoes registradas |
+ | B_MAP_taxonomia.csv | 37 | de-para local -> canonico |
+@@ -77,3 +79,11 @@ Os templates em `../../templates/*.xlsx` sao o ponto de partida para um
+ banco real preencher seus proprios dados. Cada template tem os campos
+ coloridos por categoria (obrigatorio/recomendado/opcional), listas
+ suspensas e uma aba de instrucoes.
++
++## Leitura do relatorio de gap
++
++Esta instancia executa **28 dos 337 testes** aplicaveis a um banco multiplo. O
++relatorio de gap mostra, portanto, cobertura baixa de proposito: ele demonstra
++a diferenca entre requisito **catalogado** e requisito **testado**. Todos os
++testes do catalogo estao com status `proposto` (a validar contra o texto
++oficial), e o BooX mede cobertura, nao prova conformidade.
+diff --git a/examples/banco_modelo_sa/_gerar.py b/examples/banco_modelo_sa/_gerar.py
+index 290aa4d..083cdd9 100644
+--- a/examples/banco_modelo_sa/_gerar.py
++++ b/examples/banco_modelo_sa/_gerar.py
+@@ -333,26 +333,29 @@ def g_b8():
+ # ---------------------------------------------------------------------
+ def g_b4():
+     N=[
+-     ["RES_CMN_4557","res_cmn","4557","2017","CMN","Gerenciamento de riscos e capital","Estrutura de gerenciamento de riscos","vigente",""],
++     ["RES_CMN_4557","res_cmn","4557","2017","CMN","Gerenciamento de riscos e capital","Estrutura de gerenciamento continuo e integrado de riscos e capital","vigente",""],
++     ["RES_CMN_4968","res_cmn","4968","2021","CMN","Sistema de controles internos","Sistema de controles internos (substituiu a Res. CMN 2.554)","vigente",""],
++     ["RES_CMN_4893","res_cmn","4893","2021","CMN","Seguranca cibernetica e nuvem","Politica de seguranca cibernetica e contratacao de nuvem (revogou a Res. CMN 4.658)","vigente",""],
+      ["RES_BCB_265","res_bcb","265","2022","BCB","Risco operacional","Gerenciamento continuo de risco operacional","vigente",""],
+-     ["RES_CMN_4658","res_cmn","4658","2018","CMN","Politica de seguranca cibernetica","Ciberseguranca e nuvem","vigente",""],
++     ["CIRC_BCB_3978","circ_bcb","3978","2020","BCB","PLD-FT","Politica, procedimentos e controles de prevencao a lavagem de dinheiro","vigente",""],
++     ["LEI_9613","lei","9613","1998","Congresso","Lavagem de dinheiro","Crimes de lavagem ou ocultacao de bens, direitos e valores","vigente",""],
+      ["LEI_13709","lei","13709","2018","Congresso","LGPD","Protecao de dados pessoais","vigente",""],
+-     ["LEI_9613","lei","9613","1998","Congresso","Lavagem de dinheiro","PLD-FT","vigente",""],
+-     ["CIRC_BCB_3978","circ_bcb","3978","2020","BCB","PLD-FT","Politica de prevencao a lavagem","vigente",""],
+-     ["RES_CVM_30","res_cvm","30","2021","CVM","Suitability","Dever de verificacao de adequacao","vigente",""],
+-     ["RES_CMN_4753","res_cmn","4753","2019","CMN","Continuidade de negocios","Politica de continuidade","vigente",""],
++     ["RES_CVM_30","res_cvm","30","2021","CVM","Suitability","Dever de verificacao de adequacao dos produtos ao perfil do cliente","vigente",""],
++     ["ANBIMA_SUIT_01_2019","autorregulacao","1","2019","ANBIMA","Regras e Procedimentos de Suitability","Autorregulacao de suitability e Laudo ANBIMA","vigente",""],
+     ]
+     escrever("B4_regulacao.csv",
+      ["id","tipo","numero","ano","regulador","titulo","ementa","status","url_oficial"],N)
+     V=[
+      [1,"RES_CMN_4557","risco","RL-06","primaria",""],
+-     [2,"RES_BCB_265","risco","RL-06","primaria",""],
+-     [3,"RES_CMN_4658","risco","RL-07","primaria",""],
+-     [4,"LEI_13709","risco","RL-14","primaria",""],
+-     [5,"LEI_9613","risco","RL-13","primaria",""],
++     [2,"RES_CMN_4968","risco","RL-11","primaria",""],
++     [3,"RES_CMN_4893","risco","RL-07","primaria",""],
++     [4,"RES_CMN_4893","risco","RL-09","secundaria","Arts. 19 e 20: continuidade para incidentes ciberneticos e terceiros"],
++     [5,"RES_BCB_265","risco","RL-06","primaria",""],
+      [6,"CIRC_BCB_3978","risco","RL-13","primaria",""],
+-     [7,"RES_CVM_30","risco","RL-12","primaria",""],
+-     [8,"RES_CMN_4753","risco","RL-09","primaria",""],
++     [7,"LEI_9613","risco","RL-13","primaria",""],
++     [8,"LEI_13709","risco","RL-14","primaria",""],
++     [9,"RES_CVM_30","risco","RL-12","primaria",""],
++     [10,"ANBIMA_SUIT_01_2019","risco","RL-12","secundaria","Laudo ANBIMA anual"],
+     ]
+     escrever("B4_vinculo_norma.csv",["id","norma_id","alvo_tipo","alvo_id","tipo_vinculo","notas"],V)
+ 
+@@ -413,5 +416,51 @@ def g_bmap():
+      ["id","dominio","termo_local","termo_local_id","canonico_id","confianca_ia",
+       "metodo","justificativa","status","aprovado_por","data_revisao","notas"],L)
+ 
+-g_b5(); g_b2(); g_b10(); g_b8(); g_b4(); g_b9(); g_b7(); g_bmap()
++
++# ---------------------------------------------------------------------
++# B_TESTES_execucao + B_EVIDENCIA (testes do canonico 1.5.0)
++# ---------------------------------------------------------------------
++def g_testes():
++    E=[  # id, teste, controle, resultado, data, por, evidencia, freq_real, apontamento, obs
++     ("TST.CMN4968.001","CT-016","conforme","2026-03-31","Controles Internos","EV-101","trimestral","","Pauta semanal cobre os controles relevantes"),
++     ("TST.CMN4968.019","CT-020","parcialmente_conforme","2026-04-15","Controles Internos","EV-102","semestral","AP-2025-0016","Segregacao revisada em 6 de 8 areas"),
++     ("TST.CMN4968.030","CT-009","nao_conforme","2026-05-12","Nucleo Cyber","EV-103","anual","AP-2025-0001","Teste de seguranca anual sem cobertura de sistemas legados"),
++     ("TST.CMN4968.031","CT-010","conforme","2026-06-10","Continuidade","EV-104","anual","","DR testado com RTO dentro do alvo"),
++     ("TST.CMN4968.037","CT-016","conforme","2026-04-30","Controles Internos","EV-105","anual","","Relatorio anual entregue no prazo"),
++     ("TST.CMN4557.001","CT-019","parcialmente_conforme","2026-05-20","Risco Operacional","EV-106","anual","AP-2025-0019","Politica existe, avaliacao de 4 de 9 fornecedores criticos pendente"),
++     ("TST.CMN4557.019","CT-019","nao_conforme","2026-05-20","Risco Operacional","EV-107","anual","AP-2025-0019","2 contratos de TI sem clausula de acesso do BCB"),
++     ("TST.CMN4893.001","CT-008","conforme","2026-02-27","Nucleo Cyber","EV-108","anual","","Politica aprovada pelo conselho e revisada"),
++     ("TST.CMN4893.003","CT-008","parcialmente_conforme","2026-04-22","Nucleo Cyber","EV-109","trimestral","AP-2025-0003","Varreduras em dia, 18% das criticas sem correcao no prazo"),
++     ("TST.CMN4893.004","CT-008","nao_executado","2026-06-30","Nucleo Cyber","","anual","","Contratacao do teste de intrusao independente em andamento"),
++     ("TST.CMN4893.005","CT-009","nao_conforme","2026-04-15","Nucleo Cyber","EV-103","trimestral","AP-2025-0001","3 contas administrativas sem MFA"),
++     ("TST.CMN4893.008","CT-015","conforme","2026-04-20","Nucleo Cyber","EV-110","semestral","","Criptografia e DLP operando com regras vigentes"),
++     ("TST.CMN4893.014","CT-008","conforme","2026-03-30","Nucleo Cyber","EV-111","anual","","Relatorio apresentado ao conselho antes de 31 de marco"),
++     ("TST.CMN4893.016","CT-019","parcialmente_conforme","2026-05-05","Risco Operacional","EV-112","por_evento","AP-2025-0019","Due diligence documentada em 2 de 3 contratacoes de nuvem"),
++     ("TST.CMN4893.018","CT-016","conforme","2026-05-08","Compliance","EV-113","por_evento","","Comunicacao ao BCB em ate dez dias"),
++     ("TST.CMN4893.021","CT-010","conforme","2026-06-10","Continuidade","EV-104","anual","","Cenarios de incidente cibernetico incluidos no teste de DR"),
++     ("TST.CIRC3978.001","CT-006","conforme","2026-01-31","DPLD","EV-114","anual","","Politica PLD-FT revisada e aprovada"),
++     ("TST.CIRC3978.019","CT-007","parcialmente_conforme","2026-03-10","DPLD","EV-115","continuo","AP-2025-0004","80% da amostra com validacao de identidade adequada"),
++     ("TST.CIRC3978.025","CT-007","conforme","2026-03-10","DPLD","EV-115","continuo","","Tratamento de PEP aderente na amostra"),
++     ("TST.CIRC3978.049","CT-006","nao_conforme","2026-05-05","DPLD","EV-116","mensal","AP-2025-0006","12% dos alertas de alta prioridade excederam 45 dias"),
++     ("TST.CIRC3978.055","CT-006","conforme","2026-05-31","DPLD","EV-117","mensal","","Comunicacoes em especie enviadas no prazo"),
++     ("TST.CIRC3978.067","CT-006","conforme","2026-04-25","DPLD","EV-118","anual","","Relatorio de efetividade enviado no prazo"),
++     ("TST.CVM030.001","CT-012","parcialmente_conforme","2026-04-28","Compliance","EV-119","continuo","AP-2025-0009","2 vendas em 40 sem verificacao de adequacao registrada"),
++     ("TST.CVM030.015","CT-012","nao_conforme","2026-05-18","Compliance","EV-120","mensal","AP-2025-0011","7% dos perfis com mais de cinco anos"),
++     ("TST.CVM030.013","CT-016","conforme","2026-04-30","Compliance","EV-121","anual","","Relatorio do diretor entregue ate o fim de abril"),
++     ("TST.ANBSUIT.003","CT-012","parcialmente_conforme","2026-05-18","Compliance","EV-120","mensal","AP-2025-0011","Perfis desatualizados acima da tolerancia interna"),
++     ("TST.ANBSUIT.015","CT-016","conforme","2026-03-28","Compliance","EV-122","anual","","Laudo enviado ate o ultimo dia util de marco e revisado por area independente"),
++     ("TST.ANBSUIT.017","CT-012","nao_conforme","2026-03-20","Compliance","EV-122","anual","AP-2025-0010","Indicadores do laudo nao reconciliam com o sistema de cadastro"),
++    ]
++    L=[[f"EXEC-2026-{i:03d}",*e] for i,e in enumerate(E,1)]
++    escrever("B_TESTES_execucao.csv",
++     ["id","teste_canonico_id","controle_id","resultado_ultimo","data_ultimo","executado_por",
++      "evidencia_id","frequencia_real","apontamento_id","observacoes"],L)
++    ev={}
++    for e in E:
++        if e[5] and e[5] not in ev: ev[e[5]]=e
++    EV=[[k,"relatorio",f"Evidencia do teste {e[0]}",e[3],"GED Controles",e[4],e[8],""]
++        for k,e in sorted(ev.items())]
++    escrever("B_EVIDENCIA.csv",["id","tipo","titulo","data","local","responsavel","descricao","hash"],EV)
++
++g_b5(); g_b2(); g_b10(); g_b8(); g_b4(); g_b9(); g_b7(); g_bmap(); g_testes()
+ print("Banco Modelo S.A. gerado com sucesso.")
+-- 
+2.43.0
+
