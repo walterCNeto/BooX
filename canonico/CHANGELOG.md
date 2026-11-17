@@ -6,6 +6,11 @@ Versionamento semantico do vocabulario canonico.
 - **MINOR** (x.Y.0): adicao de novos IDs (aditivo, nao quebra de-paras).
 - **MAJOR** (X.0.0): deprecacao de IDs em uso ou mudanca incompativel.
 
+## 1.11.2 - PATCH
+- Promovidos a `ativo` 49 testes revisados pelo responsavel: 21 da Res. CMN 4.557 e 28 da Res. CMN 4.968 (todos de criticidade alta).
+- Texto conferido contra a versao consolidada vigente (CMN 4.968 em 29/12/2025); dispositivos revogados do art. 5 da 4.968 (inc. IV 'i' e par. unico, Res. Conjunta 18/2025) nao sao citados por nenhum teste.
+- Testes de criticidade media/baixa seguem `proposto`.
+
 ## [1.11.1] - 2026-11-17 (PATCH)
 
 - Validacao da Circular BCB 3.978: 48 testes de criticidade alta passam de proposto a ativo, apos conferencia dos numeros e prazos contra o texto consolidado (inclui a Resolucao BCB 591/2026) e revisao de metodo, evidencia, frequencia, criticidade e aplicabilidade pelo validador. Os outros 23 testes da norma, inclusive TST.CIRC3978.026, seguem proposto.

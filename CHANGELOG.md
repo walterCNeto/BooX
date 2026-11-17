@@ -4,6 +4,11 @@ Todas as mudanças notáveis do BooX são documentadas aqui.
 
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/).
 
+## 1.11.2 - PATCH
+- Promovidos a `ativo` 49 testes revisados pelo responsavel: 21 da Res. CMN 4.557 e 28 da Res. CMN 4.968 (todos de criticidade alta).
+- Texto conferido contra a versao consolidada vigente (CMN 4.968 em 29/12/2025); dispositivos revogados do art. 5 da 4.968 (inc. IV 'i' e par. unico, Res. Conjunta 18/2025) nao sao citados por nenhum teste.
+- Testes de criticidade media/baixa seguem `proposto`.
+
 ## [Não lançado]
 
 #### Tipos de fundo administrados (canônico 1.11.0)
