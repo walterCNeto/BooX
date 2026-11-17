@@ -4,6 +4,10 @@ Todas as mudanças notáveis do BooX são documentadas aqui.
 
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/).
 
+## 1.11.3 - PATCH
+- Promovidos a `ativo` 56 testes revisados pelo responsavel (2a rodada): 23 da Circ. BCB 3.978, 16 da Res. CMN 4.557 e 17 da Res. CMN 4.968, de criticidade media e baixa.
+- Com esta rodada, as tres normas centrais ficam integralmente validadas; o teste de exemplo TST.SEED.CONF.001 (sem artigo citado) permanece `proposto`.
+
 ## 1.11.2 - PATCH
 - Promovidos a `ativo` 49 testes revisados pelo responsavel: 21 da Res. CMN 4.557 e 28 da Res. CMN 4.968 (todos de criticidade alta).
 - Texto conferido contra a versao consolidada vigente (CMN 4.968 em 29/12/2025); dispositivos revogados do art. 5 da 4.968 (inc. IV 'i' e par. unico, Res. Conjunta 18/2025) nao sao citados por nenhum teste.
