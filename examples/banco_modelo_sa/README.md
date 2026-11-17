@@ -82,7 +82,7 @@ suspensas e uma aba de instrucoes.
 
 ## Leitura do relatorio de gap
 
-Esta instancia executa **28 dos 337 testes** aplicaveis a um banco multiplo. O
+Esta instancia executa **28 dos 380 testes** aplicaveis a um banco multiplo. O
 relatorio de gap mostra, portanto, cobertura baixa de proposito: ele demonstra
 a diferenca entre requisito **catalogado** e requisito **testado**. Todos os
 testes do catalogo estao com status `proposto` (a validar contra o texto

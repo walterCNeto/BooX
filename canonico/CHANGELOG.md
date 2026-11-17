@@ -6,6 +6,13 @@ Versionamento semantico do vocabulario canonico.
 - **MINOR** (x.Y.0): adicao de novos IDs (aditivo, nao quebra de-paras).
 - **MAJOR** (X.0.0): deprecacao de IDs em uso ou mudanca incompativel.
 
+## [1.7.0] — 2026-11-17 (MINOR)
+
+- Adicionados 43 testes `proposto` da Resolucao CVM 175 (fundos de investimento), TST.CVM175.001..043: Parte Geral (divulgacao, material, fato relevante, escrituracao e auditoria, contratacao de terceiros, deveres de administrador e gestor, liquidez e estresse, voto, vedacoes, substituicao de prestador, patrimonio liquido negativo, arquivo) e Anexo Normativo I (FIF: informes a CVM, verificacoes do administrador, taxa de performance, ativos no exterior, concentracao por emissor e modalidade, enquadramento, composicao por tipo, credito privado, margem).
+- Fonte: texto consolidado da Resolucao CVM 175 anexado pelo usuario (inclui alteracoes ate as Resolucoes CVM 181, 184, 187, 200 e 206). Redacoes antigas e vigentes aparecem duplicadas no consolidado; foi usada a vigente.
+- Escopo: Parte Geral e Anexo I. Anexos II (FIDC), III (FII), IV (FIP) e demais ficam para lote proprio. Limites numericos transcritos do texto oficial; metodo, evidencia, frequencia e criticidade sao interpretacao (todos `proposto`).
+- Aplicabilidade igual a da CVM 21 (gestor_recursos, administrador_fiduciario, banco_multiplo, dtvm, distribuidora). Nao ha `equivale_a` neste lote.
+
 ## [1.6.1] — 2026-11-17 (PATCH)
 
 - Preenchido `equivale_a` em 3 testes cuja obrigacao e a mesma de um teste PQO ja ativo: TST.CVM035.015 -> TST.BSM.PQO.CAD.001 (art. 21, regras de execucao de ordens), TST.CVM035.007 -> TST.BSM.PQO.CAD.013 (art. 6, par. 3, pessoas autorizadas a emitir ordens) e TST.CVM032.004 -> TST.BSM.PQO.CAD.008 (art. 10, contrato de custodia).
