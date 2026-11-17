@@ -6,6 +6,13 @@ Versionamento semantico do vocabulario canonico.
 - **MINOR** (x.Y.0): adicao de novos IDs (aditivo, nao quebra de-paras).
 - **MAJOR** (X.0.0): deprecacao de IDs em uso ou mudanca incompativel.
 
+## [1.9.0] — 2026-11-17 (MINOR)
+
+- B_TESTES_canonico ganha a coluna opcional `atividades` (lista com `|`, vazia = vale para qualquer atividade), no fim do cabecalho. Novo enum `atividade`: administracao_fiduciaria, gestao_recursos, distribuicao, intermediacao, custodia, escrituracao, consultoria.
+- Preenchida por norma_id: RES_CVM_21 e RES_CVM_175 -> gestao_recursos|administracao_fiduciaria; RES_CVM_32 -> custodia; RES_CVM_33 -> escrituracao; RES_CVM_35 -> intermediacao; RES_CVM_30 -> distribuicao|intermediacao|consultoria. Demais normas (inclusive CNSP 416 e testes PQO) ficam vazias. O recorte por atividade e interpretacao a validar.
+- `validar.py` rejeita valor de `atividades` fora do enum. `gap_regulatorio.analisar(..., atividades=None)`: None = todas (numeros anteriores inalterados); CLI `--atividades "a|b"`.
+- O CSV passou a ser gravado com a coluna nova em todas as linhas; nenhum outro campo mudou.
+
 ## [1.8.0] — 2026-11-17 (MINOR)
 
 - Adicionados 25 testes `proposto` da Resolucao CNSP 416/2021 (Sistema de Controles Internos, Estrutura de Gestao de Riscos e Auditoria Interna), TST.CNSP416.001..025, regulador SUSEP, aplicabilidade seguradora, previdencia e capitalizacao. Vigencia inicial 2022-01-03 (art. 46).

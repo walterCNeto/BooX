@@ -18,7 +18,7 @@ Introduz duas analises complementares:
      inferida ficam como 'sem_moldura' — candidatos a revisao.
 
 Uso:
-    python -m boox.gap_regulatorio <pasta_instancia> [--tipo <tipo>] [--out <arquivo.md>]
+    python -m boox.gap_regulatorio <pasta_instancia> [--tipo <tipo>] [--atividades "a|b"] [--out <arquivo.md>]
 """
 import csv, os, sys, datetime
 from collections import defaultdict
@@ -99,8 +99,10 @@ def _grupos_equivalencia(testes):
             if a != b: pai[max(a, b)] = min(a, b)
     return {i: raiz(i) for i in pai}
 
-def analisar(pasta, tipo_instituicao=None, hoje=None):
+def analisar(pasta, tipo_instituicao=None, hoje=None, atividades=None):
+    """atividades: None = todas (padrao, sem filtro); ou lista de valores do enum `atividade`."""
     hoje = hoje or datetime.date.today().isoformat()
+    ativ_set = set(atividades) if atividades is not None else None
     canon = _canonico_dir(pasta)
     if not canon: return {"erro":"Camada canonica nao encontrada"}
     testes = _ler(os.path.join(canon,"B_TESTES_canonico.csv"))
@@ -118,12 +120,18 @@ def analisar(pasta, tipo_instituicao=None, hoje=None):
     grupo = _grupos_equivalencia(testes)
 
     candidatos=[]; fora_vigencia=[]; excluidos_por_norma=defaultdict(int)
+    excluidos_por_atividade=defaultdict(int)
     for t in testes:
         if t.get("status") not in ("ativo","proposto"): continue
         if tipo_instituicao:
             ap = t.get("aplicabilidade","").strip()
             if ap and tipo_instituicao not in ap.split("|"):
                 excluidos_por_norma[t.get("norma_id","") or "?"] += 1
+                continue
+        if ativ_set is not None:
+            at = {a for a in t.get("atividades","").strip().split("|") if a}
+            if at and not (at & ativ_set):
+                excluidos_por_atividade[t.get("norma_id","") or "?"] += 1
                 continue
         motivo = _fora_de_vigencia(t, hoje)
         if motivo:
@@ -247,6 +255,9 @@ def analisar(pasta, tipo_instituicao=None, hoje=None):
     return {
         "tipo_instituicao":tipo_instituicao,
         "data_referencia":hoje,
+        "atividades":sorted(ativ_set) if ativ_set is not None else None,
+        "nao_aplicaveis_por_atividade":[{"norma_id":n,"testes":q}
+                                        for n,q in sorted(excluidos_por_atividade.items())],
         "testes_aplicaveis":len(aplicaveis),
         "cobertura_por_status":por_status,
         "pct_validado":pct_validado,
@@ -275,6 +286,8 @@ def render_md(rel, caminho):
     tipo=rel.get("tipo_instituicao") or "(todos os tipos)"
     L.append(f"Tipo de instituicao: **{tipo}**")
     L.append(f"Testes canonicos aplicaveis: **{rel['testes_aplicaveis']}** (data de referencia: {rel['data_referencia']})")
+    ats=rel.get("atividades")
+    L.append("Atividades consideradas: " + (", ".join(ats) if ats else "padrao (todas)"))
     if rel.get("segmento"):
         L.append(f"Segmento (informativo, nao altera a analise): **{rel['segmento']}**")
     L.append("")
@@ -370,6 +383,14 @@ def render_md(rel, caminho):
         L.append(f"- {x['norma_id']} — {x['testes_excluidos']} teste(s){tot}")
     if not ne: L.append("_Nenhuma._")
     L.append("")
+    na_at=rel["nao_aplicaveis_por_atividade"]
+    L.append(f"## Nao aplicaveis pela atividade — **{sum(x['testes'] for x in na_at)}**"); L.append("")
+    L.append("Testes cuja coluna `atividades` nao intersecta as atividades consideradas (nao contados).")
+    L.append("")
+    for x in na_at:
+        L.append(f"- {x['norma_id']} — {x['testes']} teste(s)")
+    if not na_at: L.append("_Nenhum._")
+    L.append("")
     L.append("---"); L.append("_Gerado pela engine de gap regulatorio do BooX._")
     open(caminho,"w",encoding="utf-8").write("\n".join(L))
 
@@ -381,7 +402,10 @@ def main():
     if "--tipo" in sys.argv: tipo=sys.argv[sys.argv.index("--tipo")+1]
     saida=os.path.join(pasta,"gap_regulatorio.md")
     if "--out" in sys.argv: saida=sys.argv[sys.argv.index("--out")+1]
-    rel=analisar(pasta,tipo_instituicao=tipo)
+    ativ=None
+    if "--atividades" in sys.argv:
+        ativ=[a for a in sys.argv[sys.argv.index("--atividades")+1].split("|") if a]
+    rel=analisar(pasta,tipo_instituicao=tipo,atividades=ativ)
     if "--segmento" in sys.argv: rel["segmento"]=sys.argv[sys.argv.index("--segmento")+1]
     render_md(rel,saida)
     if rel.get("erro"):

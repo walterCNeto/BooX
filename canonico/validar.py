@@ -88,6 +88,18 @@ def main():
             if fc and fc not in fr_ids:
                 erros.append(f"[testes] {x['id']}: fator_risco_canonico_id '{fc}' nao existe")
         ts_ids = {x["id"] for x in ts}
+        try:
+            sys.path.insert(0, os.path.join(AQUI, ".."))
+            from boox._campos import ENUM as _ENUM
+            enum_ativ = set(_ENUM["atividade"])
+        except Exception:
+            enum_ativ = None
+            avisos.append("[testes] enum atividade indisponivel (boox._campos); coluna atividades nao validada")
+        if enum_ativ is not None:
+            for x in ts:
+                for a in x.get("atividades","").strip().split("|"):
+                    if a and a not in enum_ativ:
+                        erros.append(f"[testes] {x['id']}: atividades '{a}' fora do enum atividade")
         import datetime as _dt
         def _data_ok(v):
             try: _dt.date.fromisoformat(v); return True

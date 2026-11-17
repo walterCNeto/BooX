@@ -6,6 +6,9 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/).
 
 ## [Não lançado]
 
+#### Aplicabilidade por atividade (canônico 1.9.0)
+- Coluna opcional `atividades` em B_TESTES_canonico e enum `atividade`; o gap aceita `atividades` (CLI `--atividades "a|b"`) e o app ganha o seletor "Atividades exercidas". Sem declarar atividades, os números não mudam. O app avisa que a cobertura SUSEP é parcial (apenas CNSP 416).
+
 #### Exemplo e catálogo (canônico 1.5.0)
 - Base `banco_modelo_sa` atualizada: normas vigentes (CMN 4.893 no lugar da 4.658 revogada), 28 execuções de testes do catálogo novo e evidências coerentes.
 - Catálogo canônico: 229 testes `proposto` (CVM 21, 30, 32, 33, 35, 161; ANBIMA suitability; CMN 4.893).

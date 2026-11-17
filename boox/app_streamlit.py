@@ -377,6 +377,18 @@ with tab_gap:
         tipos = campos_mod.ENUM.get("tipo_instituicao", ["corretora", "banco_multiplo"])
         default_idx = tipos.index("corretora") if "corretora" in tipos else 0
         tipo = st.selectbox("Tipo de instituição", tipos, index=default_idx)
+        _ativs = campos_mod.ENUM["atividade"]
+        atividades = st.multiselect(
+            "Atividades exercidas", _ativs, default=_ativs,
+            help="Padrão = todas. Restringir reduz os requisitos CVM aplicáveis, "
+                 "que dependem da atividade exercida (ex.: custódia, escrituração).",
+        )
+        if tipo in ("seguradora", "previdencia", "capitalizacao"):
+            st.warning(
+                "Cobertura SUSEP parcial: apenas CNSP 416 (controles internos, gestão de riscos "
+                "e auditoria interna). Capital, provisões, subscrição, ciberseguranca e PLD não "
+                "estão catalogados."
+            )
         segmento = st.selectbox(
             "Segmento (S1–S5)", ["S1", "S2", "S3", "S4", "S5"], index=3,
             help="Apenas informativo: é gravado no relatório e não altera a análise.",
@@ -392,7 +404,9 @@ with tab_gap:
             "Testes BSM PQO 2025 Cap 1 estão **ativos e rastreados**; seeds ainda estão como proposto."
         )
 
-    rel = analisar_gap(pasta, tipo_instituicao=tipo)
+    _todas = set(atividades) == set(campos_mod.ENUM["atividade"])
+    rel = analisar_gap(pasta, tipo_instituicao=tipo,
+                       atividades=None if _todas else atividades)
     rel["segmento"] = segmento
     if rel.get("erro"):
         st.error(rel["erro"])

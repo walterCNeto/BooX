@@ -238,6 +238,8 @@ ENUM.update({
                          "seguradora","previdencia","capitalizacao","cooperativa","consorcio",
                          "administrador_fiduciario","gestor_recursos","fintech_pagamentos",
                          "instituicao_pagamento","fintech_credito"],
+    "atividade": ["administracao_fiduciaria","gestao_recursos","distribuicao","intermediacao",
+                  "custodia","escrituracao","consultoria"],
     "criticidade_teste": ["alta","media","baixa"],
     "metodo_verificacao": ["revisao_documental","teste_amostral","observacao","reexecucao",
                            "entrevista","analitico","automatizado"],
@@ -271,6 +273,7 @@ BOOKS["B_TESTES_canonico"] = {
      ("vigencia_inicio","OPC","data","Inicio de vigencia do requisito (AAAA-MM-DD)"),
      ("vigencia_fim","OPC","data","Fim de vigencia do requisito (AAAA-MM-DD)"),
      ("revogada_por","OPC","texto","Norma/dispositivo que revogou o requisito"),
+     ("atividades","OPC","texto","Atividades a que o teste se aplica (lista com |, valores do enum atividade); vazio = qualquer atividade"),
    ],
 }
 
