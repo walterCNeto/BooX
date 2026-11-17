@@ -6,6 +6,14 @@ Versionamento semantico do vocabulario canonico.
 - **MINOR** (x.Y.0): adicao de novos IDs (aditivo, nao quebra de-paras).
 - **MAJOR** (X.0.0): deprecacao de IDs em uso ou mudanca incompativel.
 
+## [1.4.0] — 2026-11-17 (MINOR)
+
+- Adicionados 71 testes `TST.CIRC3978.001-071` (CIRC_BCB_3978, PLD-FT), todos `proposto`.
+- Fonte: texto vigente da Circ. BCB 3.978/2020 com redacoes das Res. BCB 119/2021, 282/2022, 344/2023 e 591/2026 (indicadas no campo `artigo`).
+- Aplicabilidade: instituicoes autorizadas pelo BCB (art. 1), exceto seguradora, previdencia, capitalizacao, administrador_fiduciario e gestor_recursos. Recorte por tipo e interpretacao a validar.
+- Art. 23-A (dispensa em renegociacao de dividas) e art. 24 par. 3 (excecoes de beneficiario final) tratados dentro dos testes correspondentes, sem teste proprio.
+- Frequencia "bienal" nao existe no vocabulario: revisao de dois anos registrada na descricao com frequencia "anual".
+
 ## [1.3.0] — 2026-11-17 (MINOR)
 
 - Adicionados 37 testes `TST.CMN4557.001-037` (RES_CMN_4557, arts. 33 a 36 e 56), todos `proposto`.
