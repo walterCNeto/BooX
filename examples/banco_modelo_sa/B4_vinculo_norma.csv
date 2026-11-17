@@ -1,9 +1,11 @@
 id;norma_id;alvo_tipo;alvo_id;tipo_vinculo;notas
 1;RES_CMN_4557;risco;RL-06;primaria;
-2;RES_BCB_265;risco;RL-06;primaria;
-3;RES_CMN_4658;risco;RL-07;primaria;
-4;LEI_13709;risco;RL-14;primaria;
-5;LEI_9613;risco;RL-13;primaria;
+2;RES_CMN_4968;risco;RL-11;primaria;
+3;RES_CMN_4893;risco;RL-07;primaria;
+4;RES_CMN_4893;risco;RL-09;secundaria;Arts. 19 e 20: continuidade para incidentes ciberneticos e terceiros
+5;RES_BCB_265;risco;RL-06;primaria;
 6;CIRC_BCB_3978;risco;RL-13;primaria;
-7;RES_CVM_30;risco;RL-12;primaria;
-8;RES_CMN_4753;risco;RL-09;primaria;
+7;LEI_9613;risco;RL-13;primaria;
+8;LEI_13709;risco;RL-14;primaria;
+9;RES_CVM_30;risco;RL-12;primaria;
+10;ANBIMA_SUIT_01_2019;risco;RL-12;secundaria;Laudo ANBIMA anual

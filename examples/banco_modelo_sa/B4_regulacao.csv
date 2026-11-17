@@ -1,9 +1,10 @@
 id;tipo;numero;ano;regulador;titulo;ementa;status;url_oficial
-RES_CMN_4557;res_cmn;4557;2017;CMN;Gerenciamento de riscos e capital;Estrutura de gerenciamento de riscos;vigente;
+RES_CMN_4557;res_cmn;4557;2017;CMN;Gerenciamento de riscos e capital;Estrutura de gerenciamento continuo e integrado de riscos e capital;vigente;
+RES_CMN_4968;res_cmn;4968;2021;CMN;Sistema de controles internos;Sistema de controles internos (substituiu a Res. CMN 2.554);vigente;
+RES_CMN_4893;res_cmn;4893;2021;CMN;Seguranca cibernetica e nuvem;Politica de seguranca cibernetica e contratacao de nuvem (revogou a Res. CMN 4.658);vigente;
 RES_BCB_265;res_bcb;265;2022;BCB;Risco operacional;Gerenciamento continuo de risco operacional;vigente;
-RES_CMN_4658;res_cmn;4658;2018;CMN;Politica de seguranca cibernetica;Ciberseguranca e nuvem;vigente;
+CIRC_BCB_3978;circ_bcb;3978;2020;BCB;PLD-FT;Politica, procedimentos e controles de prevencao a lavagem de dinheiro;vigente;
+LEI_9613;lei;9613;1998;Congresso;Lavagem de dinheiro;Crimes de lavagem ou ocultacao de bens, direitos e valores;vigente;
 LEI_13709;lei;13709;2018;Congresso;LGPD;Protecao de dados pessoais;vigente;
-LEI_9613;lei;9613;1998;Congresso;Lavagem de dinheiro;PLD-FT;vigente;
-CIRC_BCB_3978;circ_bcb;3978;2020;BCB;PLD-FT;Politica de prevencao a lavagem;vigente;
-RES_CVM_30;res_cvm;30;2021;CVM;Suitability;Dever de verificacao de adequacao;vigente;
-RES_CMN_4753;res_cmn;4753;2019;CMN;Continuidade de negocios;Politica de continuidade;vigente;
+RES_CVM_30;res_cvm;30;2021;CVM;Suitability;Dever de verificacao de adequacao dos produtos ao perfil do cliente;vigente;
+ANBIMA_SUIT_01_2019;autorregulacao;1;2019;ANBIMA;Regras e Procedimentos de Suitability;Autorregulacao de suitability e Laudo ANBIMA;vigente;

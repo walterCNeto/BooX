@@ -333,26 +333,29 @@ def g_b8():
 # ---------------------------------------------------------------------
 def g_b4():
     N=[
-     ["RES_CMN_4557","res_cmn","4557","2017","CMN","Gerenciamento de riscos e capital","Estrutura de gerenciamento de riscos","vigente",""],
+     ["RES_CMN_4557","res_cmn","4557","2017","CMN","Gerenciamento de riscos e capital","Estrutura de gerenciamento continuo e integrado de riscos e capital","vigente",""],
+     ["RES_CMN_4968","res_cmn","4968","2021","CMN","Sistema de controles internos","Sistema de controles internos (substituiu a Res. CMN 2.554)","vigente",""],
+     ["RES_CMN_4893","res_cmn","4893","2021","CMN","Seguranca cibernetica e nuvem","Politica de seguranca cibernetica e contratacao de nuvem (revogou a Res. CMN 4.658)","vigente",""],
      ["RES_BCB_265","res_bcb","265","2022","BCB","Risco operacional","Gerenciamento continuo de risco operacional","vigente",""],
-     ["RES_CMN_4658","res_cmn","4658","2018","CMN","Politica de seguranca cibernetica","Ciberseguranca e nuvem","vigente",""],
+     ["CIRC_BCB_3978","circ_bcb","3978","2020","BCB","PLD-FT","Politica, procedimentos e controles de prevencao a lavagem de dinheiro","vigente",""],
+     ["LEI_9613","lei","9613","1998","Congresso","Lavagem de dinheiro","Crimes de lavagem ou ocultacao de bens, direitos e valores","vigente",""],
      ["LEI_13709","lei","13709","2018","Congresso","LGPD","Protecao de dados pessoais","vigente",""],
-     ["LEI_9613","lei","9613","1998","Congresso","Lavagem de dinheiro","PLD-FT","vigente",""],
-     ["CIRC_BCB_3978","circ_bcb","3978","2020","BCB","PLD-FT","Politica de prevencao a lavagem","vigente",""],
-     ["RES_CVM_30","res_cvm","30","2021","CVM","Suitability","Dever de verificacao de adequacao","vigente",""],
-     ["RES_CMN_4753","res_cmn","4753","2019","CMN","Continuidade de negocios","Politica de continuidade","vigente",""],
+     ["RES_CVM_30","res_cvm","30","2021","CVM","Suitability","Dever de verificacao de adequacao dos produtos ao perfil do cliente","vigente",""],
+     ["ANBIMA_SUIT_01_2019","autorregulacao","1","2019","ANBIMA","Regras e Procedimentos de Suitability","Autorregulacao de suitability e Laudo ANBIMA","vigente",""],
     ]
     escrever("B4_regulacao.csv",
      ["id","tipo","numero","ano","regulador","titulo","ementa","status","url_oficial"],N)
     V=[
      [1,"RES_CMN_4557","risco","RL-06","primaria",""],
-     [2,"RES_BCB_265","risco","RL-06","primaria",""],
-     [3,"RES_CMN_4658","risco","RL-07","primaria",""],
-     [4,"LEI_13709","risco","RL-14","primaria",""],
-     [5,"LEI_9613","risco","RL-13","primaria",""],
+     [2,"RES_CMN_4968","risco","RL-11","primaria",""],
+     [3,"RES_CMN_4893","risco","RL-07","primaria",""],
+     [4,"RES_CMN_4893","risco","RL-09","secundaria","Arts. 19 e 20: continuidade para incidentes ciberneticos e terceiros"],
+     [5,"RES_BCB_265","risco","RL-06","primaria",""],
      [6,"CIRC_BCB_3978","risco","RL-13","primaria",""],
-     [7,"RES_CVM_30","risco","RL-12","primaria",""],
-     [8,"RES_CMN_4753","risco","RL-09","primaria",""],
+     [7,"LEI_9613","risco","RL-13","primaria",""],
+     [8,"LEI_13709","risco","RL-14","primaria",""],
+     [9,"RES_CVM_30","risco","RL-12","primaria",""],
+     [10,"ANBIMA_SUIT_01_2019","risco","RL-12","secundaria","Laudo ANBIMA anual"],
     ]
     escrever("B4_vinculo_norma.csv",["id","norma_id","alvo_tipo","alvo_id","tipo_vinculo","notas"],V)
 
@@ -413,5 +416,51 @@ def g_bmap():
      ["id","dominio","termo_local","termo_local_id","canonico_id","confianca_ia",
       "metodo","justificativa","status","aprovado_por","data_revisao","notas"],L)
 
-g_b5(); g_b2(); g_b10(); g_b8(); g_b4(); g_b9(); g_b7(); g_bmap()
+
+# ---------------------------------------------------------------------
+# B_TESTES_execucao + B_EVIDENCIA (testes do canonico 1.5.0)
+# ---------------------------------------------------------------------
+def g_testes():
+    E=[  # id, teste, controle, resultado, data, por, evidencia, freq_real, apontamento, obs
+     ("TST.CMN4968.001","CT-016","conforme","2026-03-31","Controles Internos","EV-101","trimestral","","Pauta semanal cobre os controles relevantes"),
+     ("TST.CMN4968.019","CT-020","parcialmente_conforme","2026-04-15","Controles Internos","EV-102","semestral","AP-2025-0016","Segregacao revisada em 6 de 8 areas"),
+     ("TST.CMN4968.030","CT-009","nao_conforme","2026-05-12","Nucleo Cyber","EV-103","anual","AP-2025-0001","Teste de seguranca anual sem cobertura de sistemas legados"),
+     ("TST.CMN4968.031","CT-010","conforme","2026-06-10","Continuidade","EV-104","anual","","DR testado com RTO dentro do alvo"),
+     ("TST.CMN4968.037","CT-016","conforme","2026-04-30","Controles Internos","EV-105","anual","","Relatorio anual entregue no prazo"),
+     ("TST.CMN4557.001","CT-019","parcialmente_conforme","2026-05-20","Risco Operacional","EV-106","anual","AP-2025-0019","Politica existe, avaliacao de 4 de 9 fornecedores criticos pendente"),
+     ("TST.CMN4557.019","CT-019","nao_conforme","2026-05-20","Risco Operacional","EV-107","anual","AP-2025-0019","2 contratos de TI sem clausula de acesso do BCB"),
+     ("TST.CMN4893.001","CT-008","conforme","2026-02-27","Nucleo Cyber","EV-108","anual","","Politica aprovada pelo conselho e revisada"),
+     ("TST.CMN4893.003","CT-008","parcialmente_conforme","2026-04-22","Nucleo Cyber","EV-109","trimestral","AP-2025-0003","Varreduras em dia, 18% das criticas sem correcao no prazo"),
+     ("TST.CMN4893.004","CT-008","nao_executado","2026-06-30","Nucleo Cyber","","anual","","Contratacao do teste de intrusao independente em andamento"),
+     ("TST.CMN4893.005","CT-009","nao_conforme","2026-04-15","Nucleo Cyber","EV-103","trimestral","AP-2025-0001","3 contas administrativas sem MFA"),
+     ("TST.CMN4893.008","CT-015","conforme","2026-04-20","Nucleo Cyber","EV-110","semestral","","Criptografia e DLP operando com regras vigentes"),
+     ("TST.CMN4893.014","CT-008","conforme","2026-03-30","Nucleo Cyber","EV-111","anual","","Relatorio apresentado ao conselho antes de 31 de marco"),
+     ("TST.CMN4893.016","CT-019","parcialmente_conforme","2026-05-05","Risco Operacional","EV-112","por_evento","AP-2025-0019","Due diligence documentada em 2 de 3 contratacoes de nuvem"),
+     ("TST.CMN4893.018","CT-016","conforme","2026-05-08","Compliance","EV-113","por_evento","","Comunicacao ao BCB em ate dez dias"),
+     ("TST.CMN4893.021","CT-010","conforme","2026-06-10","Continuidade","EV-104","anual","","Cenarios de incidente cibernetico incluidos no teste de DR"),
+     ("TST.CIRC3978.001","CT-006","conforme","2026-01-31","DPLD","EV-114","anual","","Politica PLD-FT revisada e aprovada"),
+     ("TST.CIRC3978.019","CT-007","parcialmente_conforme","2026-03-10","DPLD","EV-115","continuo","AP-2025-0004","80% da amostra com validacao de identidade adequada"),
+     ("TST.CIRC3978.025","CT-007","conforme","2026-03-10","DPLD","EV-115","continuo","","Tratamento de PEP aderente na amostra"),
+     ("TST.CIRC3978.049","CT-006","nao_conforme","2026-05-05","DPLD","EV-116","mensal","AP-2025-0006","12% dos alertas de alta prioridade excederam 45 dias"),
+     ("TST.CIRC3978.055","CT-006","conforme","2026-05-31","DPLD","EV-117","mensal","","Comunicacoes em especie enviadas no prazo"),
+     ("TST.CIRC3978.067","CT-006","conforme","2026-04-25","DPLD","EV-118","anual","","Relatorio de efetividade enviado no prazo"),
+     ("TST.CVM030.001","CT-012","parcialmente_conforme","2026-04-28","Compliance","EV-119","continuo","AP-2025-0009","2 vendas em 40 sem verificacao de adequacao registrada"),
+     ("TST.CVM030.015","CT-012","nao_conforme","2026-05-18","Compliance","EV-120","mensal","AP-2025-0011","7% dos perfis com mais de cinco anos"),
+     ("TST.CVM030.013","CT-016","conforme","2026-04-30","Compliance","EV-121","anual","","Relatorio do diretor entregue ate o fim de abril"),
+     ("TST.ANBSUIT.003","CT-012","parcialmente_conforme","2026-05-18","Compliance","EV-120","mensal","AP-2025-0011","Perfis desatualizados acima da tolerancia interna"),
+     ("TST.ANBSUIT.015","CT-016","conforme","2026-03-28","Compliance","EV-122","anual","","Laudo enviado ate o ultimo dia util de marco e revisado por area independente"),
+     ("TST.ANBSUIT.017","CT-012","nao_conforme","2026-03-20","Compliance","EV-122","anual","AP-2025-0010","Indicadores do laudo nao reconciliam com o sistema de cadastro"),
+    ]
+    L=[[f"EXEC-2026-{i:03d}",*e] for i,e in enumerate(E,1)]
+    escrever("B_TESTES_execucao.csv",
+     ["id","teste_canonico_id","controle_id","resultado_ultimo","data_ultimo","executado_por",
+      "evidencia_id","frequencia_real","apontamento_id","observacoes"],L)
+    ev={}
+    for e in E:
+        if e[5] and e[5] not in ev: ev[e[5]]=e
+    EV=[[k,"relatorio",f"Evidencia do teste {e[0]}",e[3],"GED Controles",e[4],e[8],""]
+        for k,e in sorted(ev.items())]
+    escrever("B_EVIDENCIA.csv",["id","tipo","titulo","data","local","responsavel","descricao","hash"],EV)
+
+g_b5(); g_b2(); g_b10(); g_b8(); g_b4(); g_b9(); g_b7(); g_bmap(); g_testes()
 print("Banco Modelo S.A. gerado com sucesso.")
