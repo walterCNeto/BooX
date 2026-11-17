@@ -377,7 +377,15 @@ with tab_gap:
         tipos = campos_mod.ENUM.get("tipo_instituicao", ["corretora", "banco_multiplo"])
         default_idx = tipos.index("corretora") if "corretora" in tipos else 0
         tipo = st.selectbox("Tipo de instituição", tipos, index=default_idx)
+        segmento = st.selectbox(
+            "Segmento (S1–S5)", ["S1", "S2", "S3", "S4", "S5"], index=3,
+            help="Apenas informativo: é gravado no relatório e não altera a análise.",
+        )
     with col_info:
+        st.warning(
+            "O BooX mede **cobertura**, não prova conformidade. Atender um teste aqui "
+            "não substitui validação por auditoria, compliance ou pelo regulador."
+        )
         st.info(
             "O gap regulatório cruza os **testes canônicos aplicáveis** ao tipo de instituição "
             "com o que o banco **declara executar** (B_TESTES_execucao). "
@@ -385,9 +393,23 @@ with tab_gap:
         )
 
     rel = analisar_gap(pasta, tipo_instituicao=tipo)
+    rel["segmento"] = segmento
     if rel.get("erro"):
         st.error(rel["erro"])
     else:
+        with tempfile.TemporaryDirectory() as _tmp_gap:
+            _md_path = os.path.join(_tmp_gap, "gap_regulatorio.md")
+            render_gap_md(rel, _md_path)
+            _md_gap = open(_md_path, encoding="utf-8").read()
+        st.download_button("⬇️ Baixar relatório (Markdown)", data=_md_gap,
+                           file_name="gap_regulatorio.md", mime="text/markdown")
+        _pv = rel["cobertura_por_status"]
+        st.caption(
+            f"Validados (ativos): **{rel['pct_validado']}%** · "
+            f"ativos {_pv['ativo']['total']} · propostos {_pv['proposto']['total']} · "
+            f"fora de vigência {len(rel['testes_fora_vigencia'])} · "
+            f"normas excluídas {len(rel['normas_excluidas'])}"
+        )
         c1, c2, c3, c4 = st.columns(4)
         c1.markdown(f'<div class="metric-tile"><p class="lab">Testes aplicáveis</p><p class="val">{rel["testes_aplicaveis"]}</p></div>', unsafe_allow_html=True)
         c2.markdown(f'<div class="metric-tile"><p class="lab">Requisitos não atendidos</p><p class="val">{len(rel["requisitos_nao_atendidos"])}</p></div>', unsafe_allow_html=True)

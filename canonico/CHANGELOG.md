@@ -6,6 +6,12 @@ Versionamento semantico do vocabulario canonico.
 - **MINOR** (x.Y.0): adicao de novos IDs (aditivo, nao quebra de-paras).
 - **MAJOR** (X.0.0): deprecacao de IDs em uso ou mudanca incompativel.
 
+## [1.6.0] — 2026-11-17 (MINOR)
+
+- B_TESTES_canonico ganha 4 colunas opcionais, vazias por padrao: `equivale_a` (ID de outro teste que cobre o mesmo requisito), `vigencia_inicio`, `vigencia_fim` (AAAA-MM-DD) e `revogada_por`. Nenhum teste existente foi alterado; nenhum texto de artigo ou descricao mudou.
+- `validar.py`: `equivale_a` deve apontar para ID existente (e diferente do proprio), nao pode formar ciclo; datas de vigencia em AAAA-MM-DD e fim >= inicio.
+- `gap_regulatorio`: testes ligados por `equivale_a` contam uma vez (representante = menor ID); testes fora de vigencia saem da contagem e vao para bloco proprio. Os vinculos `equivale_a` entre testes PQO, sementes e CVM ainda precisam ser preenchidos (ver 1.5.0).
+
 ## [1.5.0] — 2026-11-17 (MINOR)
 
 - Adicionados 229 testes `proposto` do corpus CVM, ANBIMA e CMN 4.893: TST.CVM030 (19), TST.CVM032 (26), TST.CVM033 (34), TST.CVM161 (22), TST.CVM035 (52), TST.CVM021 (33), TST.ANBSUIT (19) e TST.CMN4893 (24).

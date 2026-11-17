@@ -20,7 +20,7 @@ Introduz duas analises complementares:
 Uso:
     python -m boox.gap_regulatorio <pasta_instancia> [--tipo <tipo>] [--out <arquivo.md>]
 """
-import csv, os, sys
+import csv, os, sys, datetime
 from collections import defaultdict
 
 def _ler(c):
@@ -54,18 +54,53 @@ MOLDURA_POR_R0 = {
     "R0.U.9":  ("CMN 4.557", "Gerenciamento de resiliencia operacional"),
     "R0.U.10": ("CMN 4.557", "Gerenciamento de risco de fornecedores e terceiros"),
     "R0.U.11": ("CMN 4.557", "Gerenciamento de risco de conformidade"),
-    "R0.U.12": ("CMN 4.860", "Gestao de ouvidoria e conduta"),
-    "R0.U.13": ("Lei 9.613", "Prevencao a lavagem de dinheiro e FT"),
+    "R0.U.12": ("CMN 4.860", "Gestao de ouvidoria e conduta"),  # distribuidores: ver _moldura_para_r0
+    "R0.U.13": ("Circ. BCB 3.978", "Prevencao a lavagem de dinheiro e FT (PLD-FT)"),
     "R0.U.14": ("LGPD (Lei 13.709)", "Protecao de dados pessoais"),
 }
 
-def _moldura_para_r0(r0):
-    """Resolve R0 ou qualquer subnivel R1-R4 para a mesma moldura do R0."""
+# Tipos fora do escopo da CMN 4.893 (art. 1, par. unico, Res. CMN 5.117/2024).
+TIPOS_FORA_CMN_4893 = {"corretora", "dtvm", "distribuidora", "consorcio", "instituicao_pagamento"}
+# Tipos que distribuem produtos (suitability: Res. CVM 30 + ANBIMA).
+TIPOS_DISTRIBUIDORES = {"corretora", "dtvm", "distribuidora", "banco_multiplo", "banco_comercial"}
+# Tipos fora do escopo da Circ. BCB 3.978 (ver CHANGELOG 1.4.0).
+TIPOS_FORA_CIRC_3978 = {"seguradora", "previdencia", "capitalizacao",
+                        "administrador_fiduciario", "gestor_recursos"}
+
+def _moldura_para_r0(r0, tipo=None):
+    """Resolve R0 ou qualquer subnivel R1-R4 para a moldura do R0, ajustada ao tipo."""
     if not r0: return None
     r0_raiz = ".".join(r0.split(".")[:3]) if r0.count(".") >= 2 else r0
+    if r0_raiz == "R0.U.7" and tipo in TIPOS_FORA_CMN_4893:
+        return ("Res. CVM 35 art. 45", "Seguranca cibernetica (CMN 4.893 nao se aplica ao tipo)")
+    if r0_raiz == "R0.U.12" and tipo in TIPOS_DISTRIBUIDORES:
+        return ("Res. CVM 30 + ANBIMA Suitability", "Suitability e conduta na distribuicao")
+    if r0_raiz == "R0.U.13" and tipo in TIPOS_FORA_CIRC_3978:
+        return ("Lei 9.613", "Prevencao a lavagem de dinheiro e FT (Circ. BCB 3.978 nao se aplica ao tipo)")
     return MOLDURA_POR_R0.get(r0_raiz)
 
-def analisar(pasta, tipo_instituicao=None):
+def _fora_de_vigencia(t, hoje):
+    vi = t.get("vigencia_inicio", "").strip(); vf = t.get("vigencia_fim", "").strip()
+    if vf and vf < hoje: return f"vigencia encerrada em {vf}"
+    if vi and vi > hoje: return f"vigencia inicia em {vi}"
+    return None
+
+def _grupos_equivalencia(testes):
+    """Union-find sobre equivale_a: id -> raiz (menor id) do grupo."""
+    pai = {t["id"]: t["id"] for t in testes}
+    def raiz(x):
+        while pai[x] != x:
+            pai[x] = pai[pai[x]]; x = pai[x]
+        return x
+    for t in testes:
+        eq = t.get("equivale_a", "").strip()
+        if eq and eq in pai:
+            a, b = raiz(t["id"]), raiz(eq)
+            if a != b: pai[max(a, b)] = min(a, b)
+    return {i: raiz(i) for i in pai}
+
+def analisar(pasta, tipo_instituicao=None, hoje=None):
+    hoje = hoje or datetime.date.today().isoformat()
     canon = _canonico_dir(pasta)
     if not canon: return {"erro":"Camada canonica nao encontrada"}
     testes = _ler(os.path.join(canon,"B_TESTES_canonico.csv"))
@@ -80,17 +115,46 @@ def analisar(pasta, tipo_instituicao=None):
                       for m in bmap if m.get("dominio") == "risco"
                       and m.get("status") in ("aprovado", "ajustado")}
 
-    aplicaveis=[]
+    grupo = _grupos_equivalencia(testes)
+
+    candidatos=[]; fora_vigencia=[]; excluidos_por_norma=defaultdict(int)
     for t in testes:
         if t.get("status") not in ("ativo","proposto"): continue
         if tipo_instituicao:
             ap = t.get("aplicabilidade","").strip()
-            if ap and tipo_instituicao not in ap.split("|"): continue
-        aplicaveis.append(t)
+            if ap and tipo_instituicao not in ap.split("|"):
+                excluidos_por_norma[t.get("norma_id","") or "?"] += 1
+                continue
+        motivo = _fora_de_vigencia(t, hoje)
+        if motivo:
+            fora_vigencia.append({"teste_id":t["id"],"norma_id":t.get("norma_id",""),
+                                  "titulo":t.get("titulo",""),"motivo":motivo,
+                                  "revogada_por":t.get("revogada_por","")})
+            continue
+        candidatos.append(t)
+
+    # equivale_a: um unico representante (menor id) por grupo
+    por_grupo = defaultdict(list)
+    for t in candidatos: por_grupo[grupo[t["id"]]].append(t)
+    aplicaveis=[]; equivalentes_agrupados=[]
+    for lst_g in por_grupo.values():
+        lst_g.sort(key=lambda x: x["id"])
+        aplicaveis.append(lst_g[0])
+        if len(lst_g) > 1:
+            equivalentes_agrupados.append({"representante":lst_g[0]["id"],
+                                           "equivalentes":[x["id"] for x in lst_g[1:]]})
+    aplicaveis.sort(key=lambda x: x["id"])
+    rep_do_grupo = {g: lst_g[0]["id"] for g, lst_g in por_grupo.items()}
+    norma_aplicavel = {t.get("norma_id","") or "?" for t in aplicaveis}
+    normas_excluidas = [{"norma_id":n,"testes_excluidos":q,"totalmente_excluida":n not in norma_aplicavel}
+                        for n, q in sorted(excluidos_por_norma.items())]
 
     exec_por_t=defaultdict(list)
     for e in execs:
-        exec_por_t[e.get("teste_canonico_id","")].append(e)
+        tid_e = e.get("teste_canonico_id","")
+        # execucao de qualquer teste equivalente vale para o representante do grupo
+        alvo = rep_do_grupo.get(grupo.get(tid_e), tid_e)
+        exec_por_t[alvo].append(e)
 
     resultados=[]
     for t in aplicaveis:
@@ -111,6 +175,7 @@ def analisar(pasta, tipo_instituicao=None):
             "risco_r0":t.get("risco_r0_canonico",""),"fator_risco":t.get("fator_risco_canonico_id",""),
             "controle_esperado":t.get("controle_esperado_texto",""),
             "estado":estado,"resultado":res,"controle_id_real":cid,
+            "status_teste":t.get("status",""),
         })
 
     # --- gaps criticos (compat: criticidade alta sem atendimento) ---
@@ -134,6 +199,16 @@ def analisar(pasta, tipo_instituicao=None):
         elif r["estado"]=="nao_aplicavel_declarado": por_reg[reg]["na"]+=1
         else: por_reg[reg]["sem_execucao"]+=1
 
+    # --- proposto x ativo (validado) ---
+    por_status={s:{"total":0,"atendido":0,"parcial":0,"nao_conforme":0,"sem_execucao":0,"na":0}
+                for s in ("ativo","proposto")}
+    chave_estado={"atendido":"atendido","parcial":"parcial","nao_conforme":"nao_conforme",
+                  "nao_aplicavel_declarado":"na"}
+    for r in resultados:
+        b=por_status[r["status_teste"]]; b["total"]+=1
+        b[chave_estado.get(r["estado"],"sem_execucao")]+=1
+    pct_validado=round(100*por_status["ativo"]["total"]/len(resultados),1) if resultados else 0.0
+
     # --- controles internos (nao regulatorios) + inferencia por moldura ---
     ctrl_em_exec={e.get("controle_id","") for e in execs if _preenchido(e.get("controle_id"))}
     nao_mapeados = [c for c in controles if c["id"] not in ctrl_em_exec]
@@ -142,7 +217,7 @@ def analisar(pasta, tipo_instituicao=None):
     for c in nao_mapeados:
         risco_local = c.get("risco_id","")
         r0 = canon_by_local.get(risco_local, "")
-        moldura = _moldura_para_r0(r0)
+        moldura = _moldura_para_r0(r0, tipo_instituicao)
         internos_classificados.append({
             "id": c["id"],
             "acao": c.get("acao",""),
@@ -171,7 +246,13 @@ def analisar(pasta, tipo_instituicao=None):
 
     return {
         "tipo_instituicao":tipo_instituicao,
+        "data_referencia":hoje,
         "testes_aplicaveis":len(aplicaveis),
+        "cobertura_por_status":por_status,
+        "pct_validado":pct_validado,
+        "testes_fora_vigencia":fora_vigencia,
+        "equivalentes_agrupados":equivalentes_agrupados,
+        "normas_excluidas":normas_excluidas,
         "testes_avaliados":resultados,
         "cobertura_por_regulador":dict(por_reg),
         "gaps_criticos":gaps_criticos,
@@ -193,7 +274,28 @@ def render_md(rel, caminho):
         open(caminho,"w",encoding="utf-8").write("\n".join(L)); return
     tipo=rel.get("tipo_instituicao") or "(todos os tipos)"
     L.append(f"Tipo de instituicao: **{tipo}**")
-    L.append(f"Testes canonicos aplicaveis: **{rel['testes_aplicaveis']}**"); L.append("")
+    L.append(f"Testes canonicos aplicaveis: **{rel['testes_aplicaveis']}** (data de referencia: {rel['data_referencia']})")
+    if rel.get("segmento"):
+        L.append(f"Segmento (informativo, nao altera a analise): **{rel['segmento']}**")
+    L.append("")
+    L.append("> O BooX mede cobertura, nao prova conformidade.")
+    L.append("")
+    ps=rel["cobertura_por_status"]
+    L.append("## Status do teste: ativo (validado) x proposto"); L.append("")
+    L.append(f"Percentual validado (ativos / aplicaveis): **{rel['pct_validado']}%**"); L.append("")
+    L.append("| Status | Total | Atendido | Parcial | Nao conforme | Sem execucao | N/A |")
+    L.append("|--------|-------|----------|---------|--------------|--------------|-----|")
+    for st in ("ativo","proposto"):
+        s=ps[st]
+        pct=round(100*s["atendido"]/s["total"],1) if s["total"] else 0
+        L.append(f"| **{st}** | {s['total']} | {s['atendido']} ({pct}%) | {s['parcial']} | {s['nao_conforme']} | {s['sem_execucao']} | {s['na']} |")
+    L.append("")
+    L.append("Testes `proposto` sao sementes ainda nao validados: atende-los nao prova conformidade.")
+    L.append("")
+    if rel["equivalentes_agrupados"]:
+        n=sum(len(g["equivalentes"]) for g in rel["equivalentes_agrupados"])
+        L.append(f"Testes equivalentes (`equivale_a`) contados uma vez: {n} deduplicado(s) em {len(rel['equivalentes_agrupados'])} grupo(s).")
+        L.append("")
 
     L.append("## Cobertura por regulador"); L.append("")
     L.append("| Regulador | Total | Atendido | Parcial | Nao conforme | Sem execucao | N/A |")
@@ -250,6 +352,24 @@ def render_md(rel, caminho):
     for f,s in fd:
         L.append(f"- {f} (testes: {s['total_testes']} · atendidos: {s['testes_atendidos']})")
     L.append("")
+    fv=rel["testes_fora_vigencia"]
+    L.append(f"## Fora de vigencia — **{len(fv)}**"); L.append("")
+    L.append(f"Testes nao contados: vigencia_fim anterior a {rel['data_referencia']} ou vigencia_inicio futura.")
+    L.append("")
+    for x in fv:
+        rv=f" · revogada por {x['revogada_por']}" if x["revogada_por"] else ""
+        L.append(f"- {x['teste_id']} ({x['norma_id']}) — {x['titulo']} [{x['motivo']}{rv}]")
+    if not fv: L.append("_Nenhum._")
+    L.append("")
+    ne=rel["normas_excluidas"]
+    L.append(f"## Normas excluidas para o tipo de instituicao — **{len(ne)}**"); L.append("")
+    L.append("Normas com testes cuja aplicabilidade nao inclui o tipo informado (nao contados).")
+    L.append("")
+    for x in ne:
+        tot=" (norma inteira)" if x["totalmente_excluida"] else " (parcial)"
+        L.append(f"- {x['norma_id']} — {x['testes_excluidos']} teste(s){tot}")
+    if not ne: L.append("_Nenhuma._")
+    L.append("")
     L.append("---"); L.append("_Gerado pela engine de gap regulatorio do BooX._")
     open(caminho,"w",encoding="utf-8").write("\n".join(L))
 
@@ -262,11 +382,13 @@ def main():
     saida=os.path.join(pasta,"gap_regulatorio.md")
     if "--out" in sys.argv: saida=sys.argv[sys.argv.index("--out")+1]
     rel=analisar(pasta,tipo_instituicao=tipo)
+    if "--segmento" in sys.argv: rel["segmento"]=sys.argv[sys.argv.index("--segmento")+1]
     render_md(rel,saida)
     if rel.get("erro"):
         print("ERRO:",rel["erro"]); sys.exit(1)
     print(f"Gap regulatorio gerado em: {saida}")
-    print(f"  Testes aplicaveis: {rel['testes_aplicaveis']}")
+    print(f"  Testes aplicaveis: {rel['testes_aplicaveis']} (validados/ativos: {rel['pct_validado']}%)")
+    print(f"  Fora de vigencia: {len(rel['testes_fora_vigencia'])}  |  Normas excluidas: {len(rel['normas_excluidas'])}")
     print(f"  Requisitos nao atendidos: {len(rel['requisitos_nao_atendidos'])}")
     print(f"  Gaps criticos (alta): {len(rel['gaps_criticos'])}")
     print(f"  Controles internos (nao regulatorios): {len(rel['controles_internos_nao_mapeados'])}")

@@ -17,7 +17,8 @@ Uso:
   python curar.py deprecar riscos --id R0.U.21 --substituido_por R0.U.6
   python curar.py adicionar areas --id ORG.TEC.OPF --nome "Open Finance" --campos dominio_id=ORG.TEC descricao="Integracao Open Finance"
 
-Depois de curar, rode: python validar.py
+Testes aceitam tambem: equivale_a=<id> vigencia_inicio=AAAA-MM-DD vigencia_fim=AAAA-MM-DD revogada_por=<texto>
+  (equivale_a e checado: id existente e sem ciclo).  Depois de curar, rode: python validar.py
 """
 import csv, os, sys, datetime
 
@@ -95,6 +96,24 @@ def adicionar(dom, novo_id, nome, campos):
             print(f"AVISO: campo '{k}' nao existe em {arq}, ignorado."); continue
         linha[ci] = v
     if _idx(header, "status") >= 0: linha[_idx(header, "status")] = "ativo"
+    if dom == "testes":
+        eq = campos.get("equivale_a", "").strip()
+        if eq:
+            if eq not in _todos_ids(header, linhas):
+                print(f"ERRO: equivale_a '{eq}' nao existe em testes."); sys.exit(1)
+            ie = _idx(header, "equivale_a")
+            prox = {l[_idx(header, "id")]: l[ie] for l in linhas}
+            atual, vistos = eq, set()
+            while atual and atual not in vistos:
+                if atual == novo_id:
+                    print("ERRO: equivale_a formaria ciclo."); sys.exit(1)
+                vistos.add(atual); atual = prox.get(atual, "")
+        for c in ("vigencia_inicio", "vigencia_fim"):
+            v = campos.get(c, "").strip()
+            if v:
+                try: datetime.date.fromisoformat(v)
+                except ValueError:
+                    print(f"ERRO: {c} '{v}' nao e data AAAA-MM-DD."); sys.exit(1)
     linhas.append(linha)
     _escrever(arq, header, linhas)
     v = _bump("MINOR")

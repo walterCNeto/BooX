@@ -267,6 +267,10 @@ BOOKS["B_TESTES_canonico"] = {
      ("substituido_por","OPC","texto","ID substituto (se deprecado)"),
      ("data_publicacao","OPC","data","Quando o teste entrou no catalogo"),
      ("fonte_url","OPC","texto","URL da norma oficial"),
+     ("equivale_a","OPC","texto","ID de outro teste que cobre o mesmo requisito (contado uma vez; sem ciclos)"),
+     ("vigencia_inicio","OPC","data","Inicio de vigencia do requisito (AAAA-MM-DD)"),
+     ("vigencia_fim","OPC","data","Fim de vigencia do requisito (AAAA-MM-DD)"),
+     ("revogada_por","OPC","texto","Norma/dispositivo que revogou o requisito"),
    ],
 }
 

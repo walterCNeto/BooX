@@ -8,6 +8,7 @@ Checa:
   - ID deprecado sem substituto (apenas aviso)
   - hierarquia: area.dominio_id existe; disciplina.dominio_2linha existe
   - parent_id de riscos aponta para risco existente
+  - testes: equivale_a existente e sem ciclos; vigencia_* em AAAA-MM-DD
 
 Uso: python validar.py
 Saida: lista de problemas; codigo 0 se tudo ok, 1 se ha erros.
@@ -86,6 +87,36 @@ def main():
                 erros.append(f"[testes] {x['id']}: risco_r0_canonico '{rc}' nao existe")
             if fc and fc not in fr_ids:
                 erros.append(f"[testes] {x['id']}: fator_risco_canonico_id '{fc}' nao existe")
+        ts_ids = {x["id"] for x in ts}
+        import datetime as _dt
+        def _data_ok(v):
+            try: _dt.date.fromisoformat(v); return True
+            except ValueError: return False
+        for x in ts:
+            eq = x.get("equivale_a","").strip()
+            if eq:
+                if eq not in ts_ids:
+                    erros.append(f"[testes] {x['id']}: equivale_a '{eq}' nao existe")
+                elif eq == x["id"]:
+                    erros.append(f"[testes] {x['id']}: equivale_a aponta para si mesmo")
+            for c in ("vigencia_inicio","vigencia_fim"):
+                v = x.get(c,"").strip()
+                if v and not _data_ok(v):
+                    erros.append(f"[testes] {x['id']}: {c} '{v}' nao e data AAAA-MM-DD")
+            vi, vf = x.get("vigencia_inicio","").strip(), x.get("vigencia_fim","").strip()
+            if vi and vf and _data_ok(vi) and _data_ok(vf) and vf < vi:
+                erros.append(f"[testes] {x['id']}: vigencia_fim anterior a vigencia_inicio")
+        # ciclos em equivale_a
+        eq_map = {x["id"]: x.get("equivale_a","").strip() for x in ts}
+        ciclicos = set()
+        for i in eq_map:
+            vistos, atual = set(), i
+            while atual and atual in eq_map and atual not in vistos:
+                vistos.add(atual); atual = eq_map[atual]
+            if atual and atual in vistos and atual != eq_map.get(atual):
+                ciclicos.add(i)
+        if ciclicos:
+            erros.append(f"[testes] equivale_a ciclico envolvendo: {', '.join(sorted(ciclicos))}")
     if fr or ts:
         propostos_ts = sum(1 for x in ts if x.get("status")=="proposto")
         print(f"  fatores={len(fr)} testes_canonicos={len(ts)} (propostos={propostos_ts})")
