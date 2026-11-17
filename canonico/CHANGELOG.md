@@ -6,6 +6,11 @@ Versionamento semantico do vocabulario canonico.
 - **MINOR** (x.Y.0): adicao de novos IDs (aditivo, nao quebra de-paras).
 - **MAJOR** (X.0.0): deprecacao de IDs em uso ou mudanca incompativel.
 
+## [1.10.0] - 2026-11-17 (MINOR)
+
+- Adicionados 39 testes proposto dos Anexos II (FIDC, 16), III (FII, 14) e IV (FIP, 9) da Resolucao CVM 175: TST.CVM175A2, A3 e A4. Fonte: textos consolidados anexados pelo usuario. Atividades por teste: administracao_fiduciaria, gestao_recursos ou custodia.
+- Limitacao: os testes valem para qualquer gestor ou administrador, mesmo sem fundos daquele tipo; falta a dimensao tipos de fundo administrados. Trechos com redacao antiga e vigente duplicadas no consolidado foram lidos pela vigente. Os artigos 21, 27 e 29 (FIDC e FIP) foram resumidos pelo conteudo visivel e remetem ao texto do artigo para o detalhe.
+
 ## [1.9.1] — 2026-11-17 (PATCH)
 
 - Coluna atividades refinada em 30 testes da CVM 21 e CVM 175: gestao_recursos, administracao_fiduciaria e custodia separadas pelo texto de cada artigo; em duvida, mantidas as duas atividades. CVM 35 e CVM 30 mantidas.
