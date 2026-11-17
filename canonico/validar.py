@@ -92,14 +92,17 @@ def main():
             sys.path.insert(0, os.path.join(AQUI, ".."))
             from boox._campos import ENUM as _ENUM
             enum_ativ = set(_ENUM["atividade"])
+            enum_tf = set(_ENUM["tipo_fundo"])
         except Exception:
-            enum_ativ = None
-            avisos.append("[testes] enum atividade indisponivel (boox._campos); coluna atividades nao validada")
-        if enum_ativ is not None:
+            enum_ativ = enum_tf = None
+            avisos.append("[testes] enums atividade/tipo_fundo indisponiveis (boox._campos); colunas atividades e tipos_fundo nao validadas")
+        for coluna, enum_ok, nome_enum in (("atividades", enum_ativ, "atividade"),
+                                           ("tipos_fundo", enum_tf, "tipo_fundo")):
+            if enum_ok is None: continue
             for x in ts:
-                for a in x.get("atividades","").strip().split("|"):
-                    if a and a not in enum_ativ:
-                        erros.append(f"[testes] {x['id']}: atividades '{a}' fora do enum atividade")
+                for a in x.get(coluna,"").strip().split("|"):
+                    if a and a not in enum_ok:
+                        erros.append(f"[testes] {x['id']}: {coluna} '{a}' fora do enum {nome_enum}")
         import datetime as _dt
         def _data_ok(v):
             try: _dt.date.fromisoformat(v); return True

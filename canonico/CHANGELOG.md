@@ -6,6 +6,12 @@ Versionamento semantico do vocabulario canonico.
 - **MINOR** (x.Y.0): adicao de novos IDs (aditivo, nao quebra de-paras).
 - **MAJOR** (X.0.0): deprecacao de IDs em uso ou mudanca incompativel.
 
+## [1.11.0] - 2026-11-17 (MINOR)
+
+- B_TESTES_canonico ganha a coluna opcional `tipos_fundo` (lista com `|`, vazia = vale para qualquer tipo), no fim do cabecalho, apos `atividades`. Novo enum `tipo_fundo`: fif, fidc, fii, fip.
+- Preenchida por id: TST.CVM175A2.* -> fidc (16); TST.CVM175A3.* -> fii (14); TST.CVM175A4.* -> fip (9); TST.CVM175.029 a 043 (artigos "Anexo I") -> fif (15). Parte Geral (TST.CVM175.001-028) e CVM 21 ficam vazias. O recorte e interpretacao a validar.
+- Resolve a limitacao registrada na 1.10.0. `validar.py` rejeita valor fora do enum. `gap_regulatorio.analisar(..., tipos_fundo=None)`: None = todos (numeros inalterados); CLI `--tipos-fundo "a|b"`.
+
 ## [1.10.0] - 2026-11-17 (MINOR)
 
 - Adicionados 39 testes proposto dos Anexos II (FIDC, 16), III (FII, 14) e IV (FIP, 9) da Resolucao CVM 175: TST.CVM175A2, A3 e A4. Fonte: textos consolidados anexados pelo usuario. Atividades por teste: administracao_fiduciaria, gestao_recursos ou custodia.

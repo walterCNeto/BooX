@@ -6,6 +6,9 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/).
 
 ## [Não lançado]
 
+#### Tipos de fundo administrados (canônico 1.11.0)
+- Coluna opcional `tipos_fundo` em B_TESTES_canonico e enum `tipo_fundo` (fif, fidc, fii, fip); o gap aceita `tipos_fundo` (CLI `--tipos-fundo "a|b"`) e o app ganha o seletor "Tipos de fundo administrados" (vazio = todos). Sem declarar tipos de fundo, os números não mudam.
+
 #### Aplicabilidade por atividade (canônico 1.9.0)
 - Coluna opcional `atividades` em B_TESTES_canonico e enum `atividade`; o gap aceita `atividades` (CLI `--atividades "a|b"`) e o app ganha o seletor "Atividades exercidas". Sem declarar atividades, os números não mudam. O app avisa que a cobertura SUSEP é parcial (apenas CNSP 416).
 

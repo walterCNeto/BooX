@@ -18,7 +18,7 @@ Introduz duas analises complementares:
      inferida ficam como 'sem_moldura' — candidatos a revisao.
 
 Uso:
-    python -m boox.gap_regulatorio <pasta_instancia> [--tipo <tipo>] [--atividades "a|b"] [--out <arquivo.md>]
+    python -m boox.gap_regulatorio <pasta_instancia> [--tipo <tipo>] [--atividades "a|b"] [--tipos-fundo "a|b"] [--out <arquivo.md>]
 """
 import csv, os, sys, datetime
 from collections import defaultdict
@@ -99,10 +99,11 @@ def _grupos_equivalencia(testes):
             if a != b: pai[max(a, b)] = min(a, b)
     return {i: raiz(i) for i in pai}
 
-def analisar(pasta, tipo_instituicao=None, hoje=None, atividades=None):
+def analisar(pasta, tipo_instituicao=None, hoje=None, atividades=None, tipos_fundo=None):
     """atividades: None = todas (padrao, sem filtro); ou lista de valores do enum `atividade`."""
     hoje = hoje or datetime.date.today().isoformat()
     ativ_set = set(atividades) if atividades is not None else None
+    tf_set = set(tipos_fundo) if tipos_fundo is not None else None
     canon = _canonico_dir(pasta)
     if not canon: return {"erro":"Camada canonica nao encontrada"}
     testes = _ler(os.path.join(canon,"B_TESTES_canonico.csv"))
@@ -120,7 +121,7 @@ def analisar(pasta, tipo_instituicao=None, hoje=None, atividades=None):
     grupo = _grupos_equivalencia(testes)
 
     candidatos=[]; fora_vigencia=[]; excluidos_por_norma=defaultdict(int)
-    excluidos_por_atividade=defaultdict(int)
+    excluidos_por_atividade=defaultdict(int); excluidos_por_tipo_fundo=defaultdict(int)
     for t in testes:
         if t.get("status") not in ("ativo","proposto"): continue
         if tipo_instituicao:
@@ -132,6 +133,11 @@ def analisar(pasta, tipo_instituicao=None, hoje=None, atividades=None):
             at = {a for a in t.get("atividades","").strip().split("|") if a}
             if at and not (at & ativ_set):
                 excluidos_por_atividade[t.get("norma_id","") or "?"] += 1
+                continue
+        if tf_set is not None:
+            tfs = {a for a in t.get("tipos_fundo","").strip().split("|") if a}
+            if tfs and not (tfs & tf_set):
+                excluidos_por_tipo_fundo[t.get("norma_id","") or "?"] += 1
                 continue
         motivo = _fora_de_vigencia(t, hoje)
         if motivo:
@@ -256,6 +262,9 @@ def analisar(pasta, tipo_instituicao=None, hoje=None, atividades=None):
         "tipo_instituicao":tipo_instituicao,
         "data_referencia":hoje,
         "atividades":sorted(ativ_set) if ativ_set is not None else None,
+        "tipos_fundo":sorted(tf_set) if tf_set is not None else None,
+        "nao_aplicaveis_por_tipo_fundo":[{"norma_id":n,"testes":q}
+                                         for n,q in sorted(excluidos_por_tipo_fundo.items())],
         "nao_aplicaveis_por_atividade":[{"norma_id":n,"testes":q}
                                         for n,q in sorted(excluidos_por_atividade.items())],
         "testes_aplicaveis":len(aplicaveis),
@@ -288,6 +297,8 @@ def render_md(rel, caminho):
     L.append(f"Testes canonicos aplicaveis: **{rel['testes_aplicaveis']}** (data de referencia: {rel['data_referencia']})")
     ats=rel.get("atividades")
     L.append("Atividades consideradas: " + (", ".join(ats) if ats else "padrao (todas)"))
+    tfs=rel.get("tipos_fundo")
+    L.append("Tipos de fundo considerados: " + (", ".join(tfs) if tfs else "padrao (todos)"))
     if rel.get("segmento"):
         L.append(f"Segmento (informativo, nao altera a analise): **{rel['segmento']}**")
     L.append("")
@@ -391,6 +402,14 @@ def render_md(rel, caminho):
         L.append(f"- {x['norma_id']} — {x['testes']} teste(s)")
     if not na_at: L.append("_Nenhum._")
     L.append("")
+    na_tf=rel["nao_aplicaveis_por_tipo_fundo"]
+    L.append(f"## Nao aplicaveis pelo tipo de fundo — **{sum(x['testes'] for x in na_tf)}**"); L.append("")
+    L.append("Testes cuja coluna `tipos_fundo` nao intersecta os tipos de fundo considerados (nao contados).")
+    L.append("")
+    for x in na_tf:
+        L.append(f"- {x['norma_id']} — {x['testes']} teste(s)")
+    if not na_tf: L.append("_Nenhum._")
+    L.append("")
     L.append("---"); L.append("_Gerado pela engine de gap regulatorio do BooX._")
     open(caminho,"w",encoding="utf-8").write("\n".join(L))
 
@@ -405,7 +424,10 @@ def main():
     ativ=None
     if "--atividades" in sys.argv:
         ativ=[a for a in sys.argv[sys.argv.index("--atividades")+1].split("|") if a]
-    rel=analisar(pasta,tipo_instituicao=tipo,atividades=ativ)
+    tfun=None
+    if "--tipos-fundo" in sys.argv:
+        tfun=[a for a in sys.argv[sys.argv.index("--tipos-fundo")+1].split("|") if a]
+    rel=analisar(pasta,tipo_instituicao=tipo,atividades=ativ,tipos_fundo=tfun)
     if "--segmento" in sys.argv: rel["segmento"]=sys.argv[sys.argv.index("--segmento")+1]
     render_md(rel,saida)
     if rel.get("erro"):

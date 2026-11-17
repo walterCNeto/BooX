@@ -383,6 +383,12 @@ with tab_gap:
             help="Padrão = todas. Restringir reduz os requisitos CVM aplicáveis, "
                  "que dependem da atividade exercida (ex.: custódia, escrituração).",
         )
+        tipos_fundo = []
+        if tipo in ("gestor_recursos", "administrador_fiduciario", "banco_multiplo", "dtvm", "distribuidora"):
+            tipos_fundo = st.multiselect(
+                "Tipos de fundo administrados", campos_mod.ENUM["tipo_fundo"], default=[],
+                help="Vazio = todos. Selecione só os tipos de fundo que a instituição administra ou gere.",
+            )
         if tipo in ("seguradora", "previdencia", "capitalizacao"):
             st.warning(
                 "Cobertura SUSEP parcial: apenas CNSP 416 (controles internos, gestão de riscos "
@@ -406,7 +412,8 @@ with tab_gap:
 
     _todas = set(atividades) == set(campos_mod.ENUM["atividade"])
     rel = analisar_gap(pasta, tipo_instituicao=tipo,
-                       atividades=None if _todas else atividades)
+                       atividades=None if _todas else atividades,
+                       tipos_fundo=tipos_fundo or None)
     rel["segmento"] = segmento
     if rel.get("erro"):
         st.error(rel["erro"])

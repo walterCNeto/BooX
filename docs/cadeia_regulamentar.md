@@ -36,7 +36,7 @@ operacionalizavel.
 ## Camadas
 
 ### Canonica (fixa, igual para todos)
-- `B_TESTES_canonico.csv` — todos os testes dos reguladores. Colunas opcionais de aplicabilidade e vigencia: `aplicabilidade` (tipos de instituicao), `atividades` (lista com `|` do enum `atividade`; vazio = qualquer atividade), `equivale_a`, `vigencia_inicio`, `vigencia_fim`, `revogada_por`. Um teste se aplica quando o tipo confere E (`atividades` vazio OU intersecta as atividades declaradas); sem declarar atividades, vale o filtro so por tipo.
+- `B_TESTES_canonico.csv` — todos os testes dos reguladores. Colunas opcionais de aplicabilidade e vigencia: `aplicabilidade` (tipos de instituicao), `atividades` (lista com `|` do enum `atividade`; vazio = qualquer atividade), `tipos_fundo` (lista com `|` do enum `tipo_fundo`: fif, fidc, fii, fip; vazio = qualquer tipo), `equivale_a`, `vigencia_inicio`, `vigencia_fim`, `revogada_por`. Um teste se aplica quando o tipo confere E (`atividades` vazio OU intersecta as atividades declaradas); a mesma regra vale para `tipos_fundo`; sem declarar atividades nem tipos de fundo, vale o filtro so por tipo de instituicao.
 - `B_FR_canonico.csv` — biblioteca de Fatores de Risco
 - Riscos R4 em `B6_riscos_canonico.csv`
 
