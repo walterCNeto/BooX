@@ -6,6 +6,10 @@ Versionamento semantico do vocabulario canonico.
 - **MINOR** (x.Y.0): adicao de novos IDs (aditivo, nao quebra de-paras).
 - **MAJOR** (X.0.0): deprecacao de IDs em uso ou mudanca incompativel.
 
+## 1.11.8 - PATCH
+- Promovidos a `ativo` 36 testes revisados pelo responsavel: Res. CVM 30, Res. CVM 161 e Regras e Procedimentos de Suitability da ANBIMA (Nº 01/2019, alteradas pelas Nº 06/21), todos de criticidade alta.
+- Os demais testes dessas normas seguem `proposto`; os testes de exemplo TST.SEED.* (sem artigo citado) tambem.
+
 ## 1.11.7 - PATCH
 - Promovidos a `ativo` 57 testes revisados pelo responsavel: Res. CVM 21, Res. CVM 32 (consolidada com a Res. CVM 209/24) e Res. CVM 33, todos de criticidade alta.
 - Os demais testes dessas normas seguem `proposto`.
