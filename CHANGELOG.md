@@ -4,6 +4,10 @@ Todas as mudanças notáveis do BooX são documentadas aqui.
 
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/).
 
+## 1.11.6 - PATCH
+- Promovidos a `ativo` 36 testes da Res. CVM 35 (texto consolidado com as Res. CVM 134/22, 179/23 e 209/24; vigente a redacao dada pela Res. CVM 134/22 aos arts. 20, 21, 22, 31 e 49), revisados pelo responsavel.
+- Os demais testes da CVM 35 seguem `proposto`.
+
 ## 1.11.5 - PATCH
 - Promovidos a `ativo` 69 testes de criticidade alta revisados pelo responsavel: 54 da Res. CVM 175 (Parte Geral e Anexos I a IV) e 15 da Res. CNSP 416 (SUSEP).
 - Testes de criticidade media e baixa dessas normas seguem `proposto`. Texto da CNSP 416 conferido na versao original; alteracoes posteriores nao verificadas.
