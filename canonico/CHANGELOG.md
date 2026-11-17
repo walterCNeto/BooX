@@ -6,6 +6,11 @@ Versionamento semantico do vocabulario canonico.
 - **MINOR** (x.Y.0): adicao de novos IDs (aditivo, nao quebra de-paras).
 - **MAJOR** (X.0.0): deprecacao de IDs em uso ou mudanca incompativel.
 
+## [1.11.1] - 2026-11-17 (PATCH)
+
+- Validacao da Circular BCB 3.978: 48 testes de criticidade alta passam de proposto a ativo, apos conferencia dos numeros e prazos contra o texto consolidado (inclui a Resolucao BCB 591/2026) e revisao de metodo, evidencia, frequencia, criticidade e aplicabilidade pelo validador. Os outros 23 testes da norma, inclusive TST.CIRC3978.026, seguem proposto.
+- TST.CIRC3978.056: descricao corrigida para a redacao do art. 49, pars. 1 e 2 (operacoes de 1/10/2026 a 31/12/2026 comunicadas no primeiro dia util de janeiro de 2027).
+
 ## [1.11.0] - 2026-11-17 (MINOR)
 
 - B_TESTES_canonico ganha a coluna opcional `tipos_fundo` (lista com `|`, vazia = vale para qualquer tipo), no fim do cabecalho, apos `atividades`. Novo enum `tipo_fundo`: fif, fidc, fii, fip.
