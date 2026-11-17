@@ -6,6 +6,12 @@ Versionamento semantico do vocabulario canonico.
 - **MINOR** (x.Y.0): adicao de novos IDs (aditivo, nao quebra de-paras).
 - **MAJOR** (X.0.0): deprecacao de IDs em uso ou mudanca incompativel.
 
+## [1.8.0] — 2026-11-17 (MINOR)
+
+- Adicionados 25 testes `proposto` da Resolucao CNSP 416/2021 (Sistema de Controles Internos, Estrutura de Gestao de Riscos e Auditoria Interna), TST.CNSP416.001..025, regulador SUSEP, aplicabilidade seguradora, previdencia e capitalizacao. Vigencia inicial 2022-01-03 (art. 46).
+- Fonte: texto da Resolucao CNSP 416, de 20 de julho de 2021, anexado pelo usuario (versao original; nao foi verificado se ha alteracoes posteriores). `fonte_url` fica vazio ate conferencia da pagina oficial da Susep.
+- Escopo: apenas a CNSP 416. NAO estao catalogados capital de risco, provisoes, subscricao, seguranca cibernetica, PLD e demais normas CNSP e Susep; o catalogo da SUSEP e parcial. Dispensas por segmento (S1 a S4) estao descritas no texto de cada teste, mas o motor ainda nao filtra por segmento. Resseguradores e corretoras de seguros nao tem tipo no enum.
+
 ## [1.7.0] — 2026-11-17 (MINOR)
 
 - Adicionados 43 testes `proposto` da Resolucao CVM 175 (fundos de investimento), TST.CVM175.001..043: Parte Geral (divulgacao, material, fato relevante, escrituracao e auditoria, contratacao de terceiros, deveres de administrador e gestor, liquidez e estresse, voto, vedacoes, substituicao de prestador, patrimonio liquido negativo, arquivo) e Anexo Normativo I (FIF: informes a CVM, verificacoes do administrador, taxa de performance, ativos no exterior, concentracao por emissor e modalidade, enquadramento, composicao por tipo, credito privado, margem).
